@@ -112,10 +112,10 @@
                                             }
                                         </small>
                                     }
-                                    else if (cls.Stereotype == Stereotype.Enum && cls.Descriptions.Any())
+                                    else if (cls.Stereotype == Stereotype.Enum && cls.Enumerators.Any())
                                     {
                                         <small class="text-muted">
-                                            <span class="badge bg-purple">@cls.Descriptions.Count значений</span>
+                                            <span class="badge bg-purple">@cls.Enumerators.Count значений</span>
                                         </small>
                                     }
                                     else if (cls.Stereotype == Stereotype.DataType && cls.SubClass != null)

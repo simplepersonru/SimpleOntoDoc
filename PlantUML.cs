@@ -34,7 +34,7 @@ namespace RdfsBeautyDoc
             _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} [[/{cls.Href}]] """);
 
             _main.AppendLine($"enum {PlantUmlId(cls)} {{");
-            foreach (var descr in cls.Descriptions)
+            foreach (var descr in cls.Enumerators)
             {
                 _main.AppendLine($"#{descr.Value.Name}");
             }

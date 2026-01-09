@@ -53,7 +53,6 @@
 				data: classes,
 				options: options);
 
-			// 3. Генерируем сайт
 			await generator.GenerateAsync();
 		}
 	}

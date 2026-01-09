@@ -122,6 +122,6 @@
         /// <summary>
         /// Описания элементов перечисления (для Stereotype.Enum)
         /// </summary>
-        public Dictionary<string, Description> Descriptions { get; set; } = new Dictionary<string, Description>();
+        public Dictionary<string, Description> Enumerators { get; set; } = new Dictionary<string, Description>();
     }
 }

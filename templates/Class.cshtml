@@ -101,11 +101,11 @@
         }
 
         <!-- Элементы перечисления (только для enums) -->
-        @if (Model.Class.Stereotype == Stereotype.Enum && Model.Class.Descriptions.Any())
+        @if (Model.Class.Stereotype == Stereotype.Enum && Model.Class.Enumerators.Any())
         {
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0">Enumeration Values (@Model.Class.Descriptions.Count)</h5>
+                    <h5 class="mb-0">Enumeration Values (@Model.Class.Enumerators.Count)</h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -117,7 +117,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var desc in Model.Class.Descriptions.Values)
+                                @foreach (var desc in Model.Class.Enumerators.Values)
                                 {
                                     <tr class="searchable">
                                         <td>
@@ -282,7 +282,7 @@
                     @if (Model.Class.Stereotype == Stereotype.Enum)
                     {
                         <dt class="col-sm-4">Значений</dt>
-                        <dd class="col-sm-8">@Model.Class.Descriptions.Count</dd>
+                        <dd class="col-sm-8">@Model.Class.Enumerators.Count</dd>
                     }
                 </dl>
             </div>
