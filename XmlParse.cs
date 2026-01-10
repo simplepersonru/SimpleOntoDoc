@@ -16,11 +16,13 @@ namespace RdfsBeautyDoc
 		public XmlParse(Program.Options options)
 		{
 			_options = options;
-
+            Log("Начало парсинга RDF/XML файлов...");
             foreach (var path in options.RdfsPaths)
             {
+                Log($"Обработка файла: {path}");
                 Work(path);
             }
+            Log("Парсинг завершён.");
 		}
 
         public delegate void Handler(XElement el);
@@ -72,6 +74,15 @@ namespace RdfsBeautyDoc
 
             return handleSharp(resourceAttr!.Value);
 		}
+
+        private string getResourceOrValue(XElement el)
+        {
+            string result = getResource(el, optional: true);
+            if (string.IsNullOrEmpty(result))
+                result = el.Value;
+            result = result.ToLower();
+            return result;
+        }
 
 		string getId(XElement el)
 		{
@@ -137,10 +148,7 @@ namespace RdfsBeautyDoc
             string stereotype = string.Empty;
             handleChildByName(el, "stereotype", (child) =>
             {
-                stereotype = getResource(child, optional:true);
-                if (string.IsNullOrEmpty(stereotype))
-                    stereotype = child.Value;
-                stereotype.ToLower();
+                stereotype = getResourceOrValue(child);
             });
             if (stereotype == "enumeration" || type == "Class")
             {
@@ -156,7 +164,7 @@ namespace RdfsBeautyDoc
             {
                 HandleClass(el);
             }
-        }
+		}
 
 		private void HandleClass(XElement el)
 		{
@@ -173,11 +181,8 @@ namespace RdfsBeautyDoc
 			});
 			handleChildByName(el, "stereotype", (child) =>
 			{
-                string resource = getResource(child);
-                string value = child.Value;
-                string str = string.IsNullOrEmpty(resource) ? value : resource;
-                str = str.ToLower();
-                cls.Stereotype = str switch
+                string val = getResourceOrValue(child);
+                cls.Stereotype = val switch
 				{
 					"enumeration" => Stereotype.Enum,
 					"primitive" => Stereotype.Primitive,
@@ -266,6 +271,7 @@ namespace RdfsBeautyDoc
 
 		public Dictionary<string, Class> Work(string path)
 		{
+            Log($"Загрузка и разбор XML: {path}");
             var doc = XDocument.Load(path);
             if (doc == null || doc.Root == null)
                 throw new Exception($"Не удалось разобрать xml файла {path}");
@@ -282,7 +288,13 @@ namespace RdfsBeautyDoc
 				else if (el.Name.LocalName == "Description")
 					HandleDescription(el);
 			}
+            Log($"Файл обработан: {path}");
 			return _classes;
 		}
+
+        private static void Log(string message)
+        {
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} [{nameof(XmlParse)}] {message}");
+        }
 	}
 }

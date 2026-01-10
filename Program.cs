@@ -23,41 +23,41 @@
 		}
 		static async Task Main(string[] args)
 		{
+            Log("Запуск генерации документации...");
+
             using var plantumlDocker = new PlantUmlDockerManager();
+
+            Log("Чтение и парсинг RDF/XML схемы...");
             var options = new Options
-			{
-				// Разделитель путей: Path.PathSeparator (обычно ; на Windows, : на Linux)
-				RdfsPaths = GetEnv("RDFSDOC_PATH_TO_RDFS")
-					.Split(new[] { System.IO.Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries),
-				PlantumlRemoteUrl = plantumlDocker.RemoteUrl,
-				OutputPath = GetEnv("RDFSDOC_OUTPUT_PATH"),
-				DocTitle = GetEnv("RDFSDOC_TITLE"),
-				DocDescription = GetEnv("RDFSDOC_DESCRIPTION"),
-				CommonNamespace = GetEnv("RDFSDOC_COMMON_NAMESPACE"),
-				UseNamespaceForProperties = Convert.ToBoolean(Environment.GetEnvironmentVariable("RDFSDOC_USE_NAMESPACE_FOR_PROPERTIES"))
-			};
+            {
+                RdfsPaths = [ "C:\\reposroot\\redkit-lab\\dmsutils\\cimparser\\scripts\\ck-rdf.xml"],
+                PlantumlRemoteUrl = plantumlDocker.RemoteUrl,
+                OutputPath = "output",
+                DocTitle = "Example",
+                DocDescription = "Example descr",
+                CommonNamespace = "cim",
+                UseNamespaceForProperties = false
+            };
 
-			//var options = new Options
-			//{
-			//	RdfsPaths = new[] { "C:\\reposroot\\redkit-lab\\dmsutils\\cimparser\\scripts\\ck-rdf.xml" },
-			//	PlantumlRemoteUrl = "http://localhost:55555",
-			//	OutputPath = "output",
-			//	DocTitle = "Example",
-			//	DocDescription = "Example descr",
-			//	CommonNamespace = "cim",
-			//	UseNamespaceForProperties = false
-			//};
+            var classes = new XmlParse(options).Classes;
 
-			var classes = new XmlParse(options).Classes;
+            Log("Генерация SVG-диаграмм PlantUML...");
+            var umlrender = new PlantUML(options.PlantumlRemoteUrl);
+            await umlrender.FillClassesAsync(classes);
 
-			var umlrender = new PlantUML(options.PlantumlRemoteUrl);
-			await umlrender.FillClassesAsync(classes);
+            Log("Генерация HTML-документации...");
+            var generator = new SiteGenerator(
+                data: classes,
+                options: options);
 
-			var generator = new SiteGenerator(
-				data: classes,
-				options: options);
+            await generator.GenerateAsync();
 
-			await generator.GenerateAsync();
-		}
-	}
+            Log("Генерация завершена успешно.");
+        }
+
+        private static void Log(string message)
+        {
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} [{nameof(Program)}] {message}");
+        }
+    }
 }

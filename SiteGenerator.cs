@@ -31,7 +31,8 @@ namespace RdfsBeautyDoc
             _data = data;
             _options = options;
 
-            // Настраиваем RazorLight для работы с файлами
+            Log("Инициализация движка RazorLight и подготовка данных...");
+
             _engine = new RazorLightEngineBuilder()
                 .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "templates"))
                 .UseMemoryCachingProvider()
@@ -55,6 +56,7 @@ namespace RdfsBeautyDoc
 
         private void CreateOutputDirectories()
         {
+            Log("Создание структуры выходных директорий...");
             Directory.CreateDirectory(_options.OutputPath);
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "classes"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "properties"));
@@ -68,13 +70,13 @@ namespace RdfsBeautyDoc
 
         public async Task GenerateAsync()
         {
-            // Генерируем данные для поиска
+            Log("Генерация поискового индекса...");
             await GenerateSearchIndexAsync();
 
-            // Главная страница
+            Log("Генерация главной страницы...");
             await GenerateIndexAsync();
 
-            // Страница со списками
+            Log("Генерация списков классов и свойств...");
             await GeneratePropertyListAsync();
             await GenerateClassListAsync(Stereotype.Class);
             await GenerateClassListAsync(Stereotype.Enum);
@@ -82,16 +84,19 @@ namespace RdfsBeautyDoc
             await GenerateClassListAsync(Stereotype.DataType);
             await GenerateClassListAsync(Stereotype.All);
 
-            // Страницы объектов
+            Log("Генерация страниц классов...");
             foreach (var cls in _data.Values)
             {
                 await GenerateClassPageAsync(cls);
             }
-            // Страницы свойств
+
+            Log("Генерация страниц свойств...");
             foreach (var prop in _properties)
             {
                 await GeneratePropertyPageAsync(prop);
             }
+
+            Log("Генерация завершена.");
         }
 
         private async Task GeneratePropertyPageAsync(Property prop)
@@ -151,7 +156,6 @@ namespace RdfsBeautyDoc
 
             var childClasses = _classes.Where(c => c.SubClass?.Id == cls.Id).ToList();
 
-
             var model = new ClassViewModel
             {
                 Title = cls.Name,
@@ -171,14 +175,12 @@ namespace RdfsBeautyDoc
             };
 
             string html = await _engine.CompileRenderAsync("Class.cshtml", model);
-
-
             await WriteOutputAsync(cls.Href, html);
         }
 
         private async Task GenerateSearchIndexAsync()
         {
-            // 1. Создаем JSON индекс для поиска
+            Log("Генерация JSON-индекса для поиска...");
             var searchData = new
             {
                 Classes = _data.Values.Select(c => new
@@ -245,7 +247,7 @@ namespace RdfsBeautyDoc
 
         private async Task GenerateClassListAsync(Stereotype type)
         {
-
+            Log($"Генерация списка классов для типа {type}...");
             List<Class> classes;
             if (type == Stereotype.All)
                 classes = _data.Values
@@ -262,7 +264,6 @@ namespace RdfsBeautyDoc
                 url = "entities.html";
             else
                 url = $"{stereotype(type)}/_index.html";
-
 
             var model = new ClassListViewModel
             {
@@ -285,6 +286,7 @@ namespace RdfsBeautyDoc
 
         private async Task GeneratePropertyListAsync()
         {
+            Log("Генерация списка всех свойств...");
             var model = new PropertyListViewModel
             {
                 Title = "All Properties",
@@ -312,6 +314,11 @@ namespace RdfsBeautyDoc
                 Directory.CreateDirectory(directory);
 
             await File.WriteAllTextAsync(fullPath, content, Encoding.UTF8);
+        }
+
+        private static void Log(string message)
+        {
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} [{nameof(SiteGenerator)}] {message}");
         }
     }
 }

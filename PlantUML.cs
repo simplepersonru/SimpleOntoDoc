@@ -1,5 +1,6 @@
 ﻿using PlantUml.Net;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace RdfsBeautyDoc
@@ -105,6 +106,10 @@ namespace RdfsBeautyDoc
 
     internal class PlantUML(string remoteUrl)
     {
+        private static void Log(string message)
+        {
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} [{nameof(PlantUML)}] {message}");
+        }
         private async Task RenderClass(Class cls)
         {
             if (cls.Stereotype != Stereotype.Class) 
@@ -118,7 +123,14 @@ namespace RdfsBeautyDoc
 
         public async Task FillClassesAsync(Dictionary<string, Class> data)
         {
-            var throttler = new SemaphoreSlim(50);
+            foreach (var cls in data)
+            {
+                await RenderClass(cls.Value);
+            }
+            return;
+
+            // Иногда не работает и падает с исключением
+            var throttler = new SemaphoreSlim(5);
 
             var tasks = data.Values.Select(async v =>
             {
@@ -137,42 +149,137 @@ namespace RdfsBeautyDoc
         }
     }
 
+    /// <summary>
+    /// Менеджер запуска контейнера PlantUML через Docker.
+    /// На Windows все docker-команды выполняются через WSL (если ОС Windows).
+    /// На Linux/macOS — напрямую.
+    /// </summary>
     internal class PlantUmlDockerManager : IDisposable
     {
-        private readonly string _containerName = "plantuml-server-rdfdoc";
+        private readonly string _containerName = "plantuml-server-rdfdoc-55667";
         private bool _startedByUs = false;
-
         public string RemoteUrl { get; }
+        private readonly int _port;
+        private readonly bool _useWsl;
+        private readonly string _wslDistro;
 
-        public PlantUmlDockerManager(int port = 55667)
+        public PlantUmlDockerManager(int port = 55667, string wslDistro = "Ubuntu-24.04")
         {
-            RemoteUrl = $"http://localhost:{port}";
+            _port = port;
+            _wslDistro = wslDistro;
+            _useWsl = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+            RemoteUrl = $"http://localhost:{_port}";
+
+            Log($"Инициализация менеджера Docker. Порт: {_port}, WSL: {_useWsl}");
+
+            EnsureWslIfNeeded();
+
             if (!IsContainerRunning())
             {
-                StartContainer(port);
+                Log("Контейнер PlantUML не найден, запускаем новый контейнер...");
+                StartContainer();
                 _startedByUs = true;
+                Log("Контейнер PlantUML успешно запущен.");
+            }
+            else
+            {
+                Log("Контейнер PlantUML уже запущен.");
+            }
+        }
+
+        /// <summary>
+        /// Если мы на Windows — убедиться, что WSL доступна и запущена.
+        /// </summary>
+        private void EnsureWslIfNeeded()
+        {
+            if (!_useWsl)
+                return;
+
+            Log("Проверка наличия и статуса WSL...");
+
+            // Проверяем, что wsl.exe доступна
+            try
+            {
+                var psi = new ProcessStartInfo("wsl", "--status")
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+                using var proc = Process.Start(psi);
+                proc!.WaitForExit(3000);
+                if (proc.ExitCode != 0)
+                    throw new Exception("WSL не установлена или не настроена.");
+            }
+            catch (Exception ex)
+            {
+                Log("WSL не установлена или не настроена.");
+                throw new Exception("WSL не установлена или не настроена.", ex);
+            }
+
+            // Запускаем дистрибутив, если он не запущен (wsl --list --running)
+            var checkPsi = new ProcessStartInfo("wsl", "--list --running")
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+            using (var proc = Process.Start(checkPsi))
+            {
+                string output = proc!.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                if (!output.Contains(_wslDistro, StringComparison.OrdinalIgnoreCase))
+                {
+                    Log($"Дистрибутив WSL '{_wslDistro}' не запущен. Запускаем...");
+                    // Запускаем дистрибутив (wsl -d <distro> -e true)
+                    var startPsi = new ProcessStartInfo("wsl", $"-d {_wslDistro} -e true")
+                    {
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    };
+                    using var startProc = Process.Start(startPsi);
+                    startProc!.WaitForExit();
+                    Log($"Дистрибутив WSL '{_wslDistro}' запущен.");
+                }
+                else
+                {
+                    Log($"Дистрибутив WSL '{_wslDistro}' уже запущен.");
+                }
+            }
+        }
+
+        private ProcessStartInfo DockerPsi(string args)
+        {
+            if (_useWsl)
+            {
+                // Все docker-команды через wsl -d <distro> docker ...
+                return new ProcessStartInfo("wsl", $"-d {_wslDistro} docker {args}")
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+            }
+            else
+            {
+                return new ProcessStartInfo("docker", args)
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
             }
         }
 
         private bool IsContainerRunning()
         {
-            var psi = new ProcessStartInfo("docker", $"ps --filter name={_containerName} --format \"{{{{.Names}}}}\"")
-            {
-                RedirectStandardOutput = true
-            };
+            var psi = DockerPsi($"ps --filter name={_containerName} --format \"{{{{.Names}}}}\"");
             using var proc = Process.Start(psi);
             string output = proc!.StandardOutput.ReadToEnd();
             proc.WaitForExit();
             return output.Contains(_containerName);
         }
 
-        private void StartContainer(int port)
+        private void StartContainer()
         {
-            var psi = new ProcessStartInfo("docker", $"run -d --rm --name {_containerName} -p {port}:8080 plantuml/plantuml-server:jetty")
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
+            var psi = DockerPsi($"run -d --rm --name {_containerName} -p {_port}:8080 plantuml/plantuml-server:jetty");
             using var proc = Process.Start(psi);
             proc!.WaitForExit();
             if (proc.ExitCode != 0)
@@ -183,14 +290,17 @@ namespace RdfsBeautyDoc
         {
             if (_startedByUs)
             {
-                var psi = new ProcessStartInfo("docker", $"stop {_containerName}")
-                {
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true
-                };
+                Log("Останавливаем контейнер PlantUML...");
+                var psi = DockerPsi($"stop {_containerName}");
                 using var proc = Process.Start(psi);
                 proc!.WaitForExit();
+                Log("Контейнер PlantUML остановлен.");
             }
+        }
+
+        private static void Log(string message)
+        {
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} [{nameof(PlantUmlDockerManager)}] {message}");
         }
     }
 }
