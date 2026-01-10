@@ -1,10 +1,6 @@
 ﻿using PlantUml.Net;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
+using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RdfsBeautyDoc
 {
@@ -138,6 +134,63 @@ namespace RdfsBeautyDoc
             });
 
             await Task.WhenAll(tasks);
+        }
+    }
+
+    internal class PlantUmlDockerManager : IDisposable
+    {
+        private readonly string _containerName = "plantuml-server-rdfdoc";
+        private bool _startedByUs = false;
+
+        public string RemoteUrl { get; }
+
+        public PlantUmlDockerManager(int port = 55667)
+        {
+            RemoteUrl = $"http://localhost:{port}";
+            if (!IsContainerRunning())
+            {
+                StartContainer(port);
+                _startedByUs = true;
+            }
+        }
+
+        private bool IsContainerRunning()
+        {
+            var psi = new ProcessStartInfo("docker", $"ps --filter name={_containerName} --format \"{{{{.Names}}}}\"")
+            {
+                RedirectStandardOutput = true
+            };
+            using var proc = Process.Start(psi);
+            string output = proc!.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+            return output.Contains(_containerName);
+        }
+
+        private void StartContainer(int port)
+        {
+            var psi = new ProcessStartInfo("docker", $"run -d --rm --name {_containerName} -p {port}:8080 plantuml/plantuml-server:jetty")
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+            using var proc = Process.Start(psi);
+            proc!.WaitForExit();
+            if (proc.ExitCode != 0)
+                throw new Exception("Не удалось запустить контейнер PlantUML: " + proc.StandardError.ReadToEnd());
+        }
+
+        public void Dispose()
+        {
+            if (_startedByUs)
+            {
+                var psi = new ProcessStartInfo("docker", $"stop {_containerName}")
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+                using var proc = Process.Start(psi);
+                proc!.WaitForExit();
+            }
         }
     }
 }

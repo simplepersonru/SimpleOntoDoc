@@ -4,7 +4,8 @@
 	{
 		public class Options
 		{
-			public required string RdfsPath { get; set; }
+			// Теперь массив путей
+			public required string[] RdfsPaths { get; set; }
 			public required string PlantumlRemoteUrl { get; set; }
 			public required string OutputPath { get; set; }
 			public required string DocTitle { get; set; }
@@ -22,10 +23,13 @@
 		}
 		static async Task Main(string[] args)
 		{
-			var options = new Options
+            using var plantumlDocker = new PlantUmlDockerManager();
+            var options = new Options
 			{
-				RdfsPath = GetEnv("RDFSDOC_PATH_TO_RDFS"),
-				PlantumlRemoteUrl = GetEnv("RDFSDOC_PLANTUML_URL"),
+				// Разделитель путей: Path.PathSeparator (обычно ; на Windows, : на Linux)
+				RdfsPaths = GetEnv("RDFSDOC_PATH_TO_RDFS")
+					.Split(new[] { System.IO.Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries),
+				PlantumlRemoteUrl = plantumlDocker.RemoteUrl,
 				OutputPath = GetEnv("RDFSDOC_OUTPUT_PATH"),
 				DocTitle = GetEnv("RDFSDOC_TITLE"),
 				DocDescription = GetEnv("RDFSDOC_DESCRIPTION"),
@@ -35,7 +39,7 @@
 
 			//var options = new Options
 			//{
-			//	RdfsPath = "C:\\reposroot\\redkit-lab\\dmsutils\\cimparser\\scripts\\ck-rdf.xml",
+			//	RdfsPaths = new[] { "C:\\reposroot\\redkit-lab\\dmsutils\\cimparser\\scripts\\ck-rdf.xml" },
 			//	PlantumlRemoteUrl = "http://localhost:55555",
 			//	OutputPath = "output",
 			//	DocTitle = "Example",
@@ -44,7 +48,7 @@
 			//	UseNamespaceForProperties = false
 			//};
 
-			var classes = new XmlParse(options).Work();
+			var classes = new XmlParse(options).Classes;
 
 			var umlrender = new PlantUML(options.PlantumlRemoteUrl);
 			await umlrender.FillClassesAsync(classes);

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -10,17 +11,19 @@ namespace RdfsBeautyDoc
 		private readonly Program.Options _options;
 		XElement _root;
 
+        public Dictionary<string, Class> Classes { get { return _classes; } }
+
 		public XmlParse(Program.Options options)
 		{
 			_options = options;
 
-			var doc = XDocument.Load(options.RdfsPath);
-			if (doc == null || doc.Root == null)
-				throw new Exception($"Не удалось разобрать xml файла {options.RdfsPath}");
-			_root = doc.Root;
+            foreach (var path in options.RdfsPaths)
+            {
+                Work(path);
+            }
 		}
 
-		public delegate void Handler(XElement el);
+        public delegate void Handler(XElement el);
 		void handleChildByName(XElement parent, string localName, Handler func)
 		{
 			foreach (var child in parent.Elements())
@@ -47,16 +50,27 @@ namespace RdfsBeautyDoc
 			return ns;
 		}
 
-		string getResource(XElement el)
+        private string handleSharp(string str)
+        {
+            if (str.StartsWith("#"))
+                return str.Substring(1); // убираем # в начале
+            else if (str.Contains("#"))
+                return str.Split('#').Last();
+            else
+                return str;
+        }
+
+		// Обновленный getResource
+		private string getResource(XElement el, bool optional = false)
 		{
 			var resourceAttr = el.Attribute(xmlns("rdf").GetName("resource"));
-			if (resourceAttr == null)
+			if (resourceAttr == null && !optional)
 				throw new Exception($"Отсутствует rdf:resource у элемента {el.Name}");
+            if (resourceAttr == null && optional)
+                return string.Empty;
 
-			if (resourceAttr.Value.StartsWith("#"))
-				return resourceAttr.Value.Substring(1); // убираем # в начале
-			else
-				return resourceAttr.Value;
+
+            return handleSharp(resourceAttr!.Value);
 		}
 
 		string getId(XElement el)
@@ -64,7 +78,7 @@ namespace RdfsBeautyDoc
 			var idAttr = el.Attribute(xmlns("rdf").GetName("ID"));
 			var aboutAttr = el.Attribute(xmlns("rdf").GetName("about"));
 
-			string result;
+			string? result = null;
 			if (idAttr == null && aboutAttr == null)
 				throw new Exception($"Отсутствует rdf:ID или rdf:about у элемента {el.Name}");
 			else if (idAttr != null && aboutAttr != null)
@@ -74,7 +88,10 @@ namespace RdfsBeautyDoc
 			else if (idAttr == null && aboutAttr != null)
 				result = aboutAttr.Value;
 
-			throw new UnreachableException();
+            if (string.IsNullOrEmpty(result))
+                throw new Exception($"Пустой идентификатор у элемента {el.Name}");
+
+            return handleSharp(result);
 		}
 
 		Class GetOrCreateClass(string name)
@@ -91,9 +108,55 @@ namespace RdfsBeautyDoc
 
 		private void HandleDescription(XElement el)
 		{
+			// Определяем тип через <rdf:type rdf:resource="...#Property"/> или ...#Class
+			var rdf = xmlns("rdf");
 
-			HandleEnumerator(el);
-		}
+            string id = getId(el);
+            string type = string.Empty;
+            handleChildByName(el, "type", (child) =>
+            {
+                type = getResource(child);
+            });
+            if (string.IsNullOrEmpty(type))
+            {
+                if (id.Split('.').Length == 2)
+                {
+                    HandleEnumerator(el);
+                }
+                else
+                {
+                    throw new Exception($"Не удалось определить тип Description с id {id}");
+                }
+            }
+            if (type == "Property")
+            {
+                HandleProperty(el);
+                return;
+            }
+
+            string stereotype = string.Empty;
+            handleChildByName(el, "stereotype", (child) =>
+            {
+                stereotype = getResource(child, optional:true);
+                if (string.IsNullOrEmpty(stereotype))
+                    stereotype = child.Value;
+                stereotype.ToLower();
+            });
+            if (stereotype == "enumeration" || type == "Class")
+            {
+                HandleClass(el);
+                return;
+            }
+            // взяли из значения
+            if (stereotype == "enum")
+            {
+                HandleEnumerator(el);
+            }
+            if (stereotype == "CIMDatatype")
+            {
+                HandleClass(el);
+            }
+        }
 
 		private void HandleClass(XElement el)
 		{
@@ -110,11 +173,16 @@ namespace RdfsBeautyDoc
 			});
 			handleChildByName(el, "stereotype", (child) =>
 			{
-				cls.Stereotype = getResource(child) switch
+                string resource = getResource(child);
+                string value = child.Value;
+                string str = string.IsNullOrEmpty(resource) ? value : resource;
+                str = str.ToLower();
+                cls.Stereotype = str switch
 				{
-					"Enumeration" => Stereotype.Enum,
-					"Datatype" => Stereotype.DataType,
-					"Primitive" => Stereotype.Primitive,
+					"enumeration" => Stereotype.Enum,
+					"primitive" => Stereotype.Primitive,
+					"datatype" => Stereotype.DataType,
+                    "cimdatatype" => Stereotype.DataType,
 					_ => Stereotype.Class
 				};
 			});
@@ -196,9 +264,14 @@ namespace RdfsBeautyDoc
 			});
 		}
 
-		public Dictionary<string, Class> Work()
+		public Dictionary<string, Class> Work(string path)
 		{
-			foreach (var el in _root.Elements())
+            var doc = XDocument.Load(path);
+            if (doc == null || doc.Root == null)
+                throw new Exception($"Не удалось разобрать xml файла {path}");
+            _root = doc.Root;
+
+            foreach (var el in _root.Elements())
 			{
 				if (el == null)
 					continue;
