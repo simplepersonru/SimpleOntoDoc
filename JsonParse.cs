@@ -85,14 +85,14 @@ namespace SimpleOntoDoc
             {
                 foreach (var prop in cls.Properties.Values)
                 {
-                    if (prop.Domain == null)
+                    if (string.IsNullOrEmpty(prop.Domain.Name))
                         throw new Exception($"Свойство '{prop.Name}' класса '{cls.Name}' имеет незаполненный Domain после парсинга.");
-                    if (prop.Range == null)
+                    if (string.IsNullOrEmpty(prop.Range.Name))
                         throw new Exception($"Свойство '{prop.Name}' класса '{cls.Name}' имеет незаполненный Range после парсинга.");
                 }
                 foreach (var enumerator in cls.Enumerators.Values)
                 {
-                    if (enumerator.Domain == null)
+                    if (string.IsNullOrEmpty(enumerator.Domain.Name))
                         throw new Exception($"Элемент перечисления '{enumerator.Name}' класса '{cls.Name}' имеет незаполненный Domain после парсинга.");
                 }
             }

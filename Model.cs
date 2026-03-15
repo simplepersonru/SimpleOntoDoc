@@ -41,11 +41,11 @@ namespace SimpleOntoDoc
 
         /// <summary>Класс-владелец свойства (устанавливается после парсинга, не из JSON). Всегда заполнен.</summary>
         [JsonIgnore]
-        public Class Domain { get; set; } = null!;
+        public Class Domain { get; set; } = new();
 
         /// <summary>Класс-тип свойства (разрешается из RangeName после парсинга). Всегда заполнен.</summary>
         [JsonIgnore]
-        public Class Range { get; set; } = null!;
+        public Class Range { get; set; } = new();
 
         public override string Id => $"{Domain.Name}.{Name}";
     }
@@ -58,7 +58,7 @@ namespace SimpleOntoDoc
     {
         /// <summary>Класс-перечисление, которому принадлежит этот элемент (устанавливается после парсинга). Всегда заполнен.</summary>
         [JsonIgnore]
-        public Class Domain { get; set; } = null!;
+        public Class Domain { get; set; } = new();
 
         public override string Id => $"{Domain.Name}.{Name}";
     }
