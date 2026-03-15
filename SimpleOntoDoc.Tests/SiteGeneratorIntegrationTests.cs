@@ -98,64 +98,34 @@ namespace SimpleOntoDoc.Tests
             Assert.True(File.Exists(Path.Combine(_outputPath, "properties", "_index.html")));
         }
 
-        [Fact]
-        public void GenerateAsync_ClassPageCountMatchesClassTypeCount()
+        /// <summary>
+        /// Данные для параметризованного теста подсчёта страниц по типу сущности.
+        /// Формат: (ClassType, папка в output).
+        /// </summary>
+        public static IEnumerable<object[]> EntityTypeDirectories =>
+        [
+            [ClassType.Class,     "classes"],
+            [ClassType.Enum,      "enums"],
+            [ClassType.Primitive, "primitives"],
+            [ClassType.Datatype,  "datatypes"],
+            [ClassType.Compound,  "compounds"],
+        ];
+
+        /// <summary>
+        /// Для каждого типа сущности проверяет, что количество HTML-файлов
+        /// в соответствующей папке (кроме _index.html) совпадает с количеством
+        /// объектов этого типа в онтологии.
+        /// </summary>
+        [Theory]
+        [MemberData(nameof(EntityTypeDirectories))]
+        public void GenerateAsync_EntityPageCountMatchesTypeCount(ClassType type, string folder)
         {
-            int expectedClassCount = _classes.Values.Count(c => c.Type == ClassType.Class);
-            string classDir = Path.Combine(_outputPath, "classes");
-            int actualClassFiles = Directory.GetFiles(classDir, "*.html")
-                .Where(f => Path.GetFileName(f) != "_index.html")
-                .Count();
+            int expected = _classes.Values.Count(c => c.Type == type);
+            string dir = Path.Combine(_outputPath, folder);
+            int actual = Directory.GetFiles(dir, "*.html")
+                .Count(f => Path.GetFileName(f) != "_index.html");
 
-            Assert.Equal(expectedClassCount, actualClassFiles);
-        }
-
-        [Fact]
-        public void GenerateAsync_EnumPageCountMatchesEnumTypeCount()
-        {
-            int expectedEnumCount = _classes.Values.Count(c => c.Type == ClassType.Enum);
-            string enumDir = Path.Combine(_outputPath, "enums");
-            int actualEnumFiles = Directory.GetFiles(enumDir, "*.html")
-                .Where(f => Path.GetFileName(f) != "_index.html")
-                .Count();
-
-            Assert.Equal(expectedEnumCount, actualEnumFiles);
-        }
-
-        [Fact]
-        public void GenerateAsync_PrimitivePageCountMatchesPrimitiveTypeCount()
-        {
-            int expectedCount = _classes.Values.Count(c => c.Type == ClassType.Primitive);
-            string dir = Path.Combine(_outputPath, "primitives");
-            int actualFiles = Directory.GetFiles(dir, "*.html")
-                .Where(f => Path.GetFileName(f) != "_index.html")
-                .Count();
-
-            Assert.Equal(expectedCount, actualFiles);
-        }
-
-        [Fact]
-        public void GenerateAsync_DatatypePageCountMatchesDatatypeTypeCount()
-        {
-            int expectedCount = _classes.Values.Count(c => c.Type == ClassType.Datatype);
-            string dir = Path.Combine(_outputPath, "datatypes");
-            int actualFiles = Directory.GetFiles(dir, "*.html")
-                .Where(f => Path.GetFileName(f) != "_index.html")
-                .Count();
-
-            Assert.Equal(expectedCount, actualFiles);
-        }
-
-        [Fact]
-        public void GenerateAsync_CompoundPageCountMatchesCompoundTypeCount()
-        {
-            int expectedCount = _classes.Values.Count(c => c.Type == ClassType.Compound);
-            string dir = Path.Combine(_outputPath, "compounds");
-            int actualFiles = Directory.GetFiles(dir, "*.html")
-                .Where(f => Path.GetFileName(f) != "_index.html")
-                .Count();
-
-            Assert.Equal(expectedCount, actualFiles);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
