@@ -1,4 +1,4 @@
-@using RdfsBeautyDoc
+@using SimpleOntoDoc
 @model PropertyListViewModel
 @{
     Layout = "_Layout.cshtml";
@@ -11,7 +11,7 @@
 <div class="row mb-4">
     <div class="col-md-12">
         <input type="text" class="form-control" id="propertyFilter"
-               placeholder="Поиск по ID, Подписи, или типу...">
+               placeholder="Поиск по ID, описанию или типу...">
     </div>
 </div>
 
@@ -21,7 +21,7 @@
         <thead class="table-light">
             <tr>
                 <th>Свойство</th>
-                <th>Подпись</th>
+                <th>Описание</th>
             </tr>
         </thead>
         <tbody>
@@ -29,17 +29,17 @@
             {
                 <tr class="searchable property-row"
                     data-id="@prop.Id.ToLower()"
-                    data-label="@(prop.Label?.ToLower() ?? "")"
+                    data-description="@(prop.Description?.ToLower() ?? "")"
                     data-domain="@prop.Domain.Id.ToLower()"
                     data-range="@prop.Range.Id.ToLower()">
                     <td>
 
                         <div class="d-flex flex-column gap-1">
-                            <a href="/@prop.Href" class="fw-bold">@prop.Id</a>
+                            <a href="/@prop.Href()" class="fw-bold">@prop.Id</a>
                             <div class="d-flex flex-row gap-2">
                                 <span>Тип</span>
-                                <a href="/@prop.Range.Href" class="badge @(prop.Range.BadgeClass) text-decoration-none">
-                                    @prop.Range.NamespacedId
+                                <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
+                                    @prop.Range.NamespacedId()
                                 </a>
                                 @if (!string.IsNullOrEmpty(prop.Multiplicity))
                                 {
@@ -50,9 +50,9 @@
                         </div>
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(prop.Label))
+                        @if (!string.IsNullOrEmpty(prop.Description))
                         {
-                            <p>@prop.Label</p>
+                            <p>@prop.Description</p>
                         }
                         else
                         {
@@ -88,13 +88,13 @@
 
         rows.forEach(row => {
             const id = row.dataset.id || '';
-            const label = row.dataset.label || '';
+            const description = row.dataset.description || '';
             const domain = row.dataset.domain || '';
             const range = row.dataset.range || '';
 
             const matches = !searchQuery ||
                           id.includes(searchQuery) ||
-                          label.includes(searchQuery) ||
+                          description.includes(searchQuery) ||
                           domain.includes(searchQuery) ||
                           range.includes(searchQuery);
 

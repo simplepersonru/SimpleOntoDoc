@@ -1,45 +1,42 @@
-﻿namespace RdfsBeautyDoc
+﻿namespace SimpleOntoDoc
 {
-	internal class Program
-	{
-		public class Options
-		{
-			// Теперь массив путей
-			public required string[] RdfsPaths { get; set; }
-			public required string PlantumlRemoteUrl { get; set; }
-			public required string OutputPath { get; set; }
-			public required string DocTitle { get; set; }
-			public required string DocDescription { get; set; }
-			public required string CommonNamespace { get; set; }
-			public bool UseNamespaceForProperties { get; set; } = false;
-		}
-		static string GetEnv(string env)
-		{
-			string? val = Environment.GetEnvironmentVariable(env);
-			if (val == null)
-				throw new Exception($"Не определен ENV {env}");
-			
-			return val;
-		}
-		static async Task Main(string[] args)
-		{
+    internal class Program
+    {
+        public class Options
+        {
+            /// <summary>Путь к входному JSON-файлу онтологии (формат model.py).</summary>
+            public required string InputJsonPath { get; set; }
+            public required string PlantumlRemoteUrl { get; set; }
+            public required string OutputPath { get; set; }
+            public required string DocTitle { get; set; }
+            public required string DocDescription { get; set; }
+        }
+
+        static string GetEnv(string env)
+        {
+            string? val = Environment.GetEnvironmentVariable(env);
+            if (val == null)
+                throw new Exception($"Не определен ENV {env}");
+            return val;
+        }
+
+        static async Task Main(string[] args)
+        {
             Log("Запуск генерации документации...");
 
             using var plantumlDocker = new PlantUmlDockerManager();
 
-            Log("Чтение и парсинг RDF/XML схемы...");
             var options = new Options
             {
-                RdfsPaths = [ "C:\\reposroot\\redkit-lab\\dmsutils\\cimparser\\scripts\\ck-rdf.xml"],
+                InputJsonPath = GetEnv("SIMPLEDOC_INPUT_PATH"),
                 PlantumlRemoteUrl = plantumlDocker.RemoteUrl,
-                OutputPath = "output",
-                DocTitle = "Example",
-                DocDescription = "Example descr",
-                CommonNamespace = "cim",
-                UseNamespaceForProperties = false
+                OutputPath = GetEnv("SIMPLEDOC_OUTPUT_PATH"),
+                DocTitle = GetEnv("SIMPLEDOC_TITLE"),
+                DocDescription = GetEnv("SIMPLEDOC_DESCRIPTION"),
             };
 
-            var classes = new XmlParse(options).Classes;
+            Log("Чтение и парсинг JSON схемы...");
+            var classes = new JsonParse(options).Classes;
 
             Log("Генерация SVG-диаграмм PlantUML...");
             var umlrender = new PlantUML(options.PlantumlRemoteUrl);

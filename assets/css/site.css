@@ -86,6 +86,10 @@ svg a {
     background-color: #20c997 !important;
 }
 
+.badge-compound {
+    background-color: #6610f2 !important;
+}
+
 /* Кастомные цвета */
 .bg-purple {
     background-color: #6f42c1 !important;

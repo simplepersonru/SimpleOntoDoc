@@ -2,21 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Collections.Specialized.BitVector32;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace RdfsBeautyDoc
+namespace SimpleOntoDoc
 {
     internal class SiteGenerator
     {
@@ -38,31 +30,34 @@ namespace RdfsBeautyDoc
                 .UseMemoryCachingProvider()
                 .Build();
 
-            // Разделяем данные по стереотипам
+            // Разделяем данные по типам
             _classes = data.Values
-                .Where(x => x.Stereotype == Stereotype.Class)
+                .Where(x => x.Type == ClassType.Class)
                 .ToList();
 
             // Собираем все свойства
             _properties = data.Values
-                .Where(x => x.Stereotype == Stereotype.Class)
+                .Where(x => x.Type == ClassType.Class)
                 .SelectMany(x => x.Properties.Values)
                 .ToList();
 
-            // Создаем структуру папок
-            CreateOutputDirectories();
-
+            // Очищаем и создаём структуру выходных директорий
+            PrepareOutputDirectories();
         }
 
-        private void CreateOutputDirectories()
+        private void PrepareOutputDirectories()
         {
-            Log("Создание структуры выходных директорий...");
+            Log("Очистка и подготовка выходной директории...");
+            if (Directory.Exists(_options.OutputPath))
+                Directory.Delete(_options.OutputPath, recursive: true);
+
             Directory.CreateDirectory(_options.OutputPath);
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "classes"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "properties"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "enums"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "primitives"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "datatypes"));
+            Directory.CreateDirectory(Path.Combine(_options.OutputPath, "compounds"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "assets"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "assets", "js"));
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "assets", "css"));
@@ -78,11 +73,12 @@ namespace RdfsBeautyDoc
 
             Log("Генерация списков классов и свойств...");
             await GeneratePropertyListAsync();
-            await GenerateClassListAsync(Stereotype.Class);
-            await GenerateClassListAsync(Stereotype.Enum);
-            await GenerateClassListAsync(Stereotype.Primitive);
-            await GenerateClassListAsync(Stereotype.DataType);
-            await GenerateClassListAsync(Stereotype.All);
+            await GenerateClassListAsync(ClassType.Class);
+            await GenerateClassListAsync(ClassType.Enum);
+            await GenerateClassListAsync(ClassType.Primitive);
+            await GenerateClassListAsync(ClassType.Datatype);
+            await GenerateClassListAsync(ClassType.Compound);
+            await GenerateClassListAsync(null); // All entities
 
             Log("Генерация страниц классов...");
             foreach (var cls in _data.Values)
@@ -112,47 +108,32 @@ namespace RdfsBeautyDoc
                 {
                     new() { Name = "Home", Url = "/index.html" },
                     new() { Name = "Properties", Url = "/properties/_index.html" },
-                    new() { Name = prop.Id, Url = prop.Href }
+                    new() { Name = prop.Id, Url = prop.Href() }
                 }
             };
 
             string html = await _engine.CompileRenderAsync("Property.cshtml", model);
-            await WriteOutputAsync(prop.Href, html);
+            await WriteOutputAsync(prop.Href(), html);
         }
 
-        private string stereotype(Stereotype val)
-        {
-            return val switch
-            {
-                Stereotype.DataType => "datatypes",
-                Stereotype.Enum => "enums",
-                Stereotype.Class => "classes",
-                Stereotype.Primitive => "primitives",
-                Stereotype.All=> "entities",
-            };
-        }
+        private string stereoPath(ClassType? type) => type.HasValue
+            ? new Class { Type = type.Value }.StereoPath()
+            : "entities";
 
-        private string nameList(Stereotype val) => val switch
+        private string nameList(ClassType? type) => type switch
         {
-            Stereotype.Class => "Classes",
-            Stereotype.Enum=> "Enums",
-            Stereotype.Primitive => "Primitives",
-            Stereotype.DataType => "DataTypes",
-            Stereotype.All => "Entities",
+            ClassType.Class => "Classes",
+            ClassType.Enum => "Enums",
+            ClassType.Primitive => "Primitives",
+            ClassType.Datatype => "DataTypes",
+            ClassType.Compound => "Compounds",
+            null => "Entities",
+            _ => "Classes"
         };
 
         private async Task GenerateClassPageAsync(Class cls)
         {
             var properties = _properties.Where(p => p.Domain.Id == cls.Id).ToList();
-            var usedInClasses = _properties
-                .Where(p => p.Range.Id == cls.Id)
-                .Select(p => p.Domain)
-                .DistinctBy(c => c.Id)
-                .ToList();
-
-            var parentClasses = cls.SubClass != null && _data.TryGetValue(cls.SubClass.Id, out var parent)
-                ? new List<Class> { parent }
-                : new List<Class>();
 
             var childClasses = _classes.Where(c => c.SubClass?.Id == cls.Id).ToList();
 
@@ -162,20 +143,20 @@ namespace RdfsBeautyDoc
                 Class = cls,
                 Properties = properties,
                 ChildClasses = childClasses,
-                CurrentPage = cls.StereoPath,
+                CurrentPage = cls.StereoPath(),
                 EnitityCount = _data.Count,
                 PropertyCount = _properties.Count,
                 AllProperties = _properties,
                 Breadcrumbs = new List<BreadcrumbItem>
                 {
                     new() { Name = "Home", Url = "/index.html" },
-                    new() { Name = nameList(cls.Stereotype), Url = $"/{cls.StereoPath}/_index.html" },
-                    new() { Name = cls.Name, Url = cls.Href }
+                    new() { Name = nameList(cls.Type), Url = $"/{cls.StereoPath()}/_index.html" },
+                    new() { Name = cls.Name, Url = cls.Href() }
                 }
             };
 
             string html = await _engine.CompileRenderAsync("Class.cshtml", model);
-            await WriteOutputAsync(cls.Href, html);
+            await WriteOutputAsync(cls.Href(), html);
         }
 
         private async Task GenerateSearchIndexAsync()
@@ -186,17 +167,17 @@ namespace RdfsBeautyDoc
                 Classes = _data.Values.Select(c => new
                 {
                     id = c.Id,
-                    name = c.Label,
-                    url = $"/{c.Href}",
-                    type = c.Stereotype.ToString(),
-                    description = c.Comment,
-                    stereotype = c.Stereotype.ToString()
+                    name = c.Name,
+                    url = $"/{c.Href()}",
+                    type = c.Type.ToString(),
+                    description = c.Description,
+                    stereotype = c.Type.ToString()
                 }),
                 Properties = _properties.Select(p => new
                 {
                     id = $"{p.Domain.Name}.{p.Name}",
-                    name = p.Label,
-                    url = $"/{p.Href}",
+                    name = p.Name,
+                    url = $"/{p.Href()}",
                     type = "Property",
                     description = $"{p.Domain.Name} → {p.Range.Name}",
                     domain = p.Domain.Name,
@@ -222,55 +203,55 @@ namespace RdfsBeautyDoc
                       Path.Combine(_options.OutputPath, "assets", "css", "site.css"),
                       overwrite: true);
         }
- 
+
         private async Task GenerateIndexAsync()
         {
             var model = new IndexViewModel
             {
                 Title = _options.DocTitle,
-				// "Онтология стандартного CIM по IEC-61970 с примесью ГОСТ РФ (приказ 1340)"
-				Description = _options.DocDescription,
+                Description = _options.DocDescription,
                 ExampleClasses = _classes.Take(5).ToList(),
                 ExampleProperties = _properties.Take(5).ToList(),
                 CurrentPage = "home",
                 ClassCount = _classes.Count,
                 PropertyCount = _properties.Count,
-                EnumCount = _data.Values.Where(x => x.Stereotype == Stereotype.Enum).Count(),
-                PrimitiveCount = _data.Values.Where(x => x.Stereotype == Stereotype.Primitive).Count(),
-                DataTypeCount = _data.Values.Where(x => x.Stereotype == Stereotype.DataType).Count(),
+                EnumCount = _data.Values.Count(x => x.Type == ClassType.Enum),
+                PrimitiveCount = _data.Values.Count(x => x.Type == ClassType.Primitive),
+                DataTypeCount = _data.Values.Count(x => x.Type == ClassType.Datatype),
+                CompoundCount = _data.Values.Count(x => x.Type == ClassType.Compound),
                 EnitityCount = _data.Count,
             };
 
-			string html = await _engine.CompileRenderAsync("Index.cshtml", model);
+            string html = await _engine.CompileRenderAsync("Index.cshtml", model);
             await WriteOutputAsync("index.html", html);
         }
 
-        private async Task GenerateClassListAsync(Stereotype type)
+        private async Task GenerateClassListAsync(ClassType? type)
         {
-            Log($"Генерация списка классов для типа {type}...");
+            Log($"Генерация списка классов для типа {type?.ToString() ?? "All"}...");
             List<Class> classes;
-            if (type == Stereotype.All)
+            if (type == null)
                 classes = _data.Values
                             .OrderBy(c => c.Id)
                             .ToList();
             else
                 classes = _data.Values
-                            .Where(c => c.Stereotype == type)
+                            .Where(c => c.Type == type)
                             .OrderBy(c => c.Id)
                             .ToList();
 
             string url;
-            if (type == Stereotype.All)
+            if (type == null)
                 url = "entities.html";
             else
-                url = $"{stereotype(type)}/_index.html";
+                url = $"{stereoPath(type)}/_index.html";
 
             var model = new ClassListViewModel
             {
                 Title = nameList(type),
                 Classes = classes,
-                Stereotype = type,
-                CurrentPage = stereotype(type),
+                Type = type,
+                CurrentPage = stereoPath(type),
                 EnitityCount = _data.Count,
                 PropertyCount = _properties.Count,
                 Breadcrumbs = new List<BreadcrumbItem>
@@ -322,3 +303,4 @@ namespace RdfsBeautyDoc
         }
     }
 }
+
