@@ -22,33 +22,27 @@
                     <dt class="col-sm-3">ID</dt>
                     <dd class="col-sm-9"><code>@Model.Property.Id</code></dd>
 
-                    @if (Model.Property.Domain != null)
-                    {
-                        <dt class="col-sm-3">Класс</dt>
-                        <dd class="col-sm-9">
-                            <a href="/@Model.Property.Domain.Href()" class="text-decoration-none">
-                                <span class="badge @(Model.Property.Domain.BadgeClass())">@Model.Property.Domain.NamespacedId()</span>
-                            </a>
-                            @if (!string.IsNullOrEmpty(Model.Property.Domain.Description))
-                            {
-                                <small class="text-muted d-block mt-1">@Model.Property.Domain.Description</small>
-                            }
-                        </dd>
-                    }
+                    <dt class="col-sm-3">Класс</dt>
+                    <dd class="col-sm-9">
+                        <a href="/@Model.Property.Domain.Href()" class="text-decoration-none">
+                            <span class="badge @(Model.Property.Domain.BadgeClass())">@Model.Property.Domain.NamespacedId()</span>
+                        </a>
+                        @if (!string.IsNullOrEmpty(Model.Property.Domain.Description))
+                        {
+                            <small class="text-muted d-block mt-1">@Model.Property.Domain.Description</small>
+                        }
+                    </dd>
 
-                    @if (Model.Property.Range != null)
-                    {
-                        <dt class="col-sm-3">Тип</dt>
-                        <dd class="col-sm-9">
-                            <a href="/@Model.Property.Range.Href()" class="text-decoration-none">
-                                <span class="badge @(Model.Property.Range.BadgeClass())">@Model.Property.Range.NamespacedId()</span>
-                            </a>
-                            @if (!string.IsNullOrEmpty(Model.Property.Range.Description))
-                            {
-                                <small class="text-muted d-block mt-1">@Model.Property.Range.Description</small>
-                            }
-                        </dd>
-                    }
+                    <dt class="col-sm-3">Тип</dt>
+                    <dd class="col-sm-9">
+                        <a href="/@Model.Property.Range.Href()" class="text-decoration-none">
+                            <span class="badge @(Model.Property.Range.BadgeClass())">@Model.Property.Range.NamespacedId()</span>
+                        </a>
+                        @if (!string.IsNullOrEmpty(Model.Property.Range.Description))
+                        {
+                            <small class="text-muted d-block mt-1">@Model.Property.Range.Description</small>
+                        }
+                    </dd>
 
                     @if (!string.IsNullOrEmpty(Model.Property.Multiplicity))
                     {
@@ -80,63 +74,54 @@
             </div>
             <div class="card-body">
                 <div class="list-group list-group-flush">
-                    @if (Model.Property.Domain != null)
-                    {
-                        <a href="/@Model.Property.Domain.Href()"
-                           class="list-group-item list-group-item-action">
-                            ← Назад к классу
-                        </a>
-                    }
+                    <a href="/@Model.Property.Domain.Href()"
+                       class="list-group-item list-group-item-action">
+                        ← Назад к классу
+                    </a>
                     <a href="/properties/_index.html"
                        class="list-group-item list-group-item-action">
                         📋 Все свойства
                     </a>
-                    @if (Model.Property.Range != null)
-                    {
-                        <a href="/@Model.Property.Range.Href()"
-                           class="list-group-item list-group-item-action">
-                            → Перейти к типу
-                        </a>
-                    }
+                    <a href="/@Model.Property.Range.Href()"
+                       class="list-group-item list-group-item-action">
+                        → Перейти к типу
+                    </a>
                 </div>
             </div>
         </div>
 
         <!-- Другие свойства того же домена -->
-        @if (Model.Property.Domain != null)
-        {
-            <div class="card">
-                <div class="card-header">
-                    <h6 class="mb-0">Другие свойства класса @Model.Property.Domain.NamespacedId()</h6>
-                </div>
-                <div class="card-body">
-                    @{
-                        var otherProperties = Model.Property.Domain.Properties.Values
-                        .Where(p => p.Id != Model.Property.Id)
-                        .ToList();
-                    }
-
-                    @if (otherProperties.Any())
-                    {
-                        <div class="list-group list-group-flush">
-                            @foreach (var prop in otherProperties)
-                            {
-                                <a href="/@prop.Href()"
-                                   class="list-group-item list-group-item-action py-2">
-                                    <div class="d-flex justify-content-between">
-                                        <span>@prop.Name</span>
-                                        <small class="text-muted">@prop.Range?.NamespacedId()</small>
-                                    </div>
-                                </a>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-muted mb-0">У класса нет других свойств</p>
-                    }
-                </div>
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Другие свойства класса @Model.Property.Domain.NamespacedId()</h6>
             </div>
-        }
+            <div class="card-body">
+                @{
+                    var otherProperties = Model.Property.Domain.Properties.Values
+                    .Where(p => p.Id != Model.Property.Id)
+                    .ToList();
+                }
+
+                @if (otherProperties.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var prop in otherProperties)
+                        {
+                            <a href="/@prop.Href()"
+                               class="list-group-item list-group-item-action py-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>@prop.Name</span>
+                                    <small class="text-muted">@prop.Range.NamespacedId()</small>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted mb-0">У класса нет других свойств</p>
+                }
+            </div>
+        </div>
     </div>
 </div>

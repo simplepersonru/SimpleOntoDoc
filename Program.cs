@@ -5,7 +5,7 @@
         public class Options
         {
             /// <summary>Путь к входному JSON-файлу онтологии (формат model.py).</summary>
-            public required string InputPath { get; set; }
+            public required string InputJsonPath { get; set; }
             public required string PlantumlRemoteUrl { get; set; }
             public required string OutputPath { get; set; }
             public required string DocTitle { get; set; }
@@ -28,7 +28,7 @@
 
             var options = new Options
             {
-                InputPath = GetEnv("SIMPLEDOC_INPUT_PATH"),
+                InputJsonPath = GetEnv("SIMPLEDOC_INPUT_PATH"),
                 PlantumlRemoteUrl = plantumlDocker.RemoteUrl,
                 OutputPath = GetEnv("SIMPLEDOC_OUTPUT_PATH"),
                 DocTitle = GetEnv("SIMPLEDOC_TITLE"),

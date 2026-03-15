@@ -15,8 +15,6 @@ until curl -sf http://localhost:$PORT > /dev/null; do
   sleep 2
 done
 
-cp $SIMPLEDOC_INPUT_PATH ./out/ontology.json
-
 docker pull gitea.simpleperson.ru/admin/simple-onto-doc:latest
 
 docker run --rm \
@@ -24,7 +22,7 @@ docker run --rm \
   --net=host \
   -e SIMPLEDOC_PLANTUML_URL=http://localhost:$PORT \
   -e SIMPLEDOC_OUTPUT_PATH=/out \
-  -e SIMPLEDOC_INPUT_PATH=/out/ontology.json \
+  -e SIMPLEDOC_INPUT_PATH \
   -e SIMPLEDOC_TITLE \
   -e SIMPLEDOC_DESCRIPTION \
   gitea.simpleperson.ru/admin/simple-onto-doc:latest

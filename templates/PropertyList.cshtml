@@ -11,7 +11,7 @@
 <div class="row mb-4">
     <div class="col-md-12">
         <input type="text" class="form-control" id="propertyFilter"
-               placeholder="Поиск по ID или типу...">
+               placeholder="Поиск по ID, описанию или типу...">
     </div>
 </div>
 
@@ -30,8 +30,8 @@
                 <tr class="searchable property-row"
                     data-id="@prop.Id.ToLower()"
                     data-description="@(prop.Description?.ToLower() ?? "")"
-                    data-domain="@prop.Domain?.Id.ToLower()"
-                    data-range="@prop.Range?.Id.ToLower()">
+                    data-domain="@prop.Domain.Id.ToLower()"
+                    data-range="@prop.Range.Id.ToLower()">
                     <td>
 
                         <div class="d-flex flex-column gap-1">

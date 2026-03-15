@@ -147,7 +147,7 @@
         <!-- Использование (где этот класс используется как range) -->
         @{
             var usedInProperties = Model.AllProperties
-            .Where(p => p.Range?.Id == Model.Class.Id)
+            .Where(p => p.Range.Id == Model.Class.Id)
             .ToList();
         }
 

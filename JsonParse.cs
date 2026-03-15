@@ -16,8 +16,8 @@ namespace SimpleOntoDoc
 
         public JsonParse(Program.Options options)
         {
-            Log($"Начало парсинга JSON файла: {options.InputPath}");
-            Parse(options.InputPath);
+            Log($"Начало парсинга JSON файла: {options.InputJsonPath}");
+            Parse(options.InputJsonPath);
             Log("Парсинг завершён.");
         }
 
@@ -69,13 +69,32 @@ namespace SimpleOntoDoc
                 foreach (var prop in cls.Properties.Values)
                 {
                     prop.Domain = cls;
-                    if (!string.IsNullOrEmpty(prop.RangeName))
-                        prop.Range = GetOrCreate(prop.RangeName);
+
+                    if (string.IsNullOrEmpty(prop.RangeName))
+                        throw new Exception($"Свойство '{prop.Name}' класса '{cls.Name}' не имеет range. Range обязателен для всех свойств.");
+                    prop.Range = GetOrCreate(prop.RangeName);
                 }
 
                 // Устанавливаем Domain на элементы перечислений
                 foreach (var enumerator in cls.Enumerators.Values)
                     enumerator.Domain = cls;
+            }
+
+            // Третий проход: проверяем что у всех свойств заполнены Domain и Range
+            foreach (var cls in _classes.Values)
+            {
+                foreach (var prop in cls.Properties.Values)
+                {
+                    if (prop.Domain == null)
+                        throw new Exception($"Свойство '{prop.Name}' класса '{cls.Name}' имеет незаполненный Domain после парсинга.");
+                    if (prop.Range == null)
+                        throw new Exception($"Свойство '{prop.Name}' класса '{cls.Name}' имеет незаполненный Range после парсинга.");
+                }
+                foreach (var enumerator in cls.Enumerators.Values)
+                {
+                    if (enumerator.Domain == null)
+                        throw new Exception($"Элемент перечисления '{enumerator.Name}' класса '{cls.Name}' имеет незаполненный Domain после парсинга.");
+                }
             }
 
             Log($"После разрешения ссылок итого классов: {_classes.Count}");

@@ -39,15 +39,15 @@ namespace SimpleOntoDoc
         [JsonPropertyName("inverse_role_name")]
         public string? InverseRoleName { get; set; }
 
-        /// <summary>Класс-владелец свойства (устанавливается после парсинга, не из JSON).</summary>
+        /// <summary>Класс-владелец свойства (устанавливается после парсинга, не из JSON). Всегда заполнен.</summary>
         [JsonIgnore]
-        public Class? Domain { get; set; }
+        public Class Domain { get; set; } = null!;
 
-        /// <summary>Класс-тип свойства (разрешается из RangeName после парсинга).</summary>
+        /// <summary>Класс-тип свойства (разрешается из RangeName после парсинга). Всегда заполнен.</summary>
         [JsonIgnore]
-        public Class? Range { get; set; }
+        public Class Range { get; set; } = null!;
 
-        public override string Id => $"{Domain?.Name}.{Name}";
+        public override string Id => $"{Domain.Name}.{Name}";
     }
 
     /// <summary>
@@ -56,11 +56,11 @@ namespace SimpleOntoDoc
     /// </summary>
     public class Enumerator : Base
     {
-        /// <summary>Класс-перечисление, которому принадлежит этот элемент (устанавливается после парсинга).</summary>
+        /// <summary>Класс-перечисление, которому принадлежит этот элемент (устанавливается после парсинга). Всегда заполнен.</summary>
         [JsonIgnore]
-        public Class? Domain { get; set; }
+        public Class Domain { get; set; } = null!;
 
-        public override string Id => $"{Domain?.Name}.{Name}";
+        public override string Id => $"{Domain.Name}.{Name}";
     }
 
     /// <summary>

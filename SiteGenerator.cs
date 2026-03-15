@@ -115,16 +115,9 @@ namespace SimpleOntoDoc
             await WriteOutputAsync(prop.Href(), html);
         }
 
-        private string stereoPath(ClassType? type) => type switch
-        {
-            ClassType.Datatype => "datatypes",
-            ClassType.Enum => "enums",
-            ClassType.Class => "classes",
-            ClassType.Primitive => "primitives",
-            ClassType.Compound => "compounds",
-            null => "entities",
-            _ => "classes"
-        };
+        private string stereoPath(ClassType? type) => type.HasValue
+            ? new Class { Type = type.Value }.StereoPath()
+            : "entities";
 
         private string nameList(ClassType? type) => type switch
         {
@@ -139,7 +132,7 @@ namespace SimpleOntoDoc
 
         private async Task GenerateClassPageAsync(Class cls)
         {
-            var properties = _properties.Where(p => p.Domain?.Id == cls.Id).ToList();
+            var properties = _properties.Where(p => p.Domain.Id == cls.Id).ToList();
 
             var childClasses = _classes.Where(c => c.SubClass?.Id == cls.Id).ToList();
 
@@ -181,13 +174,13 @@ namespace SimpleOntoDoc
                 }),
                 Properties = _properties.Select(p => new
                 {
-                    id = $"{p.Domain?.Name}.{p.Name}",
+                    id = $"{p.Domain.Name}.{p.Name}",
                     name = p.Name,
                     url = $"/{p.Href()}",
                     type = "Property",
-                    description = $"{p.Domain?.Name} → {p.Range?.Name}",
-                    domain = p.Domain?.Name,
-                    range = p.Range?.Name
+                    description = $"{p.Domain.Name} → {p.Range.Name}",
+                    domain = p.Domain.Name,
+                    range = p.Range.Name
                 }),
             };
 

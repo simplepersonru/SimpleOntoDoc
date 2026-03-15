@@ -48,7 +48,7 @@ namespace SimpleOntoDoc
     public static class PropertyExtensions
     {
         public static string Href(this Property prop) =>
-            $"properties/{prop.Domain?.Name}.{prop.Name}.html";
+            $"properties/{prop.Domain.Name}.{prop.Name}.html";
 
         public static string NamespacedId(this Property prop) =>
             string.IsNullOrEmpty(prop.Namespace) ? prop.Name : $"{prop.Namespace}:{prop.Name}";
