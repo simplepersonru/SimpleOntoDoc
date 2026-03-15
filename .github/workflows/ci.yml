@@ -41,3 +41,36 @@ jobs:
           --configuration Release
           --verbosity normal
           --filter "FullyQualifiedName!~PlantUmlIntegrationTests"
+
+      # -----------------------------------------------------------------------
+      # Тест 3 (PlantUML): локально поднимаем plantuml/plantuml-server в Docker
+      # (аналогично publish.bash), дожидаемся готовности и запускаем тесты,
+      # передавая URL через SIMPLEDOC_PLANTUML_URL. Если тесты не пройдут
+      # (например, контейнер не поднялся), это не блокирует билд.
+      # -----------------------------------------------------------------------
+      - name: Start local PlantUML Docker container
+        run: |
+          docker run --rm -d --name plantuml_ci -p 18080:8080 plantuml/plantuml-server:jetty
+          echo "Waiting for PlantUML to become ready..."
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:18080 > /dev/null; then
+              echo "PlantUML is ready."
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Run PlantUML integration tests
+        env:
+          SIMPLEDOC_PLANTUML_URL: http://localhost:18080
+        run: >
+          dotnet test SimpleOntoDoc.Tests/SimpleOntoDoc.Tests.csproj
+          --no-build
+          --configuration Release
+          --verbosity normal
+          --filter "FullyQualifiedName~PlantUmlIntegrationTests"
+        continue-on-error: true
+
+      - name: Stop local PlantUML Docker container
+        if: always()
+        run: docker stop plantuml_ci || true
