@@ -21,7 +21,7 @@
         <thead class="table-light">
             <tr>
                 <th>Свойство</th>
-                <th>Описание</th>
+                <th>Имя</th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
             {
                 <tr class="searchable property-row"
                     data-id="@prop.Id.ToLower()"
-                    data-description="@(prop.Description?.ToLower() ?? "")"
+                    data-name="@(prop.Name?.ToLower() ?? "")"
                     data-domain="@prop.Domain.Id.ToLower()"
                     data-range="@prop.Range.Id.ToLower()">
                     <td>
@@ -50,9 +50,9 @@
                         </div>
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(prop.Description))
+                        @if (!string.IsNullOrEmpty(prop.Name))
                         {
-                            <p>@prop.Description</p>
+                            <p>@prop.Name</p>
                         }
                         else
                         {
@@ -88,13 +88,13 @@
 
         rows.forEach(row => {
             const id = row.dataset.id || '';
-            const description = row.dataset.description || '';
+            const name = row.dataset.name || '';
             const domain = row.dataset.domain || '';
             const range = row.dataset.range || '';
 
             const matches = !searchQuery ||
                           id.includes(searchQuery) ||
-                          description.includes(searchQuery) ||
+                          name.includes(searchQuery) ||
                           domain.includes(searchQuery) ||
                           range.includes(searchQuery);
 

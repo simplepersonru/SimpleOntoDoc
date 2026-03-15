@@ -91,9 +91,9 @@
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <div>
                                     <h6 class="mb-1">@cls.Id</h6>
-                                    @if (!string.IsNullOrEmpty(cls.Description))
+                                    @if (!string.IsNullOrEmpty(cls.Name))
                                     {
-                                        <small class="text-muted">@cls.Description</small>
+                                        <small class="text-muted">@cls.Name</small>
                                     }
                                 </div>
                                 <span class="badge bg-primary rounded-pill">@cls.Properties.Count</span>
@@ -119,9 +119,9 @@
                             <div class="d-flex w-100 justify-content-between">
                                 <div>
                                     <h6 class="mb-1">@prop.Id</h6>
-                                    @if (!string.IsNullOrEmpty(prop.Description))
+                                    @if (!string.IsNullOrEmpty(prop.Name))
                                     {
-                                        <small class="text-muted">@prop.Description</small>
+                                        <small class="text-muted">@prop.Name</small>
                                     }
                                 </div>
                                 <div class="text-end">

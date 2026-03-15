@@ -5,9 +5,9 @@
 }
 
 <h1>@Model.Property.Id</h1>
-@if (!string.IsNullOrEmpty(Model.Property.Description))
+@if (!string.IsNullOrEmpty(Model.Property.Name))
 {
-    <p class="lead">@Model.Property.Description</p>
+    <p class="lead">@Model.Property.Name</p>
 }
 
 <div class="row mt-4">
@@ -27,9 +27,9 @@
                         <a href="/@Model.Property.Domain.Href()" class="text-decoration-none">
                             <span class="badge @(Model.Property.Domain.BadgeClass())">@Model.Property.Domain.NamespacedId()</span>
                         </a>
-                        @if (!string.IsNullOrEmpty(Model.Property.Domain.Description))
+                        @if (!string.IsNullOrEmpty(Model.Property.Domain.Name))
                         {
-                            <small class="text-muted d-block mt-1">@Model.Property.Domain.Description</small>
+                            <small class="text-muted d-block mt-1">@Model.Property.Domain.Name</small>
                         }
                     </dd>
 
@@ -38,9 +38,9 @@
                         <a href="/@Model.Property.Range.Href()" class="text-decoration-none">
                             <span class="badge @(Model.Property.Range.BadgeClass())">@Model.Property.Range.NamespacedId()</span>
                         </a>
-                        @if (!string.IsNullOrEmpty(Model.Property.Range.Description))
+                        @if (!string.IsNullOrEmpty(Model.Property.Range.Name))
                         {
-                            <small class="text-muted d-block mt-1">@Model.Property.Range.Description</small>
+                            <small class="text-muted d-block mt-1">@Model.Property.Range.Name</small>
                         }
                     </dd>
 

@@ -7,6 +7,11 @@
 
 <h1>@Model.Class.Id <small class="text-muted">@GetTypeBadge(Model.Class.Type)</small></h1>
 
+@if (!string.IsNullOrEmpty(Model.Class.Name))
+{
+    <p class="lead">@Model.Class.Name</p>
+}
+
 @if (!string.IsNullOrEmpty(Model.Class.Description))
 {
     <div class="alert alert-info">@Model.Class.Description</div>
@@ -47,7 +52,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Тип</th>
-                                    <th>Описание</th>
+                                    <th>Имя</th>
                                     <th>Количество</th>
                                 </tr>
                             </thead>
@@ -66,9 +71,9 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(prop.Description))
+                                            @if (!string.IsNullOrEmpty(prop.Name))
                                             {
-                                                <small class="text-muted">@prop.Description</small>
+                                                <small class="text-muted">@prop.Name</small>
                                             }
                                             else
                                             {
@@ -108,7 +113,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Value</th>
-                                    <th>Описание</th>
+                                    <th>Имя</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,14 +124,7 @@
                                             <code>@enumerator.Name</code>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(enumerator.Description))
-                                            {
-                                                <span>@enumerator.Description</span>
-                                            }
-                                            else
-                                            {
-                                                <span>—</span>
-                                            }
+                                            <span>@enumerator.Name</span>
                                         </td>
                                     </tr>
                                 }
@@ -157,7 +155,7 @@
                                 <tr>
                                     <th>Класс</th>
                                     <th>Свойство</th>
-                                    <th>Описание</th>
+                                    <th>Имя</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -175,9 +173,9 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(prop.Description))
+                                            @if (!string.IsNullOrEmpty(prop.Name))
                                             {
-                                                <p>@prop.Description</p>
+                                                <p>@prop.Name</p>
                                             }
                                             else
                                             {
@@ -205,7 +203,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Класс</th>
-                                    <th>Описание</th>
+                                    <th>Имя</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -218,9 +216,9 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(cls.Description))
+                                            @if (!string.IsNullOrEmpty(cls.Name))
                                             {
-                                                <p>@cls.Description</p>
+                                                <p>@cls.Name</p>
                                             }
                                             else
                                             {
