@@ -1,0 +1,212 @@
+[
+  {
+    "description": "Текстовая строка",
+    "namespace": "animal",
+    "name": "String",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Целое число",
+    "namespace": "animal",
+    "name": "Integer",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Логическое значение",
+    "namespace": "animal",
+    "name": "Boolean",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Дата",
+    "namespace": "animal",
+    "name": "Date",
+    "type": "Datatype",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Географическая координата",
+    "namespace": "animal",
+    "name": "GeoPosition",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "latitude": {
+        "description": "Широта",
+        "namespace": "animal",
+        "name": "latitude",
+        "range": "String",
+        "optional": false
+      },
+      "longitude": {
+        "description": "Долгота",
+        "namespace": "animal",
+        "name": "longitude",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Классификация рациона питания",
+    "namespace": "animal",
+    "name": "DietKind",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "herbivore": {
+        "description": "Растительноядное",
+        "namespace": "animal",
+        "name": "herbivore"
+      },
+      "carnivore": {
+        "description": "Плотоядное",
+        "namespace": "animal",
+        "name": "carnivore"
+      },
+      "omnivore": {
+        "description": "Всеядное",
+        "namespace": "animal",
+        "name": "omnivore"
+      }
+    }
+  },
+  {
+    "description": "Базовый класс всех живых существ",
+    "namespace": "animal",
+    "name": "LivingBeing",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "name": {
+        "description": "Имя существа",
+        "namespace": "animal",
+        "name": "name",
+        "range": "String",
+        "optional": false
+      },
+      "isAlive": {
+        "description": "Живо ли существо",
+        "namespace": "animal",
+        "name": "isAlive",
+        "range": "Boolean",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Базовый класс животных",
+    "namespace": "animal",
+    "name": "Animal",
+    "type": "Class",
+    "sub_class": "LivingBeing",
+    "properties": {
+      "age": {
+        "description": "Возраст в годах",
+        "namespace": "animal",
+        "name": "age",
+        "range": "Integer",
+        "optional": true,
+        "multiplicity": "0..1"
+      },
+      "diet": {
+        "description": "Тип рациона",
+        "namespace": "animal",
+        "name": "diet",
+        "range": "DietKind",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Млекопитающее",
+    "namespace": "animal",
+    "name": "Mammal",
+    "type": "Class",
+    "sub_class": "Animal",
+    "properties": {
+      "furColor": {
+        "description": "Цвет шерсти",
+        "namespace": "animal",
+        "name": "furColor",
+        "range": "String",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Собака — одомашненное млекопитающее",
+    "namespace": "animal",
+    "name": "Dog",
+    "type": "Class",
+    "sub_class": "Mammal",
+    "properties": {
+      "breed": {
+        "description": "Порода",
+        "namespace": "animal",
+        "name": "breed",
+        "range": "String",
+        "optional": true
+      },
+      "owner": {
+        "description": "Владелец собаки",
+        "namespace": "animal",
+        "name": "owner",
+        "range": "Person",
+        "optional": true,
+        "inverse_role_name": "pets"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Человек, который может владеть питомцами",
+    "namespace": "animal",
+    "name": "Person",
+    "type": "Class",
+    "sub_class": "LivingBeing",
+    "properties": {
+      "birthDate": {
+        "description": "Дата рождения",
+        "namespace": "animal",
+        "name": "birthDate",
+        "range": "Date",
+        "optional": true
+      },
+      "pets": {
+        "description": "Питомцы человека",
+        "namespace": "animal",
+        "name": "pets",
+        "range": "Dog",
+        "optional": true,
+        "multiplicity": "0..*",
+        "inverse_role_name": "owner"
+      },
+      "habitat": {
+        "description": "Место обитания",
+        "namespace": "animal",
+        "name": "habitat",
+        "range": "GeoPosition",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  }
+]

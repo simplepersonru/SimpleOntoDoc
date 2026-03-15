@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build-and-test:
+    name: Build & Test (.NET 9)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore SimpleOntoDoc.sln
+
+      - name: Build
+        run: dotnet build SimpleOntoDoc.sln --no-restore --configuration Release
+
+      # -----------------------------------------------------------------------
+      # Тест 1 (модульные) + Тест 2 (интеграционный без PlantUML):
+      # PlantUML-тесты исключаются из обычного прогона через фильтр категории,
+      # чтобы не зависеть от сети. Они запускаются отдельным шагом ниже.
+      # -----------------------------------------------------------------------
+      - name: Run unit and integration tests (no PlantUML)
+        run: >
+          dotnet test SimpleOntoDoc.Tests/SimpleOntoDoc.Tests.csproj
+          --no-build
+          --configuration Release
+          --verbosity normal
+          --filter "FullyQualifiedName!~PlantUmlIntegrationTests"
+
+      # -----------------------------------------------------------------------
+      # Тест 3 (интеграционный с PlantUML):
+      # Использует публичный сервис https://plantuml.simpleperson.ru/
+      # Запускается отдельно и помечен как «continue-on-error», чтобы временная
+      # недоступность внешнего сервиса не блокировала CI целиком.
+      # -----------------------------------------------------------------------
+      - name: Run PlantUML integration tests
+        continue-on-error: true
+        run: >
+          dotnet test SimpleOntoDoc.Tests/SimpleOntoDoc.Tests.csproj
+          --no-build
+          --configuration Release
+          --verbosity normal
+          --filter "FullyQualifiedName~PlantUmlIntegrationTests"
