@@ -16,7 +16,7 @@
             <div class="card-body text-center py-3">
                 <h3 class="card-title mb-1">@Model.ClassCount</h3>
                 <p class="card-text mb-0">Classes</p>
-                <a href="/classes/_index.html" class="stretched-link"></a>
+                <a href="@Model.BasePath/classes/_index.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
             <div class="card-body text-center py-3">
                 <h3 class="card-title mb-1">@Model.PropertyCount</h3>
                 <p class="card-text mb-0">Properties</p>
-                <a href="/properties/_index.html" class="stretched-link"></a>
+                <a href="@Model.BasePath/properties/_index.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <div class="card-body text-center py-3">
                 <h3 class="card-title mb-1">@Model.EnumCount</h3>
                 <p class="card-text mb-0">Enums</p>
-                <a href="/enums/_index.html" class="stretched-link"></a>
+                <a href="@Model.BasePath/enums/_index.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
             <div class="card-body text-center py-3">
                 <h3 class="card-title mb-1">@Model.PrimitiveCount</h3>
                 <p class="card-text mb-0">Primitives</p>
-                <a href="/primitives/_index.html" class="stretched-link"></a>
+                <a href="@Model.BasePath/primitives/_index.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
             <div class="card-body text-center py-3">
                 <h3 class="card-title mb-1">@Model.DataTypeCount</h3>
                 <p class="card-text mb-0">Data Types</p>
-                <a href="/datatypes/_index.html" class="stretched-link"></a>
+                <a href="@Model.BasePath/datatypes/_index.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
             <div class="card-body text-center py-3">
                 <h3 class="card-title mb-1">@Model.CompoundCount</h3>
                 <p class="card-text mb-0">Compounds</p>
-                <a href="/compounds/_index.html" class="stretched-link"></a>
+                <a href="@Model.BasePath/compounds/_index.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -81,13 +81,13 @@
         <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Примеры классов</h5>
-                <a href="/classes/_index.html" class="btn btn-sm btn-outline-primary">View All</a>
+                <a href="@Model.BasePath/classes/_index.html" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
                     @foreach (var cls in Model.ExampleClasses)
                     {
-                        <a href="/@cls.Href()" class="list-group-item list-group-item-action py-3 searchable">
+                        <a href="@Model.BasePath/@cls.Href()" class="list-group-item list-group-item-action py-3 searchable">
                             <div class="d-flex w-100 justify-content-between align-items-center">
                                 <div>
                                     <h6 class="mb-1">@cls.Id</h6>
@@ -109,13 +109,13 @@
         <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Примеры свойств</h5>
-                <a href="/properties/_index.html" class="btn btn-sm btn-outline-success">View All</a>
+                <a href="@Model.BasePath/properties/_index.html" class="btn btn-sm btn-outline-success">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
                     @foreach (var prop in Model.ExampleProperties)
                     {
-                        <a href="/@prop.Href()" class="list-group-item list-group-item-action py-3 searchable">
+                        <a href="@Model.BasePath/@prop.Href()" class="list-group-item list-group-item-action py-3 searchable">
                             <div class="d-flex w-100 justify-content-between">
                                 <div>
                                     <h6 class="mb-1">@prop.Id</h6>

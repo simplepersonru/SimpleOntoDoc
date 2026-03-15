@@ -61,12 +61,12 @@
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            <a href="/@prop.Href()" class="text-decoration-none">
+                                            <a href="@Model.BasePath/@prop.Href()" class="text-decoration-none">
                                                 @prop.Name
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
+                                            <a href="@Model.BasePath/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
                                                 @prop.Range.Id
                                             </a>
                                         </td>
@@ -170,12 +170,12 @@
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            <a href="/@prop.Domain.Href()" class="badge badge-class text-decoration-none">
+                                            <a href="@Model.BasePath/@prop.Domain.Href()" class="badge badge-class text-decoration-none">
                                                 @prop.Domain.NamespacedId()
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="/@prop.Href()" class="badge badge-property text-decoration-none">
+                                            <a href="@Model.BasePath/@prop.Href()" class="badge badge-property text-decoration-none">
                                                 @prop.NamespacedId()
                                             </a>
                                         </td>
@@ -218,7 +218,7 @@
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            <a href="/@cls.Href()" class="badge badge-class text-decoration-none">
+                                            <a href="@Model.BasePath/@cls.Href()" class="badge badge-class text-decoration-none">
                                                 @cls.NamespacedId()
                                             </a>
                                         </td>
@@ -261,7 +261,7 @@
                     {
                         <dt class="col-sm-4">Наследует</dt>
                         <dd class="col-sm-8">
-                            <a href="/@Model.Class.SubClass.Href()" class="text-decoration-none">
+                            <a href="@Model.BasePath/@Model.Class.SubClass.Href()" class="text-decoration-none">
                                 @Model.Class.SubClass.NamespacedId()
                             </a>
                         </dd>
@@ -289,17 +289,17 @@
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
-                    <a href="/@Model.Class.Href()" class="list-group-item list-group-item-action">
+                    <a href="@Model.BasePath/@Model.Class.Href()" class="list-group-item list-group-item-action">
                         ← All @Model.Breadcrumbs[1].Name
                     </a>
                     @if (Model.Class.SubClass != null)
                     {
-                        <a href="/@Model.Class.SubClass.Href()"
+                        <a href="@Model.BasePath/@Model.Class.SubClass.Href()"
                            class="list-group-item list-group-item-action">
                             ↑ Parent: @Model.Class.SubClass.NamespacedId()
                         </a>
                     }
-                    <a href="/index.html" class="list-group-item list-group-item-action">
+                    <a href="@Model.BasePath/index.html" class="list-group-item list-group-item-action">
                         🏠 Home
                     </a>
                 </div>

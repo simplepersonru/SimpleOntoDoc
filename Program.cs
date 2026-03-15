@@ -10,6 +10,11 @@
             public required string OutputPath { get; set; }
             public required string DocTitle { get; set; }
             public required string DocDescription { get; set; }
+            /// <summary>
+            /// Базовый путь сайта относительно домена (например, "/hello" для ky.ru/hello/...).
+            /// Пустая строка означает корень домена. Всегда начинается с "/" если не пустой.
+            /// </summary>
+            public string BasePath { get; set; } = string.Empty;
         }
 
         static string GetEnv(string env)
@@ -18,6 +23,18 @@
             if (val == null)
                 throw new Exception($"Не определен ENV {env}");
             return val;
+        }
+
+        static string GetEnvOptional(string env, string defaultValue = "")
+        {
+            return Environment.GetEnvironmentVariable(env) ?? defaultValue;
+        }
+
+        static string NormalizeBasePath(string basePath)
+        {
+            if (string.IsNullOrEmpty(basePath))
+                return string.Empty;
+            return "/" + basePath.Trim('/');
         }
 
         static async Task Main(string[] args)
@@ -33,6 +50,7 @@
                 OutputPath = GetEnv("SIMPLEDOC_OUTPUT_PATH"),
                 DocTitle = GetEnv("SIMPLEDOC_TITLE"),
                 DocDescription = GetEnv("SIMPLEDOC_DESCRIPTION"),
+                BasePath = NormalizeBasePath(GetEnvOptional("SIMPLEDOC_BASE_PATH")),
             };
 
             Log("Чтение и парсинг JSON схемы...");

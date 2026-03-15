@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/css/site.css" rel="stylesheet">
+    <link href="@Model.BasePath/assets/css/site.css" rel="stylesheet">
     <script src='https://unpkg.com/panzoom@9.4.0/dist/panzoom.min.js'></script>
 </head>
 <body>
     <!-- Навигация -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/index.html">
+            <a class="navbar-brand" href="@Model.BasePath/index.html">
                 📚 SimpleOntoDoc
             </a>
 
@@ -22,17 +22,17 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link @(Model.CurrentPage == "home" ? "active" : "")"
-                           href="/index.html">Home</a>
+                           href="@Model.BasePath/index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(Model.CurrentPage == "entities" ? "active" : "")"
-                           href="/entities.html">
+                           href="@Model.BasePath/entities.html">
                             Entities (@Model.EnitityCount)
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(Model.CurrentPage == "properties" ? "active" : "")"
-                           href="/properties/_index.html">
+                           href="@Model.BasePath/properties/_index.html">
                             Properties (@Model.PropertyCount)
                         </a>
                     </li>
@@ -95,6 +95,7 @@
 
     <!-- Скрипты -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/search.js"></script>
+    <script>window.SIMPLEDOC_BASE_PATH = '@Model.BasePath';</script>
+    <script src="@Model.BasePath/assets/js/search.js"></script>
 </body>
 </html>

@@ -24,7 +24,7 @@
 
                     <dt class="col-sm-3">Класс</dt>
                     <dd class="col-sm-9">
-                        <a href="/@Model.Property.Domain.Href()" class="text-decoration-none">
+                        <a href="@Model.BasePath/@Model.Property.Domain.Href()" class="text-decoration-none">
                             <span class="badge @(Model.Property.Domain.BadgeClass())">@Model.Property.Domain.NamespacedId()</span>
                         </a>
                         @if (!string.IsNullOrEmpty(Model.Property.Domain.Description))
@@ -35,7 +35,7 @@
 
                     <dt class="col-sm-3">Тип</dt>
                     <dd class="col-sm-9">
-                        <a href="/@Model.Property.Range.Href()" class="text-decoration-none">
+                        <a href="@Model.BasePath/@Model.Property.Range.Href()" class="text-decoration-none">
                             <span class="badge @(Model.Property.Range.BadgeClass())">@Model.Property.Range.NamespacedId()</span>
                         </a>
                         @if (!string.IsNullOrEmpty(Model.Property.Range.Description))
@@ -56,7 +56,7 @@
                     {
                         <dt class="col-sm-3">Обратное свойство</dt>
                         <dd class="col-sm-9">
-                            <a href="/properties/@(Model.Property.InverseRoleName).html" class="text-decoration-none">
+                            <a href="@Model.BasePath/properties/@(Model.Property.InverseRoleName).html" class="text-decoration-none">
                                 <code>@Model.Property.InverseRoleName</code>
                             </a>
                         </dd>
@@ -74,15 +74,15 @@
             </div>
             <div class="card-body">
                 <div class="list-group list-group-flush">
-                    <a href="/@Model.Property.Domain.Href()"
+                    <a href="@Model.BasePath/@Model.Property.Domain.Href()"
                        class="list-group-item list-group-item-action">
                         ← Назад к классу
                     </a>
-                    <a href="/properties/_index.html"
+                    <a href="@Model.BasePath/properties/_index.html"
                        class="list-group-item list-group-item-action">
                         📋 Все свойства
                     </a>
-                    <a href="/@Model.Property.Range.Href()"
+                    <a href="@Model.BasePath/@Model.Property.Range.Href()"
                        class="list-group-item list-group-item-action">
                         → Перейти к типу
                     </a>
@@ -107,7 +107,7 @@
                     <div class="list-group list-group-flush">
                         @foreach (var prop in otherProperties)
                         {
-                            <a href="/@prop.Href()"
+                            <a href="@Model.BasePath/@prop.Href()"
                                class="list-group-item list-group-item-action py-2">
                                 <div class="d-flex justify-content-between">
                                     <span>@prop.Name</span>

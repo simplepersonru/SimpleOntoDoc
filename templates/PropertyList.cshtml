@@ -35,10 +35,10 @@
                     <td>
 
                         <div class="d-flex flex-column gap-1">
-                            <a href="/@prop.Href()" class="fw-bold">@prop.Id</a>
+                            <a href="@Model.BasePath/@prop.Href()" class="fw-bold">@prop.Id</a>
                             <div class="d-flex flex-row gap-2">
                                 <span>Тип</span>
-                                <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
+                                <a href="@Model.BasePath/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
                                     @prop.Range.NamespacedId()
                                 </a>
                                 @if (!string.IsNullOrEmpty(prop.Multiplicity))
