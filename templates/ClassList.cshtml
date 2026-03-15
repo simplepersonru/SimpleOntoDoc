@@ -70,10 +70,10 @@
                             data-id="@cls.Id.ToLower()"
                             data-description="@(cls.Description?.ToLower() ?? "")"
                             data-type="@cls.Type.ToString().ToLower()"
-                            data-url="/@cls.Href()">
+                            data-url="@Model.BasePath/@cls.Href()">
                             <td>
                                 <div class="d-flex flex-column">
-                                    <a href="/@cls.Href()" class="text-decoration-none fw-bold">
+                                    <a href="@Model.BasePath/@cls.Href()" class="text-decoration-none fw-bold">
                                         @cls.Id
                                     </a>
                                     <small >

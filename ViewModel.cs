@@ -70,6 +70,7 @@ namespace SimpleOntoDoc
         public string CurrentPage { get; set; } = "home";
         public int PropertyCount { get; set; }
         public int EnitityCount { get; set; }
+        public string BasePath { get; set; } = string.Empty;
     }
 
     public class IndexViewModel : LayoutViewModel

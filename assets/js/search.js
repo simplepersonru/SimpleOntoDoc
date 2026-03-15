@@ -2,7 +2,8 @@
 const searchIndex = {};
 
 // Загружаем индекс
-fetch('/assets/search-index.json')
+const _basePath = window.SIMPLEDOC_BASE_PATH || '';
+fetch(_basePath + '/assets/search-index.json')
     .then(response => response.json())
     .then(data => {
         // Теперь у нас только классы и свойства

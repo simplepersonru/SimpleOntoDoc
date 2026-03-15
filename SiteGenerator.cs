@@ -97,6 +97,11 @@ namespace SimpleOntoDoc
             Log("Генерация завершена.");
         }
 
+        private string AbsoluteUrl(string relativePath) =>
+            string.IsNullOrEmpty(_options.BasePath)
+                ? $"/{relativePath}"
+                : $"{_options.BasePath}/{relativePath}";
+
         private async Task GeneratePropertyPageAsync(Property prop)
         {
             var model = new PropertyViewModel
@@ -106,11 +111,12 @@ namespace SimpleOntoDoc
                 CurrentPage = "properties",
                 PropertyCount = _properties.Count,
                 EnitityCount = _data.Count,
+                BasePath = _options.BasePath,
                 Breadcrumbs = new List<BreadcrumbItem>
                 {
-                    new() { Name = "Home", Url = "/index.html" },
-                    new() { Name = "Properties", Url = "/properties/_index.html" },
-                    new() { Name = prop.Id, Url = prop.Href() }
+                    new() { Name = "Home", Url = AbsoluteUrl("index.html") },
+                    new() { Name = "Properties", Url = AbsoluteUrl("properties/_index.html") },
+                    new() { Name = prop.Id, Url = AbsoluteUrl(prop.Href()) }
                 }
             };
 
@@ -149,11 +155,12 @@ namespace SimpleOntoDoc
                 EnitityCount = _data.Count,
                 PropertyCount = _properties.Count,
                 AllProperties = _properties,
+                BasePath = _options.BasePath,
                 Breadcrumbs = new List<BreadcrumbItem>
                 {
-                    new() { Name = "Home", Url = "/index.html" },
-                    new() { Name = nameList(cls.Type), Url = $"/{cls.StereoPath()}/_index.html" },
-                    new() { Name = cls.Name, Url = cls.Href() }
+                    new() { Name = "Home", Url = AbsoluteUrl("index.html") },
+                    new() { Name = nameList(cls.Type), Url = AbsoluteUrl($"{cls.StereoPath()}/_index.html") },
+                    new() { Name = cls.Name, Url = AbsoluteUrl(cls.Href()) }
                 }
             };
 
@@ -170,7 +177,7 @@ namespace SimpleOntoDoc
                 {
                     id = c.Id,
                     name = c.Name,
-                    url = $"/{c.Href()}",
+                    url = AbsoluteUrl(c.Href()),
                     type = c.Type.ToString(),
                     description = c.Description,
                     stereotype = c.Type.ToString()
@@ -179,7 +186,7 @@ namespace SimpleOntoDoc
                 {
                     id = $"{p.Domain.Name}.{p.Name}",
                     name = p.Name,
-                    url = $"/{p.Href()}",
+                    url = AbsoluteUrl(p.Href()),
                     type = "Property",
                     description = $"{p.Domain.Name} → {p.Range.Name}",
                     domain = p.Domain.Name,
@@ -222,6 +229,7 @@ namespace SimpleOntoDoc
                 DataTypeCount = _data.Values.Count(x => x.Type == ClassType.Datatype),
                 CompoundCount = _data.Values.Count(x => x.Type == ClassType.Compound),
                 EnitityCount = _data.Count,
+                BasePath = _options.BasePath,
             };
 
             string html = await _engine.CompileRenderAsync("Index.cshtml", model);
@@ -256,10 +264,11 @@ namespace SimpleOntoDoc
                 CurrentPage = stereoPath(type),
                 EnitityCount = _data.Count,
                 PropertyCount = _properties.Count,
+                BasePath = _options.BasePath,
                 Breadcrumbs = new List<BreadcrumbItem>
                 {
-                    new() { Name = "Home", Url = "/index.html" },
-                    new() { Name = nameList(type), Url = url }
+                    new() { Name = "Home", Url = AbsoluteUrl("index.html") },
+                    new() { Name = nameList(type), Url = AbsoluteUrl(url) }
                 }
             };
 
@@ -277,10 +286,11 @@ namespace SimpleOntoDoc
                 CurrentPage = "properties",
                 EnitityCount = _data.Count,
                 PropertyCount = _properties.Count,
+                BasePath = _options.BasePath,
                 Breadcrumbs = new List<BreadcrumbItem>
                 {
-                    new() { Name = "Home", Url = "/index.html" },
-                    new() { Name = "Properties", Url = "/properties/_index.html" }
+                    new() { Name = "Home", Url = AbsoluteUrl("index.html") },
+                    new() { Name = "Properties", Url = AbsoluteUrl("properties/_index.html") }
                 }
             };
 
