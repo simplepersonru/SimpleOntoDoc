@@ -10,8 +10,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- Исключаем тестовый проект из компиляции основного проекта -->
+		<Compile Remove="SimpleOntoDoc.Tests\**" />
+		<None Remove="SimpleOntoDoc.Tests\**" />
+		<Content Remove="SimpleOntoDoc.Tests\**" />
+		<EmbeddedResource Remove="SimpleOntoDoc.Tests\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="PlantUml.Net" Version="1.4.80" />
 		<PackageReference Include="RazorLight" Version="2.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>SimpleOntoDoc.Tests</_Parameter1>
+		</AssemblyAttribute>
 	</ItemGroup>
 
 	<ItemGroup>
