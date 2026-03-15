@@ -49,7 +49,7 @@ jobs:
       # недоступность внешнего сервиса не блокировала CI целиком.
       # -----------------------------------------------------------------------
       - name: Run PlantUML integration tests
-        continue-on-error: true
+        continue-on-error: false
         run: >
           dotnet test SimpleOntoDoc.Tests/SimpleOntoDoc.Tests.csproj
           --no-build
