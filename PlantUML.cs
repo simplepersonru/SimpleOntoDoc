@@ -43,9 +43,6 @@ namespace SimpleOntoDoc
             foreach (var propKeyValue in cls.Properties)
             {
                 var prop = propKeyValue.Value;
-                if (prop.Range == null)
-                    continue;
-
                 var type = prop.Range.Type;
 
                 if (type != ClassType.Enum && type != ClassType.Class)
@@ -67,9 +64,6 @@ namespace SimpleOntoDoc
             {
                 foreach (var prop in cls.Properties)
                 {
-                    if (prop.Value.Range == null)
-                        continue;
-
                     string rangeModifier = prop.Value.Range.Type switch
                     {
                         ClassType.Class => "~",

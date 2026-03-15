@@ -57,9 +57,18 @@
         </div>
     </div>
     <div class="col-md-2 col-6 mb-3">
+        <div class="card text-white badge-compound">
+            <div class="card-body text-center py-3">
+                <h3 class="card-title mb-1">@Model.CompoundCount</h3>
+                <p class="card-text mb-0">Compounds</p>
+                <a href="/compounds/_index.html" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-6 mb-3">
         <div class="card bg-light">
             <div class="card-body text-center py-3">
-                <h3 class="card-title mb-1 text-dark">@(Model.ClassCount + Model.PropertyCount + Model.EnumCount + Model.PrimitiveCount + Model.DataTypeCount)</h3>
+                <h3 class="card-title mb-1 text-dark">@(Model.ClassCount + Model.PropertyCount + Model.EnumCount + Model.PrimitiveCount + Model.DataTypeCount + Model.CompoundCount)</h3>
                 <p class="card-text mb-0 text-dark">Total</p>
             </div>
         </div>

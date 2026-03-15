@@ -32,6 +32,7 @@ namespace SimpleOntoDoc
             ClassType.Enum => "badge-enum",
             ClassType.Primitive => "badge-primitive",
             ClassType.Datatype => "badge-datatype",
+            ClassType.Compound => "badge-compound",
             _ => "badge-secondary"
         };
 
@@ -80,6 +81,7 @@ namespace SimpleOntoDoc
         public int EnumCount { get; set; }
         public int PrimitiveCount { get; set; }
         public int DataTypeCount { get; set; }
+        public int CompoundCount { get; set; }
     }
 
     public class ClassViewModel : LayoutViewModel

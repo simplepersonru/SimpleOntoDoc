@@ -61,16 +61,9 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (prop.Range != null)
-                                            {
-                                                <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
-                                                    @prop.Range.Id
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-muted">—</span>
-                                            }
+                                            <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
+                                                @prop.Range.Id
+                                            </a>
                                         </td>
                                         <td>
                                             @if (!string.IsNullOrEmpty(prop.Description))
@@ -172,12 +165,9 @@
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            @if (prop.Domain != null)
-                                            {
-                                                <a href="/@prop.Domain.Href()" class="badge badge-class text-decoration-none">
-                                                    @prop.Domain.NamespacedId()
-                                                </a>
-                                            }
+                                            <a href="/@prop.Domain.Href()" class="badge badge-class text-decoration-none">
+                                                @prop.Domain.NamespacedId()
+                                            </a>
                                         </td>
                                         <td>
                                             <a href="/@prop.Href()" class="badge badge-property text-decoration-none">

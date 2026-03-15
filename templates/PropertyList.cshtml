@@ -38,12 +38,9 @@
                             <a href="/@prop.Href()" class="fw-bold">@prop.Id</a>
                             <div class="d-flex flex-row gap-2">
                                 <span>Тип</span>
-                                @if (prop.Range != null)
-                                {
-                                    <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
-                                        @prop.Range.NamespacedId()
-                                    </a>
-                                }
+                                <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
+                                    @prop.Range.NamespacedId()
+                                </a>
                                 @if (!string.IsNullOrEmpty(prop.Multiplicity))
                                 {
                                     <span class="ms-4">Количество</span>

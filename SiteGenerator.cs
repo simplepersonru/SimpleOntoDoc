@@ -77,6 +77,7 @@ namespace SimpleOntoDoc
             await GenerateClassListAsync(ClassType.Enum);
             await GenerateClassListAsync(ClassType.Primitive);
             await GenerateClassListAsync(ClassType.Datatype);
+            await GenerateClassListAsync(ClassType.Compound);
             await GenerateClassListAsync(null); // All entities
 
             Log("Генерация страниц классов...");
@@ -217,6 +218,7 @@ namespace SimpleOntoDoc
                 EnumCount = _data.Values.Count(x => x.Type == ClassType.Enum),
                 PrimitiveCount = _data.Values.Count(x => x.Type == ClassType.Primitive),
                 DataTypeCount = _data.Values.Count(x => x.Type == ClassType.Datatype),
+                CompoundCount = _data.Values.Count(x => x.Type == ClassType.Compound),
                 EnitityCount = _data.Count,
             };
 

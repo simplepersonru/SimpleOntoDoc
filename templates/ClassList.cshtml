@@ -39,6 +39,10 @@
                             <span class="badge badge-datatype me-2">@Model.Classes.Count(c => c.Type == ClassType.Datatype)</span>
                             <span>Data Types</span>
                         </span>
+                        <span class="d-flex align-items-center">
+                            <span class="badge badge-compound me-2">@Model.Classes.Count(c => c.Type == ClassType.Compound)</span>
+                            <span>Compounds</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -47,7 +51,7 @@
 }
 
 
-<!-- Таблица классов -->
+                <!-- Таблица классов -->
 <div class="card">
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -55,6 +59,7 @@
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>
+                        <th>Имя</th>
                         <th>Описание</th>
                     </tr>
                 </thead>
@@ -77,17 +82,7 @@
                                 </div>
                             </td>
                             <td>
-                                @if (!string.IsNullOrEmpty(cls.Description))
-                                {
-                                    <div class="text-wrap" style="min-width: 200px; max-width: 1200px;">
-                                        <small>@cls.Description</small>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">—</span>
-                                }
-
+                                <span>@cls.Name</span>
                                 <!-- Дополнительная информация для разных типов -->
                                 <div class="mt-1">
                                     @if (cls.Type == ClassType.Class && cls.Properties.Any())
@@ -114,7 +109,18 @@
                                     }
                                 </div>
                             </td>
-
+                            <td>
+                                @if (!string.IsNullOrEmpty(cls.Description))
+                                {
+                                    <div class="text-wrap" style="min-width: 200px; max-width: 800px;">
+                                        <small>@cls.Description</small>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>
