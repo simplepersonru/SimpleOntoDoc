@@ -7,10 +7,7 @@
 
 <h1>@Model.Class.Id <small class="text-muted">@GetTypeBadge(Model.Class.Type)</small></h1>
 
-@if (!string.IsNullOrEmpty(Model.Class.Name))
-{
-    <p class="lead">@Model.Class.Name</p>
-}
+<p class="lead">@Model.Class.Name</p>
 
 @if (!string.IsNullOrEmpty(Model.Class.Description))
 {
@@ -71,14 +68,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(prop.Name))
-                                            {
-                                                <small class="text-muted">@prop.Name</small>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-muted">—</span>
-                                            }
+                                            <small class="text-muted">@prop.Name</small>
                                         </td>
   
                                         <td>
@@ -173,14 +163,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(prop.Name))
-                                            {
-                                                <p>@prop.Name</p>
-                                            }
-                                            else
-                                            {
-                                                <p>—</p>
-                                            }
+                                            <p>@prop.Name</p>
                                         </td>
                                     </tr>
                                 }
@@ -216,14 +199,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(cls.Name))
-                                            {
-                                                <p>@cls.Name</p>
-                                            }
-                                            else
-                                            {
-                                                <p>—</p>
-                                            }
+                                            <p>@cls.Name</p>
                                         </td>
                                     </tr>
                                 }
@@ -249,6 +225,9 @@
 
                     <dt class="col-sm-4">Тип</dt>
                     <dd class="col-sm-8">@GetTypeBadge(Model.Class.Type)</dd>
+
+                    <dt class="col-sm-4">Имя</dt>
+                    <dd class="col-sm-8">@Model.Class.Name</dd>
 
                     @if (Model.Class.SubClass != null)
                     {
