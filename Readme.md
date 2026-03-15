@@ -1,67 +1,67 @@
 # SimpleOntoDoc
 
-> **Beautiful HTML documentation generator for RDF/XML ontologies**
+> **Красивый генератор HTML-документации для RDF/XML-онтологий**
 
-SimpleOntoDoc (internally *RdfsBeautyDoc*) transforms your RDFS/RDF ontology files into a fully searchable, interactive static HTML documentation website — complete with UML class diagrams, cross-linked entities, and a responsive Bootstrap 5 UI.
-
----
-
-## ✨ Why SimpleOntoDoc?
-
-Ontologies defined in RDF/XML are rich knowledge models, but reading raw XML is painful. SimpleOntoDoc bridges that gap by generating a polished documentation site, similar to what JavaDoc or Sphinx provides for code — but tailored specifically for semantic web schemas.
-
-It was originally created to document the **CIM (Common Information Model)** used in power-system standards (IEC-61970), and works with any RDFS-compliant ontology.
+SimpleOntoDoc (внутреннее название *RdfsBeautyDoc*) преобразует файлы RDFS/RDF-онтологий в полнофункциональный статический HTML-сайт документации с поддержкой поиска — включая UML-диаграммы классов, перекрёстные ссылки между сущностями и адаптивный интерфейс на Bootstrap 5.
 
 ---
 
-## 🚀 Features
+## ✨ Зачем SimpleOntoDoc?
 
-| Feature | Description |
+Онтологии, определённые в RDF/XML, содержат богатые модели знаний, но читать сырой XML — мучение. SimpleOntoDoc устраняет этот разрыв, генерируя аккуратный сайт документации — по аналогии с тем, что JavaDoc или Sphinx делают для кода, — но адаптированный специально для схем семантических веб-стандартов.
+
+Проект был изначально создан для документирования **CIM (Common Information Model)** из стандартов энергосистем (IEC-61970) и работает с любой RDFS-совместимой онтологией.
+
+---
+
+## 🚀 Возможности
+
+| Возможность | Описание |
 |---|---|
-| 📄 **HTML site generation** | Produces a complete static HTML website from one or more RDF/XML files |
-| 🔍 **Full-text search** | Client-side JSON search index lets users find any class or property instantly |
-| 📐 **UML diagrams** | PlantUML-powered SVG class diagrams embedded per page |
-| 🏷️ **Stereotype support** | Automatically categorises entities as Class, Enum, DataType, Primitive, UnitSymbol and UnitMultiplier |
-| 🔗 **Cross-linking** | Every property domain/range reference links to the corresponding entity page |
-| 📱 **Responsive design** | Bootstrap 5 layout works on desktop, tablet and mobile |
-| 🐳 **Docker-first deployment** | `publish.bash` builds an nginx Docker image ready to serve |
-| 🪟 **Windows + WSL support** | Automatically uses WSL when running Docker commands on Windows |
+| 📄 **Генерация HTML-сайта** | Создаёт полноценный статический HTML-сайт из одного или нескольких RDF/XML-файлов |
+| 🔍 **Полнотекстовый поиск** | Клиентский JSON-индекс позволяет мгновенно найти любой класс или свойство |
+| 📐 **UML-диаграммы** | SVG-диаграммы классов на основе PlantUML, встроенные на каждую страницу |
+| 🏷️ **Поддержка стереотипов** | Автоматически классифицирует сущности: Class, Enum, DataType, Primitive, UnitSymbol и UnitMultiplier |
+| 🔗 **Перекрёстные ссылки** | Каждая ссылка на домен/диапазон свойства ведёт на страницу соответствующей сущности |
+| 📱 **Адаптивный дизайн** | Вёрстка на Bootstrap 5 работает на десктопе, планшете и мобильном устройстве |
+| 🐳 **Docker-ориентированное развёртывание** | `publish.bash` собирает образ Docker с nginx, готовый к запуску |
+| 🪟 **Поддержка Windows + WSL** | Автоматически использует WSL для команд Docker в Windows |
 
 ---
 
-## 📸 Output Structure
+## 📸 Структура выходных файлов
 
-Running SimpleOntoDoc on your ontology produces a static website like this:
+Запуск SimpleOntoDoc на вашей онтологии создаёт статический сайт следующей структуры:
 
 ```
 output/
-├── index.html                         # Home page with statistics
-├── classes/_index.html                # All classes
-├── enums/_index.html                  # All enumerations
-├── datatypes/_index.html              # All data types
-├── primitives/_index.html             # All primitives
-├── properties/_index.html             # All properties
-├── classes/<ClassName>.html           # One page per class
-├── properties/<Domain>.<Prop>.html    # One page per property
+├── index.html                         # Главная страница со статистикой
+├── classes/_index.html                # Все классы
+├── enums/_index.html                  # Все перечисления
+├── datatypes/_index.html              # Все типы данных
+├── primitives/_index.html             # Все примитивы
+├── properties/_index.html             # Все свойства
+├── classes/<ClassName>.html           # Отдельная страница на каждый класс
+├── properties/<Domain>.<Prop>.html    # Отдельная страница на каждое свойство
 └── assets/
     ├── css/site.css
     ├── js/search.js
-    └── search-index.json              # Search index
+    └── search-index.json              # Поисковый индекс
 ```
 
 ---
 
-## 🛠️ Getting Started
+## 🛠️ Начало работы
 
-### Prerequisites
+### Требования
 
-| Tool | Version | Notes |
+| Инструмент | Версия | Примечание |
 |---|---|---|
-| [.NET SDK](https://dotnet.microsoft.com/download) | **9.0+** | Required to build and run |
-| [Docker](https://www.docker.com/get-started) | Any recent version | Required for PlantUML diagram rendering |
-| WSL 2 *(Windows only)* | — | Used to run Docker commands on Windows |
+| [.NET SDK](https://dotnet.microsoft.com/download) | **9.0+** | Необходим для сборки и запуска |
+| [Docker](https://www.docker.com/get-started) | Любая актуальная версия | Необходим для рендеринга диаграмм PlantUML |
+| WSL 2 *(только Windows)* | — | Используется для команд Docker в Windows |
 
-### Build from source
+### Сборка из исходников
 
 ```bash
 git clone https://github.com/simplepersonru/SimpleOntoDoc.git
@@ -70,85 +70,85 @@ cd SimpleOntoDoc
 dotnet build RdfsBeautyDoc.csproj
 ```
 
-### Publish a self-contained binary
+### Публикация самодостаточного бинарника
 
 ```bash
 dotnet publish RdfsBeautyDoc.csproj -c Release
 ```
 
-The binary and all required assets are placed in `bin/Release/net9.0/publish/`.
+Бинарник и все необходимые ресурсы будут помещены в `bin/Release/net9.0/publish/`.
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Конфигурация
 
-SimpleOntoDoc is configured entirely through **environment variables**.
+SimpleOntoDoc настраивается полностью через **переменные окружения**.
 
-| Variable | Required | Description |
+| Переменная | Обязательна | Описание |
 |---|---|---|
-| `RDFSDOC_PATH_TO_RDFS` | ✅ | Path to your input RDF/XML ontology file |
-| `RDFSDOC_TITLE` | ✅ | Documentation site title |
-| `RDFSDOC_DESCRIPTION` | ✅ | Short description shown on the home page |
-| `RDFSDOC_COMMON_NAMESPACE` | ✅ | Namespace prefix used in the ontology (e.g. `cim`) |
-| `RDFSDOC_PLANTUML_URL` | ✅ | URL of a running PlantUML server (e.g. `http://localhost:55667`) |
-| `RDFSDOC_OUTPUT_PATH` | ✅ | Directory where the generated site will be written |
-| `RDFSDOC_USE_NAMESPACE_FOR_PROPERTIES` | ❌ | Set to `true` to include namespace prefix in property names |
+| `RDFSDOC_PATH_TO_RDFS` | ✅ | Путь к входному RDF/XML-файлу онтологии |
+| `RDFSDOC_TITLE` | ✅ | Заголовок сайта документации |
+| `RDFSDOC_DESCRIPTION` | ✅ | Краткое описание, отображаемое на главной странице |
+| `RDFSDOC_COMMON_NAMESPACE` | ✅ | Префикс пространства имён в онтологии (например, `cim`) |
+| `RDFSDOC_PLANTUML_URL` | ✅ | URL работающего сервера PlantUML (например, `http://localhost:55667`) |
+| `RDFSDOC_OUTPUT_PATH` | ✅ | Директория, в которую будет записан сгенерированный сайт |
+| `RDFSDOC_USE_NAMESPACE_FOR_PROPERTIES` | ❌ | Установите `true`, чтобы включить префикс пространства имён в названия свойств |
 
 ---
 
-## 🏃 Usage
+## 🏃 Использование
 
-### Option 1 — Run with `publish.bash` (recommended for production)
+### Вариант 1 — Запуск через `publish.bash` (рекомендуется для продакшена)
 
-`publish.bash` automates the full pipeline: starts a PlantUML container, generates the site, and packages the result into an nginx Docker image.
+`publish.bash` автоматизирует весь процесс: запускает контейнер PlantUML, генерирует сайт и упаковывает результат в образ Docker с nginx.
 
 ```bash
 RDFSDOC_PATH_TO_RDFS=/path/to/ontology.xml \
-RDFSDOC_TITLE="My RDFS Documentation" \
-RDFSDOC_DESCRIPTION="Auto-generated documentation for my ontology" \
+RDFSDOC_TITLE="Моя RDFS-документация" \
+RDFSDOC_DESCRIPTION="Автоматически сгенерированная документация для моей онтологии" \
 RDFSDOC_COMMON_NAMESPACE=cim \
 /usr/bin/bash publish.bash
 ```
 
-This will:
-1. Pull and start the `plantuml/plantuml-server` container
-2. Run the documentation generator
-3. Build an `nginx:alpine` Docker image with the generated site inside
-4. Push the image to the configured registry
+Что произойдёт:
+1. Будет скачан и запущен контейнер `plantuml/plantuml-server`
+2. Запустится генератор документации
+3. Будет собран образ Docker `nginx:alpine` со сгенерированным сайтом внутри
+4. Образ будет отправлен в настроенный реестр
 
-### Option 2 — Run the binary directly
+### Вариант 2 — Запуск бинарника напрямую
 
-Start a PlantUML server first (Docker required):
+Сначала запустите сервер PlantUML (требуется Docker):
 
 ```bash
 docker run -d --name plantuml -p 55667:8080 plantuml/plantuml-server
 ```
 
-Then run the generator:
+Затем запустите генератор:
 
 ```bash
 RDFSDOC_PATH_TO_RDFS=/path/to/ontology.xml \
-RDFSDOC_TITLE="My Ontology" \
-RDFSDOC_DESCRIPTION="My ontology description" \
+RDFSDOC_TITLE="Моя онтология" \
+RDFSDOC_DESCRIPTION="Описание моей онтологии" \
 RDFSDOC_COMMON_NAMESPACE=cim \
 RDFSDOC_PLANTUML_URL=http://localhost:55667 \
 RDFSDOC_OUTPUT_PATH=./output \
 dotnet run --project RdfsBeautyDoc.csproj
 ```
 
-Open `./output/index.html` in your browser to view the result.
+Откройте `./output/index.html` в браузере для просмотра результата.
 
-### Option 3 — Run via Docker
+### Вариант 3 — Запуск через Docker
 
-A pre-built image is available:
+Готовый образ доступен по адресу:
 
 ```bash
 docker run --rm \
   -v ./output:/out \
   --net=host \
   -e RDFSDOC_PATH_TO_RDFS=/out/ontology.xml \
-  -e RDFSDOC_TITLE="My Ontology" \
-  -e RDFSDOC_DESCRIPTION="My ontology description" \
+  -e RDFSDOC_TITLE="Моя онтология" \
+  -e RDFSDOC_DESCRIPTION="Описание моей онтологии" \
   -e RDFSDOC_COMMON_NAMESPACE=cim \
   -e RDFSDOC_PLANTUML_URL=http://localhost:55667 \
   -e RDFSDOC_OUTPUT_PATH=/out \
@@ -157,73 +157,73 @@ docker run --rm \
 
 ---
 
-## 📖 How It Works
+## 📖 Как это работает
 
 ```
-RDF/XML file(s)
+RDF/XML файл(ы)
       │
       ▼
-  XmlParse              ← Parses namespaces, classes, properties,
-      │                    enumerations and stereotypes
+  XmlParse              ← Разбирает пространства имён, классы, свойства,
+      │                    перечисления и стереотипы
       ▼
-  PlantUML              ← Renders per-class SVG diagrams via a
-      │                    PlantUML server running in Docker
+  PlantUML              ← Рендерит SVG-диаграммы для каждого класса
+      │                    через сервер PlantUML в Docker
       ▼
-  SiteGenerator         ← Uses RazorLight (.cshtml) templates to
-      │                    produce HTML pages and search-index.json
+  SiteGenerator         ← Использует шаблоны RazorLight (.cshtml) для
+      │                    генерации HTML-страниц и search-index.json
       ▼
-  output/               ← Static website ready to serve with any
-                           HTTP server or nginx Docker image
+  output/               ← Статический сайт, готовый к публикации через
+                           любой HTTP-сервер или образ Docker с nginx
 ```
 
 ---
 
-## 🏗️ Project Structure
+## 🏗️ Структура проекта
 
 ```
 SimpleOntoDoc/
-├── Program.cs          # Entry point and configuration
-├── Model.cs            # Domain model: Class, Property, Description, Stereotype
-├── XmlParse.cs         # RDF/XML parser
-├── SiteGenerator.cs    # HTML generation engine (RazorLight)
-├── PlantUML.cs         # PlantUML diagram renderer + Docker manager
-├── ViewModel.cs        # View models for Razor templates
-├── templates/          # Razor (.cshtml) templates
+├── Program.cs          # Точка входа и конфигурация
+├── Model.cs            # Доменная модель: Class, Property, Description, Stereotype
+├── XmlParse.cs         # Парсер RDF/XML
+├── SiteGenerator.cs    # Движок генерации HTML (RazorLight)
+├── PlantUML.cs         # Рендерер диаграмм PlantUML + управление Docker
+├── ViewModel.cs        # View-модели для шаблонов Razor
+├── templates/          # Razor (.cshtml) шаблоны
 │   ├── _Layout.cshtml
 │   ├── Index.cshtml
 │   ├── Class.cshtml
 │   ├── ClassList.cshtml
 │   ├── Property.cshtml
 │   └── PropertyList.cshtml
-├── assets/             # Static web assets
+├── assets/             # Статические веб-ресурсы
 │   ├── css/site.css
 │   └── js/search.js
-├── Dockerfile          # nginx image wrapping generated output
-├── publish.bash        # End-to-end build + deploy script
+├── Dockerfile          # nginx-образ, оборачивающий сгенерированный сайт
+├── publish.bash        # Скрипт сборки и деплоя
 └── RdfsBeautyDoc.csproj
 ```
 
 ---
 
-## 🤝 Contributing
+## 🤝 Участие в разработке
 
-Contributions are welcome! Here is how you can help:
+Мы рады вашему участию! Вот как вы можете помочь:
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/my-feature`
-3. **Commit** your changes: `git commit -m "Add my feature"`
-4. **Push** to your fork: `git push origin feature/my-feature`
-5. **Open a Pull Request**
+1. **Форкните** репозиторий
+2. **Создайте** ветку для своей задачи: `git checkout -b feature/my-feature`
+3. **Зафиксируйте** изменения: `git commit -m "Добавить мою функцию"`
+4. **Отправьте** ветку в ваш форк: `git push origin feature/my-feature`
+5. **Откройте Pull Request**
 
-Please follow the existing C# code style (see `.editorconfig`).
-
----
-
-## 📄 License
-
-No license file is currently included in this repository.  
-**All rights reserved** — please contact the author before using, copying, or distributing this software.
+Пожалуйста, соблюдайте существующий стиль кода C# (см. `.editorconfig`).
 
 ---
 
-*Built with ❤️ using [.NET 9](https://dotnet.microsoft.com/), [RazorLight](https://github.com/toddams/RazorLight), [PlantUML](https://plantuml.com/) and [Bootstrap 5](https://getbootstrap.com/).*
+## 📄 Лицензия
+
+Файл лицензии в репозитории отсутствует.  
+**Все права защищены** — пожалуйста, свяжитесь с автором, прежде чем использовать, копировать или распространять это программное обеспечение.
+
+---
+
+*Создано с ❤️ с использованием [.NET 9](https://dotnet.microsoft.com/), [RazorLight](https://github.com/toddams/RazorLight), [PlantUML](https://plantuml.com/) и [Bootstrap 5](https://getbootstrap.com/).*
