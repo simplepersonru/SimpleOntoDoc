@@ -68,7 +68,7 @@
                     {
                         <tr class="searchable class-row"
                             data-id="@cls.Id.ToLower()"
-                            data-name="@cls.Name.ToLower()"
+                            data-description="@(cls.Description?.ToLower() ?? "")"
                             data-type="@cls.Type.ToString().ToLower()"
                             data-url="/@cls.Href()">
                             <td>
@@ -155,12 +155,12 @@
 
         rows.forEach((row, index) => {
             const id = row.dataset.id || '';
-            const name = row.dataset.name || '';
+            const description = row.dataset.description || '';
 
             // Проверка поискового запроса
             const searchMatches = !searchQuery ||
                 id.includes(searchQuery) ||
-                name.includes(searchQuery);
+                description.includes(searchQuery);
 
             const isVisible = searchMatches;
             row.style.display = isVisible ? '' : 'none';

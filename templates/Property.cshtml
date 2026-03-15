@@ -5,7 +5,10 @@
 }
 
 <h1>@Model.Property.Id</h1>
-<p class="lead">@Model.Property.Name</p>
+@if (!string.IsNullOrEmpty(Model.Property.Description))
+{
+    <p class="lead">@Model.Property.Description</p>
+}
 
 <div class="row mt-4">
     <div class="col-lg-8">
@@ -24,7 +27,10 @@
                         <a href="/@Model.Property.Domain.Href()" class="text-decoration-none">
                             <span class="badge @(Model.Property.Domain.BadgeClass())">@Model.Property.Domain.NamespacedId()</span>
                         </a>
-                        <small class="text-muted d-block mt-1">@Model.Property.Domain.Name</small>
+                        @if (!string.IsNullOrEmpty(Model.Property.Domain.Description))
+                        {
+                            <small class="text-muted d-block mt-1">@Model.Property.Domain.Description</small>
+                        }
                     </dd>
 
                     <dt class="col-sm-3">Тип</dt>
@@ -32,7 +38,10 @@
                         <a href="/@Model.Property.Range.Href()" class="text-decoration-none">
                             <span class="badge @(Model.Property.Range.BadgeClass())">@Model.Property.Range.NamespacedId()</span>
                         </a>
-                        <small class="text-muted d-block mt-1">@Model.Property.Range.Name</small>
+                        @if (!string.IsNullOrEmpty(Model.Property.Range.Description))
+                        {
+                            <small class="text-muted d-block mt-1">@Model.Property.Range.Description</small>
+                        }
                     </dd>
 
                     @if (!string.IsNullOrEmpty(Model.Property.Multiplicity))

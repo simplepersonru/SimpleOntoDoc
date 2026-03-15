@@ -7,7 +7,10 @@
 
 <h1>@Model.Class.Id <small class="text-muted">@GetTypeBadge(Model.Class.Type)</small></h1>
 
-<p class="lead">@Model.Class.Name</p>
+@if (!string.IsNullOrEmpty(Model.Class.Description))
+{
+    <p class="lead">@Model.Class.Description</p>
+}
 
 @if (!string.IsNullOrEmpty(Model.Class.Description))
 {
@@ -49,7 +52,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Тип</th>
-                                    <th>Имя</th>
+                                    <th>Описание</th>
                                     <th>Количество</th>
                                 </tr>
                             </thead>
@@ -68,7 +71,14 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <small class="text-muted">@prop.Name</small>
+                                            @if (!string.IsNullOrEmpty(prop.Description))
+                                            {
+                                                <small class="text-muted">@prop.Description</small>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
                                         </td>
   
                                         <td>
@@ -103,7 +113,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Value</th>
-                                    <th>Имя</th>
+                                    <th>Описание</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -114,7 +124,14 @@
                                             <code>@enumerator.Name</code>
                                         </td>
                                         <td>
-                                            <span>@enumerator.Name</span>
+                                            @if (!string.IsNullOrEmpty(enumerator.Description))
+                                            {
+                                                <span>@enumerator.Description</span>
+                                            }
+                                            else
+                                            {
+                                                <span>—</span>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -145,7 +162,7 @@
                                 <tr>
                                     <th>Класс</th>
                                     <th>Свойство</th>
-                                    <th>Имя</th>
+                                    <th>Описание</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -163,7 +180,14 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <p>@prop.Name</p>
+                                            @if (!string.IsNullOrEmpty(prop.Description))
+                                            {
+                                                <p>@prop.Description</p>
+                                            }
+                                            else
+                                            {
+                                                <p>—</p>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -186,7 +210,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Класс</th>
-                                    <th>Имя</th>
+                                    <th>Описание</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -199,7 +223,14 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <p>@cls.Name</p>
+                                            @if (!string.IsNullOrEmpty(cls.Description))
+                                            {
+                                                <p>@cls.Description</p>
+                                            }
+                                            else
+                                            {
+                                                <p>—</p>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -225,9 +256,6 @@
 
                     <dt class="col-sm-4">Тип</dt>
                     <dd class="col-sm-8">@GetTypeBadge(Model.Class.Type)</dd>
-
-                    <dt class="col-sm-4">Имя</dt>
-                    <dd class="col-sm-8">@Model.Class.Name</dd>
 
                     @if (Model.Class.SubClass != null)
                     {
