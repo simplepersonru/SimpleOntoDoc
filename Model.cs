@@ -1,168 +1,107 @@
-﻿namespace RdfsBeautyDoc
+﻿using System.Text.Json.Serialization;
+
+namespace SimpleOntoDoc
 {
+    /// <summary>
+    /// Базовый класс для всех сущностей онтологической схемы.
+    /// Поля соответствуют структуре Base из model.py.
+    /// </summary>
     public abstract class Base
     {
-        public string Label { get; set; } = string.Empty;
-        public string Namespace { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public virtual string NamespacedId
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(Namespace))
-                    return Name;
-                else
-                    return $"{Namespace}:{Name}";
-            }
-        }
-        public virtual string Id => Name;
+        [JsonPropertyName("description")]
+        public string Description { get; set; } = string.Empty;
 
+        [JsonPropertyName("namespace")]
+        public string Namespace { get; set; } = string.Empty;
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
+
+        public virtual string Id => Name;
     }
+
     /// <summary>
     /// Представляет свойство (атрибут или связь) класса в онтологической схеме.
-    /// Свойство связывает домен (класс-владелец) с диапазоном (типом или другим классом) и содержит дополнительную метаинформацию.
+    /// Соответствует классу Property из model.py.
     /// </summary>
     public class Property : Base
     {
-        /// <summary>
-        /// Класс, которому принадлежит это свойство (домен свойства).
-        /// </summary>
-        required public Class Domain { get; set; }
+        /// <summary>Имя класса-типа свойства (строковая ссылка из JSON, разрешается в Range после парсинга).</summary>
+        [JsonPropertyName("range")]
+        public string? RangeName { get; set; }
 
-        /// <summary>
-        /// Ограничение кратности для свойства (например, "1", "0..*", и т.д.).
-        /// </summary>
-        public string Multiplicity { get; set; } = string.Empty;
+        [JsonPropertyName("optional")]
+        public bool Optional { get; set; } = true;
 
-        /// <summary>
-        /// Имя обратного свойства, если связь двунаправленная.
-        /// </summary>
-        public string InverseRoleName { get; set; } = string.Empty;
+        [JsonPropertyName("multiplicity")]
+        public string? Multiplicity { get; set; }
 
-        /// <summary>
-        /// Тип свойства (может быть примитивным типом или ссылкой на другой класс).
-        /// </summary>
-        public Class Range { get; set; }
+        [JsonPropertyName("inverse_role_name")]
+        public string? InverseRoleName { get; set; }
 
-        /// <summary>
-        /// Относительный URL к HTML-документации этого свойства.
-        /// </summary>
-        public string Href => $"properties/{Domain.Name}.{Name}.html";
+        /// <summary>Класс-владелец свойства (устанавливается после парсинга, не из JSON).</summary>
+        [JsonIgnore]
+        public Class? Domain { get; set; }
 
-        /// <inheritdoc/>
-        public override string Id => $"{Domain.Name}.{Name}";
+        /// <summary>Класс-тип свойства (разрешается из RangeName после парсинга).</summary>
+        [JsonIgnore]
+        public Class? Range { get; set; }
 
-        /// <inheritdoc/>
-        public override string NamespacedId
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(Namespace))
-                    return Name;
-                else
-                    return $"{Namespace}:{Name}";
-            }
-        }
-
-        public string PropertyId => string.IsNullOrEmpty(Namespace) ? Name : $"{Namespace}:{Name}";
+        public override string Id => $"{Domain?.Name}.{Name}";
     }
 
-    public class Description : Base
+    /// <summary>
+    /// Представляет элемент перечисления в онтологической схеме.
+    /// Соответствует классу Enumerator из model.py.
+    /// </summary>
+    public class Enumerator : Base
     {
-        required public Class Domain { get; set; }
+        /// <summary>Класс-перечисление, которому принадлежит этот элемент (устанавливается после парсинга).</summary>
+        [JsonIgnore]
+        public Class? Domain { get; set; }
 
-        public override string Id => $"{Domain.Name}.{Name}";
-
-        public override string NamespacedId
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(Namespace))
-                    return $"{Domain.Name}.{Name}";
-                else
-                    return $"{Namespace}:{Domain.Name}.{Name}";
-            }
-        }
+        public override string Id => $"{Domain?.Name}.{Name}";
     }
 
-
-    public enum Stereotype
+    /// <summary>
+    /// Тип класса в онтологической схеме.
+    /// Соответствует enum Type из model.py.
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum ClassType
     {
         Class,
         Enum,
-        DataType,
+        Datatype,
         Primitive,
-        UnitSymbol,
-        UnitMultiplier,
-        All
+        Compound
     }
 
-    public class DataTypeInfo
-    { 
-        public Class? Value { get; set; }
-        public Class? UnitSymbol { get; set; }
-        public Class? UnitMultiplier { get; set; }
-    }
-
+    /// <summary>
+    /// Представляет класс в онтологической схеме.
+    /// Соответствует классу Class из model.py.
+    /// </summary>
     public class Class : Base
     {
-        public string Comment { get; set; } = string.Empty;
-        public string SvgDiagram { get; set; } = string.Empty;
+        [JsonPropertyName("type")]
+        public ClassType Type { get; set; } = ClassType.Class;
+
+        /// <summary>Имя базового класса (строковая ссылка из JSON, разрешается в SubClass после парсинга).</summary>
+        [JsonPropertyName("sub_class")]
+        public string? SubClassName { get; set; }
+
+        [JsonPropertyName("properties")]
+        public Dictionary<string, Property> Properties { get; set; } = new();
+
+        [JsonPropertyName("enumerators")]
+        public Dictionary<string, Enumerator> Enumerators { get; set; } = new();
+
+        /// <summary>Базовый класс (разрешается из SubClassName после парсинга, не из JSON).</summary>
+        [JsonIgnore]
         public Class? SubClass { get; set; }
-        public string Href => $"{StereoPath}/{Name}.html";
-        public string StereoPath => Stereotype switch
-        {
-            Stereotype.DataType => "datatypes",
-            Stereotype.Enum => "enums",
-            Stereotype.Class => "classes",
-            Stereotype.Primitive => "primitives",
-            Stereotype.All => "entities",
-        };
 
-        /// <inheritdoc/>
-        public override string NamespacedId
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(Namespace)
-                    || Stereotype == Stereotype.Primitive
-                    || Stereotype == Stereotype.DataType)
-                    return Name;
-                else
-                    return $"{Namespace}:{Name}";
-            }
-        }
-
-        /// <summary>
-        /// Возвращает CSS-класс для бейджа, соответствующего стереотипу класса.
-        /// </summary>
-        public static string BadgeClassStatic(Stereotype stereotype) => stereotype switch
-        {
-            Stereotype.Class => "badge-class",
-            Stereotype.Enum => "badge-enum",
-            Stereotype.Primitive => "badge-primitive",
-            Stereotype.DataType => "badge-datatype",
-            _ => "badge-secondary"
-        };
-
-        /// <summary>
-        /// CSS-класс для бейджа текущего стереотипа класса.
-        /// </summary>
-        public string BadgeClass => BadgeClassStatic(Stereotype);
-
-        /// <summary>
-        /// Стереотип класса (например, Class, Enum, Primitive, DataType).
-        /// </summary>
-        public Stereotype Stereotype { get; set; } = Stereotype.Class;
-
-        /// <summary>
-        /// Свойства (атрибуты и связи), определённые для этого класса.
-        /// </summary>
-        public Dictionary<string, Property> Properties { get; set; } = new Dictionary<string, Property>();
-
-        /// <summary>
-        /// Значения перечисления для этого класса (если класс — перечисление).
-        /// </summary>
-        public Dictionary<string, Description> Enumerators { get; set; } = new Dictionary<string, Description>();
+        /// <summary>SVG-диаграмма класса (заполняется PlantUML, не из JSON).</summary>
+        [JsonIgnore]
+        public string SvgDiagram { get; set; } = string.Empty;
     }
 }

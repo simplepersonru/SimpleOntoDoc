@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Html
-@using RdfsBeautyDoc
+@using SimpleOntoDoc
 @model ClassListViewModel
 @{
     Layout = "_Layout.cshtml";
@@ -11,12 +11,12 @@
 <div class="row mb-4">
     <div class="col-md-12">
         <input type="text" class="form-control" id="classesSearch"
-               placeholder="Поиск по ID, подписи или описанию">
+               placeholder="Поиск по ID или описанию">
     </div>
 </div>
 
 <!-- Статистика -->
-@if (Model.Stereotype == Stereotype.All)
+@if (Model.Type == null)
 {
     <div class="row mb-4">
         <div class="col-12">
@@ -24,19 +24,19 @@
                 <div class="card-body py-2">
                     <div class="d-flex flex-wrap gap-3 justify-content-center">
                         <span class="d-flex align-items-center">
-                            <span class="badge badge-class me-2">@Model.Classes.Count(c => c.Stereotype == Stereotype.Class)</span>
+                            <span class="badge badge-class me-2">@Model.Classes.Count(c => c.Type == ClassType.Class)</span>
                             <span>Classes</span>
                         </span>
                         <span class="d-flex align-items-center">
-                            <span class="badge badge-enum me-2">@Model.Classes.Count(c => c.Stereotype == Stereotype.Enum)</span>
+                            <span class="badge badge-enum me-2">@Model.Classes.Count(c => c.Type == ClassType.Enum)</span>
                             <span>Enums</span>
                         </span>
                         <span class="d-flex align-items-center">
-                            <span class="badge badge-primitive me-2">@Model.Classes.Count(c => c.Stereotype == Stereotype.Primitive)</span>
+                            <span class="badge badge-primitive me-2">@Model.Classes.Count(c => c.Type == ClassType.Primitive)</span>
                             <span>Primitives</span>
                         </span>
                         <span class="d-flex align-items-center">
-                            <span class="badge badge-datatype me-2">@Model.Classes.Count(c => c.Stereotype == Stereotype.DataType)</span>
+                            <span class="badge badge-datatype me-2">@Model.Classes.Count(c => c.Type == ClassType.Datatype)</span>
                             <span>Data Types</span>
                         </span>
                     </div>
@@ -55,8 +55,7 @@
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>Label</th>
-                        <th>Description</th>
+                        <th>Описание</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,35 +63,24 @@
                     {
                         <tr class="searchable class-row"
                             data-id="@cls.Id.ToLower()"
-                            data-label="@(cls.Label?.ToLower() ?? "")"
-                            data-description="@(cls.Comment?.ToLower() ?? "")"
-                            data-stereotype="@cls.Stereotype.ToString().ToLower()"
-                            data-url="/@cls.Href">
+                            data-description="@(cls.Description?.ToLower() ?? "")"
+                            data-type="@cls.Type.ToString().ToLower()"
+                            data-url="/@cls.Href()">
                             <td>
                                 <div class="d-flex flex-column">
-                                    <a href="/@cls.Href" class="text-decoration-none fw-bold">
+                                    <a href="/@cls.Href()" class="text-decoration-none fw-bold">
                                         @cls.Id
                                     </a>
                                     <small >
-                                        @GetStereotypeBadge(cls.Stereotype)
+                                        @GetTypeBadge(cls.Type)
                                     </small>
                                 </div>
                             </td>
                             <td>
-                                @if (!string.IsNullOrEmpty(cls.Label))
-                                {
-                                    @cls.Label
-                                }
-                                else
-                                {
-                                    <span class="text-muted">—</span>
-                                }
-                            </td>
-                            <td>
-                                @if (!string.IsNullOrEmpty(cls.Comment))
+                                @if (!string.IsNullOrEmpty(cls.Description))
                                 {
                                     <div class="text-wrap" style="min-width: 200px; max-width: 1200px;">
-                                        <small>@cls.Comment</small>
+                                        <small>@cls.Description</small>
                                     </div>
                                 }
                                 else
@@ -102,7 +90,7 @@
 
                                 <!-- Дополнительная информация для разных типов -->
                                 <div class="mt-1">
-                                    @if (cls.Stereotype == Stereotype.Class && cls.Properties.Any())
+                                    @if (cls.Type == ClassType.Class && cls.Properties.Any())
                                     {
                                         <small class="text-muted">
                                             <span class="badge bg-success">@cls.Properties.Count свойств</span>
@@ -112,13 +100,13 @@
                                             }
                                         </small>
                                     }
-                                    else if (cls.Stereotype == Stereotype.Enum && cls.Enumerators.Any())
+                                    else if (cls.Type == ClassType.Enum && cls.Enumerators.Any())
                                     {
                                         <small class="text-muted">
                                             <span class="badge bg-purple">@cls.Enumerators.Count значений</span>
                                         </small>
                                     }
-                                    else if (cls.Stereotype == Stereotype.DataType && cls.SubClass != null)
+                                    else if (cls.Type == ClassType.Datatype && cls.SubClass != null)
                                     {
                                         <small class="text-muted">
                                             Extends: @cls.SubClass.Id
@@ -161,13 +149,11 @@
 
         rows.forEach((row, index) => {
             const id = row.dataset.id || '';
-            const label = row.dataset.label || '';
             const description = row.dataset.description || '';
 
             // Проверка поискового запроса
             const searchMatches = !searchQuery ||
                 id.includes(searchQuery) ||
-                label.includes(searchQuery) ||
                 description.includes(searchQuery);
 
             const isVisible = searchMatches;
@@ -214,17 +200,18 @@
 </style>
 
 @functions {
-    HtmlString GetStereotypeBadge(Stereotype stereotype)
+    HtmlString GetTypeBadge(ClassType type)
     {
-        var displayText = stereotype switch
+        var displayText = type switch
         {
-            Stereotype.Class => "Class",
-            Stereotype.Enum => "Enum",
-            Stereotype.Primitive => "Primitive",
-            Stereotype.DataType => "Data Type",
-            _ => stereotype.ToString()
+            ClassType.Class => "Class",
+            ClassType.Enum => "Enum",
+            ClassType.Primitive => "Primitive",
+            ClassType.Datatype => "Data Type",
+            ClassType.Compound => "Compound",
+            _ => type.ToString()
         };
 
-        return new HtmlString($"<span class=\"badge {Class.BadgeClassStatic(stereotype)}\">{displayText}</span>");
+        return new HtmlString($"<span class=\"badge {ClassExtensions.BadgeClassStatic(type)}\">{displayText}</span>");
     }
 }

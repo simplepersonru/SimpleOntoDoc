@@ -1,20 +1,15 @@
 @using Microsoft.AspNetCore.Html
-@using RdfsBeautyDoc
+@using SimpleOntoDoc
 @model ClassViewModel
 @{
     Layout = "_Layout.cshtml";
 }
 
-<h1>@Model.Class.Id <small class="text-muted">@GetStereotypeBadge(Model.Class.Stereotype)</small></h1>
+<h1>@Model.Class.Id <small class="text-muted">@GetTypeBadge(Model.Class.Type)</small></h1>
 
-@if (!string.IsNullOrEmpty(Model.Class.Label))
+@if (!string.IsNullOrEmpty(Model.Class.Description))
 {
-    <p class="lead">@Model.Class.Label</p>
-}
-
-@if (!string.IsNullOrEmpty(Model.Class.Comment))
-{
-    <div class="alert alert-info">@Model.Class.Comment</div>
+    <div class="alert alert-info">@Model.Class.Description</div>
 }
 
 
@@ -39,7 +34,7 @@
 <div class="row mt-4">
     <div class="col-lg-8">
         <!-- Свойства класса (только для обычных классов) -->
-        @if (Model.Class.Stereotype == Stereotype.Class && Model.Properties.Any())
+        @if (Model.Class.Type == ClassType.Class && Model.Properties.Any())
         {
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -52,7 +47,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Тип</th>
-                                    <th>Подпись</th>
+                                    <th>Описание</th>
                                     <th>Количество</th>
                                 </tr>
                             </thead>
@@ -61,19 +56,26 @@
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            <a href="/@prop.Href" class="text-decoration-none">
+                                            <a href="/@prop.Href()" class="text-decoration-none">
                                                 @prop.Name
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="/@prop.Range.Href" class="badge @(prop.Range.BadgeClass) text-decoration-none">
-                                                @prop.Range.Id
-                                            </a>
+                                            @if (prop.Range != null)
+                                            {
+                                                <a href="/@prop.Range.Href()" class="badge @(prop.Range.BadgeClass()) text-decoration-none">
+                                                    @prop.Range.Id
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">—</span>
+                                            }
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(prop.Label))
+                                            @if (!string.IsNullOrEmpty(prop.Description))
                                             {
-                                                <small class="text-muted">@prop.Label</small>
+                                                <small class="text-muted">@prop.Description</small>
                                             }
                                             else
                                             {
@@ -101,7 +103,7 @@
         }
 
         <!-- Элементы перечисления (только для enums) -->
-        @if (Model.Class.Stereotype == Stereotype.Enum && Model.Class.Enumerators.Any())
+        @if (Model.Class.Type == ClassType.Enum && Model.Class.Enumerators.Any())
         {
             <div class="card mb-4">
                 <div class="card-header">
@@ -113,20 +115,20 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Value</th>
-                                    <th>Label</th>
+                                    <th>Описание</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var desc in Model.Class.Enumerators.Values)
+                                @foreach (var enumerator in Model.Class.Enumerators.Values)
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            <code>@desc.Name</code>
+                                            <code>@enumerator.Name</code>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(desc.Label))
+                                            @if (!string.IsNullOrEmpty(enumerator.Description))
                                             {
-                                                <span>@desc.Label</span>
+                                                <span>@enumerator.Description</span>
                                             }
                                             else
                                             {
@@ -145,7 +147,7 @@
         <!-- Использование (где этот класс используется как range) -->
         @{
             var usedInProperties = Model.AllProperties
-            .Where(p => p.Range.Id == Model.Class.Id)
+            .Where(p => p.Range?.Id == Model.Class.Id)
             .ToList();
         }
 
@@ -162,7 +164,7 @@
                                 <tr>
                                     <th>Класс</th>
                                     <th>Свойство</th>
-                                    <th>Подпись</th>
+                                    <th>Описание</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -170,19 +172,22 @@
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            <a href="/@prop.Domain.Href" class="badge badge-class text-decoration-none">
-                                                @prop.Domain.NamespacedId
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="/@prop.Href" class="badge badge-property text-decoration-none">
-                                                @prop.NamespacedId
-                                            </a>
-                                        </td>
-                                        <td>
-                                            @if (!string.IsNullOrEmpty(prop.Label))
+                                            @if (prop.Domain != null)
                                             {
-                                                <p>@prop.Label</p>
+                                                <a href="/@prop.Domain.Href()" class="badge badge-class text-decoration-none">
+                                                    @prop.Domain.NamespacedId()
+                                                </a>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="/@prop.Href()" class="badge badge-property text-decoration-none">
+                                                @prop.NamespacedId()
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(prop.Description))
+                                            {
+                                                <p>@prop.Description</p>
                                             }
                                             else
                                             {
@@ -210,7 +215,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Класс</th>
-                                    <th>Подпись</th>
+                                    <th>Описание</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -218,14 +223,14 @@
                                 {
                                     <tr class="searchable">
                                         <td>
-                                            <a href="/@cls.Href" class="badge badge-class text-decoration-none">
-                                                @cls.NamespacedId
+                                            <a href="/@cls.Href()" class="badge badge-class text-decoration-none">
+                                                @cls.NamespacedId()
                                             </a>
                                         </td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(cls.Label))
+                                            @if (!string.IsNullOrEmpty(cls.Description))
                                             {
-                                                <p>@cls.Label</p>
+                                                <p>@cls.Description</p>
                                             }
                                             else
                                             {
@@ -252,34 +257,28 @@
             <div class="card-body">
                 <dl class="row mb-0">
                     <dt class="col-sm-4">ID</dt>
-                    <dd class="col-sm-8"><code>@Model.Class.NamespacedId</code></dd>
+                    <dd class="col-sm-8"><code>@Model.Class.NamespacedId()</code></dd>
 
                     <dt class="col-sm-4">Тип</dt>
-                    <dd class="col-sm-8">@GetStereotypeBadge(Model.Class.Stereotype)</dd>
-
-                    @if (!string.IsNullOrEmpty(Model.Class.Label))
-                    {
-                        <dt class="col-sm-4">Подпись</dt>
-                        <dd class="col-sm-8">@Model.Class.Label</dd>
-                    }
+                    <dd class="col-sm-8">@GetTypeBadge(Model.Class.Type)</dd>
 
                     @if (Model.Class.SubClass != null)
                     {
                         <dt class="col-sm-4">Наследует</dt>
                         <dd class="col-sm-8">
-                            <a href="/@Model.Class.SubClass.Href" class="text-decoration-none">
-                                @Model.Class.SubClass.NamespacedId
+                            <a href="/@Model.Class.SubClass.Href()" class="text-decoration-none">
+                                @Model.Class.SubClass.NamespacedId()
                             </a>
                         </dd>
                     }
 
-                    @if (Model.Class.Stereotype == Stereotype.Class)
+                    @if (Model.Class.Type == ClassType.Class)
                     {
                         <dt class="col-sm-4">Свойств</dt>
                         <dd class="col-sm-8">@Model.Properties.Count</dd>
                     }
 
-                    @if (Model.Class.Stereotype == Stereotype.Enum)
+                    @if (Model.Class.Type == ClassType.Enum)
                     {
                         <dt class="col-sm-4">Значений</dt>
                         <dd class="col-sm-8">@Model.Class.Enumerators.Count</dd>
@@ -295,14 +294,14 @@
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
-                    <a href="/@Model.Class.Href" class="list-group-item list-group-item-action">
+                    <a href="/@Model.Class.Href()" class="list-group-item list-group-item-action">
                         ← All @Model.Breadcrumbs[1].Name
                     </a>
                     @if (Model.Class.SubClass != null)
                     {
-                        <a href="/@Model.Class.SubClass.Href"
+                        <a href="/@Model.Class.SubClass.Href()"
                            class="list-group-item list-group-item-action">
-                            ↑ Parent: @Model.Class.SubClass.NamespacedId
+                            ↑ Parent: @Model.Class.SubClass.NamespacedId()
                         </a>
                     }
                     <a href="/index.html" class="list-group-item list-group-item-action">
@@ -341,17 +340,18 @@
 </script>
 
 @functions {
-    HtmlString GetStereotypeBadge(Stereotype stereotype)
+    HtmlString GetTypeBadge(ClassType type)
     {
-        var displayText = stereotype switch
+        var displayText = type switch
         {
-            Stereotype.Class => "Class",
-            Stereotype.Enum => "Enum",
-            Stereotype.Primitive => "Primitive",
-            Stereotype.DataType => "Data Type",
-            _ => stereotype.ToString().ToUpper()
+            ClassType.Class => "Class",
+            ClassType.Enum => "Enum",
+            ClassType.Primitive => "Primitive",
+            ClassType.Datatype => "Data Type",
+            ClassType.Compound => "Compound",
+            _ => type.ToString().ToUpper()
         };
 
-        return new HtmlString($"<span class=\"badge {Class.BadgeClassStatic(stereotype)}\">{displayText}</span>");
+        return new HtmlString($"<span class=\"badge {ClassExtensions.BadgeClassStatic(type)}\">{displayText}</span>");
     }
 }

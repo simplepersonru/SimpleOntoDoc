@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace RdfsBeautyDoc
+namespace SimpleOntoDoc
 {
     class PlantUmlBuilder
     {
@@ -28,7 +28,7 @@ namespace RdfsBeautyDoc
         }
         void Enum(Class cls)
         {
-            _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} [[/{cls.Href}]] """);
+            _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} [[/{cls.Href()}]] """);
 
             _main.AppendLine($"enum {PlantUmlId(cls)} {{");
             foreach (var descr in cls.Enumerators)
@@ -43,37 +43,41 @@ namespace RdfsBeautyDoc
             foreach (var propKeyValue in cls.Properties)
             {
                 var prop = propKeyValue.Value;
-                var stereotype = prop.Range.Stereotype;
-
-                if (stereotype != Stereotype.Enum
-                    && stereotype != Stereotype.Class)
+                if (prop.Range == null)
                     continue;
 
-                if (stereotype == Stereotype.Enum)
+                var type = prop.Range.Type;
+
+                if (type != ClassType.Enum && type != ClassType.Class)
+                    continue;
+
+                if (type == ClassType.Enum)
                     Enum(prop.Range);
-                else if (stereotype == Stereotype.Class)
-                    Class(prop.Range, useProperties:false);
+                else if (type == ClassType.Class)
+                    Class(prop.Range, useProperties: false);
 
                 _main.AppendLine($"{PlantUmlId(cls)}::{prop.Name} -- {PlantUmlId(prop.Range)}");
             }
         }
         void Class(Class cls, bool useProperties = true)
         {
-            _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} [[/{cls.Href}]] """);
+            _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} [[/{cls.Href()}]] """);
 
             if (useProperties)
             {
                 foreach (var prop in cls.Properties)
                 {
-                    string rangeModifier = prop.Value.Range.Stereotype switch
+                    if (prop.Value.Range == null)
+                        continue;
+
+                    string rangeModifier = prop.Value.Range.Type switch
                     {
-                        Stereotype.Class => "~",
-                        Stereotype.Enum => "#",
+                        ClassType.Class => "~",
+                        ClassType.Enum => "#",
                         _ => "+",
                     };
 
-                    // для Primitive Id не включать namespace всегда
-                    _main.AppendLine($"{PlantUmlId(cls)} : {rangeModifier}{prop.Value.NamespacedId} : {prop.Value.Range.Id}");
+                    _main.AppendLine($"{PlantUmlId(cls)} : {rangeModifier}{prop.Value.NamespacedId()} : {prop.Value.Range.Id}");
                 }
             }
         }
@@ -112,7 +116,7 @@ namespace RdfsBeautyDoc
         }
         private async Task RenderClass(Class cls)
         {
-            if (cls.Stereotype != Stereotype.Class) 
+            if (cls.Type != ClassType.Class)
                 return;
             var factory = new RendererFactory();
             var renderer = factory.CreateRenderer(new PlantUmlSettings { RemoteUrl = remoteUrl });
