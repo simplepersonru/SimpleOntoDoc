@@ -17,16 +17,18 @@ namespace SimpleOntoDoc
         private readonly List<Class> _classes;
         private readonly List<Property> _properties;
         private readonly Program.Options _options;
+        private readonly string _basePath;
 
-        public SiteGenerator(Dictionary<string, Class> data, Program.Options options)
+        public SiteGenerator(Dictionary<string, Class> data, Program.Options options, string? basePath = null)
         {
             _data = data;
             _options = options;
+            _basePath = basePath ?? AppContext.BaseDirectory;
 
             Log("Инициализация движка RazorLight и подготовка данных...");
 
             _engine = new RazorLightEngineBuilder()
-                .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "templates"))
+                .UseFileSystemProject(Path.Combine(_basePath, "templates"))
                 .UseMemoryCachingProvider()
                 .Build();
 
@@ -201,12 +203,12 @@ namespace SimpleOntoDoc
             await WriteOutputAsync("assets/search-index.json", json);
 
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "assets", "js"));
-            File.Copy(Path.Combine("assets", "js", "search.js"),
+            File.Copy(Path.Combine(_basePath, "assets", "js", "search.js"),
                       Path.Combine(_options.OutputPath, "assets", "js", "search.js"),
                       overwrite: true);
 
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "assets", "css"));
-            File.Copy(Path.Combine("assets", "css", "site.css"),
+            File.Copy(Path.Combine(_basePath, "assets", "css", "site.css"),
                       Path.Combine(_options.OutputPath, "assets", "css", "site.css"),
                       overwrite: true);
         }
