@@ -1,0 +1,1778 @@
+[
+  {
+    "description": "Text string value",
+    "namespace": "food",
+    "name": "String",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Integer number",
+    "namespace": "food",
+    "name": "Integer",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Floating point number",
+    "namespace": "food",
+    "name": "Float",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Boolean value",
+    "namespace": "food",
+    "name": "Boolean",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Date value",
+    "namespace": "food",
+    "name": "Date",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Universal resource identifier",
+    "namespace": "food",
+    "name": "URI",
+    "type": "Primitive",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Generic quantity with unit",
+    "namespace": "food",
+    "name": "Quantity",
+    "type": "Datatype",
+    "sub_class": null,
+    "properties": {
+      "value": {
+        "description": "Numeric value",
+        "namespace": "food",
+        "name": "value",
+        "range": "Float",
+        "optional": false
+      },
+      "unit": {
+        "description": "Unit name",
+        "namespace": "food",
+        "name": "unit",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Monetary amount",
+    "namespace": "food",
+    "name": "Money",
+    "type": "Datatype",
+    "sub_class": null,
+    "properties": {
+      "value": {
+        "description": "Money value",
+        "namespace": "food",
+        "name": "value",
+        "range": "Float",
+        "optional": false
+      },
+      "currency": {
+        "description": "Currency code",
+        "namespace": "food",
+        "name": "currency",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Temperature measurement",
+    "namespace": "food",
+    "name": "Temperature",
+    "type": "Datatype",
+    "sub_class": null,
+    "properties": {
+      "value": {
+        "description": "Temperature value",
+        "namespace": "food",
+        "name": "value",
+        "range": "Float",
+        "optional": false
+      },
+      "unit": {
+        "description": "Temperature unit",
+        "namespace": "food",
+        "name": "unit",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Time duration",
+    "namespace": "food",
+    "name": "Duration",
+    "type": "Datatype",
+    "sub_class": null,
+    "properties": {
+      "value": {
+        "description": "Duration numeric value",
+        "namespace": "food",
+        "name": "value",
+        "range": "Integer",
+        "optional": false
+      },
+      "unit": {
+        "description": "Time unit",
+        "namespace": "food",
+        "name": "unit",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Geographic position",
+    "namespace": "food",
+    "name": "GeoPosition",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "latitude": {
+        "description": "Latitude coordinate",
+        "namespace": "food",
+        "name": "latitude",
+        "range": "Float",
+        "optional": false
+      },
+      "longitude": {
+        "description": "Longitude coordinate",
+        "namespace": "food",
+        "name": "longitude",
+        "range": "Float",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Postal address",
+    "namespace": "food",
+    "name": "Address",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "street": {
+        "description": "Street name",
+        "namespace": "food",
+        "name": "street",
+        "range": "String",
+        "optional": false
+      },
+      "city": {
+        "description": "City name",
+        "namespace": "food",
+        "name": "city",
+        "range": "String",
+        "optional": false
+      },
+      "country": {
+        "description": "Country code",
+        "namespace": "food",
+        "name": "country",
+        "range": "CountryCode",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Nutrition facts structure",
+    "namespace": "food",
+    "name": "NutritionFacts",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "calories": {
+        "description": "Energy calories",
+        "namespace": "food",
+        "name": "calories",
+        "range": "Float",
+        "optional": true
+      },
+      "fat": {
+        "description": "Fat amount",
+        "namespace": "food",
+        "name": "fat",
+        "range": "Quantity",
+        "optional": true
+      },
+      "protein": {
+        "description": "Protein amount",
+        "namespace": "food",
+        "name": "protein",
+        "range": "Quantity",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Physical dimensions",
+    "namespace": "food",
+    "name": "Dimensions",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "width": {
+        "description": "Width",
+        "namespace": "food",
+        "name": "width",
+        "range": "Quantity",
+        "optional": true
+      },
+      "height": {
+        "description": "Height",
+        "namespace": "food",
+        "name": "height",
+        "range": "Quantity",
+        "optional": true
+      },
+      "depth": {
+        "description": "Depth",
+        "namespace": "food",
+        "name": "depth",
+        "range": "Quantity",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Contact information",
+    "namespace": "food",
+    "name": "ContactInfo",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "phone": {
+        "description": "Phone number",
+        "namespace": "food",
+        "name": "phone",
+        "range": "String",
+        "optional": true
+      },
+      "email": {
+        "description": "Email address",
+        "namespace": "food",
+        "name": "email",
+        "range": "String",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Time range interval",
+    "namespace": "food",
+    "name": "TimeRange",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "start": {
+        "description": "Start date",
+        "namespace": "food",
+        "name": "start",
+        "range": "Date",
+        "optional": false
+      },
+      "end": {
+        "description": "End date",
+        "namespace": "food",
+        "name": "end",
+        "range": "Date",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "RGB color structure",
+    "namespace": "food",
+    "name": "ColorRGB",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "r": {
+        "description": "Red channel",
+        "namespace": "food",
+        "name": "r",
+        "range": "Integer",
+        "optional": false
+      },
+      "g": {
+        "description": "Green channel",
+        "namespace": "food",
+        "name": "g",
+        "range": "Integer",
+        "optional": false
+      },
+      "b": {
+        "description": "Blue channel",
+        "namespace": "food",
+        "name": "b",
+        "range": "Integer",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Energy value structure",
+    "namespace": "food",
+    "name": "EnergyValue",
+    "type": "Compound",
+    "sub_class": null,
+    "properties": {
+      "value": {
+        "description": "Energy amount",
+        "namespace": "food",
+        "name": "value",
+        "range": "Float",
+        "optional": false
+      },
+      "unit": {
+        "description": "Energy unit",
+        "namespace": "food",
+        "name": "unit",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Cuisine classification",
+    "namespace": "food",
+    "name": "CuisineKind",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "italian": {
+        "description": "Italian cuisine",
+        "namespace": "food",
+        "name": "italian"
+      },
+      "japanese": {
+        "description": "Japanese cuisine",
+        "namespace": "food",
+        "name": "japanese"
+      },
+      "mexican": {
+        "description": "Mexican cuisine",
+        "namespace": "food",
+        "name": "mexican"
+      },
+      "indian": {
+        "description": "Indian cuisine",
+        "namespace": "food",
+        "name": "indian"
+      }
+    }
+  },
+  {
+    "description": "Food category",
+    "namespace": "food",
+    "name": "FoodCategory",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "starter": {
+        "description": "Starter dish",
+        "namespace": "food",
+        "name": "starter"
+      },
+      "main": {
+        "description": "Main course",
+        "namespace": "food",
+        "name": "main"
+      },
+      "dessert": {
+        "description": "Dessert",
+        "namespace": "food",
+        "name": "dessert"
+      }
+    }
+  },
+  {
+    "description": "Diet classification",
+    "namespace": "food",
+    "name": "DietKind",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "vegan": {
+        "description": "Vegan diet",
+        "namespace": "food",
+        "name": "vegan"
+      },
+      "vegetarian": {
+        "description": "Vegetarian diet",
+        "namespace": "food",
+        "name": "vegetarian"
+      },
+      "omnivore": {
+        "description": "Omnivore diet",
+        "namespace": "food",
+        "name": "omnivore"
+      }
+    }
+  },
+  {
+    "description": "Allergen classification",
+    "namespace": "food",
+    "name": "AllergenKind",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "gluten": {
+        "description": "Contains gluten",
+        "namespace": "food",
+        "name": "gluten"
+      },
+      "nuts": {
+        "description": "Contains nuts",
+        "namespace": "food",
+        "name": "nuts"
+      },
+      "milk": {
+        "description": "Contains milk",
+        "namespace": "food",
+        "name": "milk"
+      }
+    }
+  },
+  {
+    "description": "Meal type",
+    "namespace": "food",
+    "name": "MealType",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "breakfast": {
+        "description": "Breakfast meal",
+        "namespace": "food",
+        "name": "breakfast"
+      },
+      "lunch": {
+        "description": "Lunch meal",
+        "namespace": "food",
+        "name": "lunch"
+      },
+      "dinner": {
+        "description": "Dinner meal",
+        "namespace": "food",
+        "name": "dinner"
+      }
+    }
+  },
+  {
+    "description": "Spice level scale",
+    "namespace": "food",
+    "name": "SpiceLevel",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "mild": {
+        "description": "Low spice",
+        "namespace": "food",
+        "name": "mild"
+      },
+      "medium": {
+        "description": "Medium spice",
+        "namespace": "food",
+        "name": "medium"
+      },
+      "hot": {
+        "description": "Very spicy",
+        "namespace": "food",
+        "name": "hot"
+      }
+    }
+  },
+  {
+    "description": "Measurement units",
+    "namespace": "food",
+    "name": "UnitKind",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "gram": {
+        "description": "Gram unit",
+        "namespace": "food",
+        "name": "gram"
+      },
+      "liter": {
+        "description": "Liter unit",
+        "namespace": "food",
+        "name": "liter"
+      },
+      "piece": {
+        "description": "Piece unit",
+        "namespace": "food",
+        "name": "piece"
+      }
+    }
+  },
+  {
+    "description": "Order processing status",
+    "namespace": "food",
+    "name": "OrderStatus",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "created": {
+        "description": "Order created",
+        "namespace": "food",
+        "name": "created"
+      },
+      "paid": {
+        "description": "Order paid",
+        "namespace": "food",
+        "name": "paid"
+      },
+      "completed": {
+        "description": "Order completed",
+        "namespace": "food",
+        "name": "completed"
+      }
+    }
+  },
+  {
+    "description": "Payment method",
+    "namespace": "food",
+    "name": "PaymentMethod",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "cash": {
+        "description": "Cash payment",
+        "namespace": "food",
+        "name": "cash"
+      },
+      "card": {
+        "description": "Card payment",
+        "namespace": "food",
+        "name": "card"
+      },
+      "online": {
+        "description": "Online payment",
+        "namespace": "food",
+        "name": "online"
+      }
+    }
+  },
+  {
+    "description": "Country code enumeration",
+    "namespace": "food",
+    "name": "CountryCode",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "de": {
+        "description": "Germany",
+        "namespace": "food",
+        "name": "de"
+      },
+      "us": {
+        "description": "United States",
+        "namespace": "food",
+        "name": "us"
+      },
+      "fr": {
+        "description": "France",
+        "namespace": "food",
+        "name": "fr"
+      }
+    }
+  },
+  {
+    "description": "Language codes",
+    "namespace": "food",
+    "name": "LanguageCode",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "en": {
+        "description": "English",
+        "namespace": "food",
+        "name": "en"
+      },
+      "de": {
+        "description": "German",
+        "namespace": "food",
+        "name": "de"
+      },
+      "fr": {
+        "description": "French",
+        "namespace": "food",
+        "name": "fr"
+      }
+    }
+  },
+  {
+    "description": "Packaging classification",
+    "namespace": "food",
+    "name": "PackagingKind",
+    "type": "Enum",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {
+      "box": {
+        "description": "Box packaging",
+        "namespace": "food",
+        "name": "box"
+      },
+      "bag": {
+        "description": "Bag packaging",
+        "namespace": "food",
+        "name": "bag"
+      },
+      "bottle": {
+        "description": "Bottle packaging",
+        "namespace": "food",
+        "name": "bottle"
+      }
+    }
+  },
+  {
+    "description": "Base class for living entities",
+    "namespace": "food",
+    "name": "LivingEntity",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "name": {
+        "description": "Entity name",
+        "namespace": "food",
+        "name": "name",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Organization entity",
+    "namespace": "food",
+    "name": "Organization",
+    "type": "Class",
+    "sub_class": "LivingEntity",
+    "properties": {
+      "contact": {
+        "description": "Contact info",
+        "namespace": "food",
+        "name": "contact",
+        "range": "ContactInfo",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Human person",
+    "namespace": "food",
+    "name": "Person",
+    "type": "Class",
+    "sub_class": "LivingEntity",
+    "properties": {
+      "birthDate": {
+        "description": "Birth date",
+        "namespace": "food",
+        "name": "birthDate",
+        "range": "Date",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Customer entity",
+    "namespace": "food",
+    "name": "Customer",
+    "type": "Class",
+    "sub_class": "Person",
+    "properties": {
+      "orders": {
+        "description": "Customer orders",
+        "namespace": "food",
+        "name": "orders",
+        "range": "Order",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Employee of organization",
+    "namespace": "food",
+    "name": "Employee",
+    "type": "Class",
+    "sub_class": "Person",
+    "properties": {
+      "employer": {
+        "description": "Employer organization",
+        "namespace": "food",
+        "name": "employer",
+        "range": "Organization",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Chef employee",
+    "namespace": "food",
+    "name": "Chef",
+    "type": "Class",
+    "sub_class": "Employee",
+    "properties": {
+      "specialtyCuisine": {
+        "description": "Cuisine specialization",
+        "namespace": "food",
+        "name": "specialtyCuisine",
+        "range": "CuisineKind",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Supplier organization",
+    "namespace": "food",
+    "name": "Supplier",
+    "type": "Class",
+    "sub_class": "Organization",
+    "properties": {
+      "supplies": {
+        "description": "Supplied ingredients",
+        "namespace": "food",
+        "name": "supplies",
+        "range": "Ingredient",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Farmer supplier",
+    "namespace": "food",
+    "name": "Farmer",
+    "type": "Class",
+    "sub_class": "Supplier",
+    "properties": {
+      "farmLocation": {
+        "description": "Farm location",
+        "namespace": "food",
+        "name": "farmLocation",
+        "range": "GeoPosition",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Restaurant organization",
+    "namespace": "food",
+    "name": "Restaurant",
+    "type": "Class",
+    "sub_class": "Organization",
+    "properties": {
+      "menu": {
+        "description": "Restaurant menu",
+        "namespace": "food",
+        "name": "menu",
+        "range": "Menu",
+        "optional": true
+      },
+      "location": {
+        "description": "Restaurant address",
+        "namespace": "food",
+        "name": "location",
+        "range": "Address",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Kitchen area",
+    "namespace": "food",
+    "name": "Kitchen",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "restaurant": {
+        "description": "Parent restaurant",
+        "namespace": "food",
+        "name": "restaurant",
+        "range": "Restaurant",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Menu definition",
+    "namespace": "food",
+    "name": "Menu",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "sections": {
+        "description": "Menu sections",
+        "namespace": "food",
+        "name": "sections",
+        "range": "MenuSection",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Menu section",
+    "namespace": "food",
+    "name": "MenuSection",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "items": {
+        "description": "Menu items",
+        "namespace": "food",
+        "name": "items",
+        "range": "MenuItem",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Menu item",
+    "namespace": "food",
+    "name": "MenuItem",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "price": {
+        "description": "Menu item price",
+        "namespace": "food",
+        "name": "price",
+        "range": "Money",
+        "optional": false
+      },
+      "recipe": {
+        "description": "Recipe reference",
+        "namespace": "food",
+        "name": "recipe",
+        "range": "Recipe",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Ingredient base class",
+    "namespace": "food",
+    "name": "Ingredient",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "nutrition": {
+        "description": "Nutrition facts",
+        "namespace": "food",
+        "name": "nutrition",
+        "range": "NutritionFacts",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Raw ingredient",
+    "namespace": "food",
+    "name": "RawIngredient",
+    "type": "Class",
+    "sub_class": "Ingredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Processed ingredient",
+    "namespace": "food",
+    "name": "ProcessedIngredient",
+    "type": "Class",
+    "sub_class": "Ingredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Spice ingredient",
+    "namespace": "food",
+    "name": "Spice",
+    "type": "Class",
+    "sub_class": "Ingredient",
+    "properties": {
+      "spiceLevel": {
+        "description": "Spice level",
+        "namespace": "food",
+        "name": "spiceLevel",
+        "range": "SpiceLevel",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Vegetable ingredient",
+    "namespace": "food",
+    "name": "Vegetable",
+    "type": "Class",
+    "sub_class": "RawIngredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Fruit ingredient",
+    "namespace": "food",
+    "name": "Fruit",
+    "type": "Class",
+    "sub_class": "RawIngredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Meat ingredient",
+    "namespace": "food",
+    "name": "Meat",
+    "type": "Class",
+    "sub_class": "RawIngredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Seafood ingredient",
+    "namespace": "food",
+    "name": "Seafood",
+    "type": "Class",
+    "sub_class": "RawIngredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Dairy product",
+    "namespace": "food",
+    "name": "DairyProduct",
+    "type": "Class",
+    "sub_class": "ProcessedIngredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Grain ingredient",
+    "namespace": "food",
+    "name": "Grain",
+    "type": "Class",
+    "sub_class": "RawIngredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Beverage product",
+    "namespace": "food",
+    "name": "Beverage",
+    "type": "Class",
+    "sub_class": "Ingredient",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Alcoholic beverage",
+    "namespace": "food",
+    "name": "AlcoholicBeverage",
+    "type": "Class",
+    "sub_class": "Beverage",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Non alcoholic beverage",
+    "namespace": "food",
+    "name": "NonAlcoholicBeverage",
+    "type": "Class",
+    "sub_class": "Beverage",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Recipe definition",
+    "namespace": "food",
+    "name": "Recipe",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "steps": {
+        "description": "Recipe steps",
+        "namespace": "food",
+        "name": "steps",
+        "range": "RecipeStep",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Recipe step",
+    "namespace": "food",
+    "name": "RecipeStep",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "duration": {
+        "description": "Step duration",
+        "namespace": "food",
+        "name": "duration",
+        "range": "Duration",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Cooking tool",
+    "namespace": "food",
+    "name": "CookingTool",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Kitchen appliance",
+    "namespace": "food",
+    "name": "Appliance",
+    "type": "Class",
+    "sub_class": "CookingTool",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Oven appliance",
+    "namespace": "food",
+    "name": "Oven",
+    "type": "Class",
+    "sub_class": "Appliance",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Stove appliance",
+    "namespace": "food",
+    "name": "Stove",
+    "type": "Class",
+    "sub_class": "Appliance",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Refrigerator appliance",
+    "namespace": "food",
+    "name": "Refrigerator",
+    "type": "Class",
+    "sub_class": "Appliance",
+    "properties": {
+      "temperature": {
+        "description": "Internal temperature",
+        "namespace": "food",
+        "name": "temperature",
+        "range": "Temperature",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Customer order",
+    "namespace": "food",
+    "name": "Order",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "items": {
+        "description": "Order items",
+        "namespace": "food",
+        "name": "items",
+        "range": "OrderItem",
+        "optional": true,
+        "multiplicity": "0..*"
+      },
+      "status": {
+        "description": "Order status",
+        "namespace": "food",
+        "name": "status",
+        "range": "OrderStatus",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Order item",
+    "namespace": "food",
+    "name": "OrderItem",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "menuItem": {
+        "description": "Ordered menu item",
+        "namespace": "food",
+        "name": "menuItem",
+        "range": "MenuItem",
+        "optional": false
+      },
+      "quantity": {
+        "description": "Ordered quantity",
+        "namespace": "food",
+        "name": "quantity",
+        "range": "Integer",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Table reservation",
+    "namespace": "food",
+    "name": "Reservation",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "time": {
+        "description": "Reservation time",
+        "namespace": "food",
+        "name": "time",
+        "range": "Date",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Restaurant table",
+    "namespace": "food",
+    "name": "Table",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "seats": {
+        "description": "Seat count",
+        "namespace": "food",
+        "name": "seats",
+        "range": "Integer",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Dining room",
+    "namespace": "food",
+    "name": "DiningRoom",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "tables": {
+        "description": "Dining tables",
+        "namespace": "food",
+        "name": "tables",
+        "range": "Table",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Customer review",
+    "namespace": "food",
+    "name": "Review",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "rating": {
+        "description": "Review rating",
+        "namespace": "food",
+        "name": "rating",
+        "range": "Rating",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Rating value",
+    "namespace": "food",
+    "name": "Rating",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "score": {
+        "description": "Score value",
+        "namespace": "food",
+        "name": "score",
+        "range": "Integer",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Payment record",
+    "namespace": "food",
+    "name": "Payment",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "method": {
+        "description": "Payment method",
+        "namespace": "food",
+        "name": "method",
+        "range": "PaymentMethod",
+        "optional": false
+      },
+      "amount": {
+        "description": "Payment amount",
+        "namespace": "food",
+        "name": "amount",
+        "range": "Money",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Invoice document",
+    "namespace": "food",
+    "name": "Invoice",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "total": {
+        "description": "Invoice total",
+        "namespace": "food",
+        "name": "total",
+        "range": "Money",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Delivery service",
+    "namespace": "food",
+    "name": "Delivery",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "address": {
+        "description": "Delivery address",
+        "namespace": "food",
+        "name": "address",
+        "range": "Address",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Delivery address",
+    "namespace": "food",
+    "name": "DeliveryAddress",
+    "type": "Class",
+    "sub_class": "Address",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Warehouse storage",
+    "namespace": "food",
+    "name": "Warehouse",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "location": {
+        "description": "Warehouse location",
+        "namespace": "food",
+        "name": "location",
+        "range": "Address",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Inventory item",
+    "namespace": "food",
+    "name": "InventoryItem",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "ingredient": {
+        "description": "Stored ingredient",
+        "namespace": "food",
+        "name": "ingredient",
+        "range": "Ingredient",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Stock batch",
+    "namespace": "food",
+    "name": "StockBatch",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "quantity": {
+        "description": "Batch quantity",
+        "namespace": "food",
+        "name": "quantity",
+        "range": "Quantity",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Purchase order",
+    "namespace": "food",
+    "name": "PurchaseOrder",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "items": {
+        "description": "Purchase order items",
+        "namespace": "food",
+        "name": "items",
+        "range": "PurchaseOrderItem",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Purchase order item",
+    "namespace": "food",
+    "name": "PurchaseOrderItem",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "ingredient": {
+        "description": "Ordered ingredient",
+        "namespace": "food",
+        "name": "ingredient",
+        "range": "Ingredient",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Shipment",
+    "namespace": "food",
+    "name": "Shipment",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "items": {
+        "description": "Shipment items",
+        "namespace": "food",
+        "name": "items",
+        "range": "ShipmentItem",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Shipment item",
+    "namespace": "food",
+    "name": "ShipmentItem",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "quantity": {
+        "description": "Shipment quantity",
+        "namespace": "food",
+        "name": "quantity",
+        "range": "Quantity",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Nutrition profile",
+    "namespace": "food",
+    "name": "NutritionProfile",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "diet": {
+        "description": "Diet classification",
+        "namespace": "food",
+        "name": "diet",
+        "range": "DietKind",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Diet plan",
+    "namespace": "food",
+    "name": "DietPlan",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "meals": {
+        "description": "Planned meals",
+        "namespace": "food",
+        "name": "meals",
+        "range": "Meal",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Meal plan",
+    "namespace": "food",
+    "name": "MealPlan",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "days": {
+        "description": "Meal days",
+        "namespace": "food",
+        "name": "days",
+        "range": "Meal",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Meal entity",
+    "namespace": "food",
+    "name": "Meal",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "type": {
+        "description": "Meal type",
+        "namespace": "food",
+        "name": "type",
+        "range": "MealType",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Event",
+    "namespace": "food",
+    "name": "Event",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "date": {
+        "description": "Event date",
+        "namespace": "food",
+        "name": "date",
+        "range": "Date",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Catering order",
+    "namespace": "food",
+    "name": "CateringOrder",
+    "type": "Class",
+    "sub_class": "Order",
+    "properties": {
+      "event": {
+        "description": "Related event",
+        "namespace": "food",
+        "name": "event",
+        "range": "Event",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Catering menu",
+    "namespace": "food",
+    "name": "CateringMenu",
+    "type": "Class",
+    "sub_class": "Menu",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Food package",
+    "namespace": "food",
+    "name": "FoodPackage",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "kind": {
+        "description": "Packaging type",
+        "namespace": "food",
+        "name": "kind",
+        "range": "PackagingKind",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Package label",
+    "namespace": "food",
+    "name": "PackageLabel",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "language": {
+        "description": "Label language",
+        "namespace": "food",
+        "name": "language",
+        "range": "LanguageCode",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Certification document",
+    "namespace": "food",
+    "name": "Certification",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "issuer": {
+        "description": "Issuing organization",
+        "namespace": "food",
+        "name": "issuer",
+        "range": "Organization",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Organic certification",
+    "namespace": "food",
+    "name": "OrganicCertification",
+    "type": "Class",
+    "sub_class": "Certification",
+    "properties": {},
+    "enumerators": {}
+  },
+  {
+    "description": "Allergen information",
+    "namespace": "food",
+    "name": "AllergenInfo",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "allergen": {
+        "description": "Allergen kind",
+        "namespace": "food",
+        "name": "allergen",
+        "range": "AllergenKind",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Temperature log record",
+    "namespace": "food",
+    "name": "TemperatureLog",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "value": {
+        "description": "Measured temperature",
+        "namespace": "food",
+        "name": "value",
+        "range": "Temperature",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Sensor device",
+    "namespace": "food",
+    "name": "SensorDevice",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "location": {
+        "description": "Sensor location",
+        "namespace": "food",
+        "name": "location",
+        "range": "GeoPosition",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "IoT gateway device",
+    "namespace": "food",
+    "name": "IoTGateway",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "sensors": {
+        "description": "Connected sensors",
+        "namespace": "food",
+        "name": "sensors",
+        "range": "SensorDevice",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "User account",
+    "namespace": "food",
+    "name": "UserAccount",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "person": {
+        "description": "Linked person",
+        "namespace": "food",
+        "name": "person",
+        "range": "Person",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Security role",
+    "namespace": "food",
+    "name": "Role",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "permissions": {
+        "description": "Role permissions",
+        "namespace": "food",
+        "name": "permissions",
+        "range": "Permission",
+        "optional": true,
+        "multiplicity": "0..*"
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Permission entity",
+    "namespace": "food",
+    "name": "Permission",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "name": {
+        "description": "Permission name",
+        "namespace": "food",
+        "name": "name",
+        "range": "String",
+        "optional": false
+      }
+    },
+    "enumerators": {}
+  },
+  {
+    "description": "Audit log entry",
+    "namespace": "food",
+    "name": "AuditLog",
+    "type": "Class",
+    "sub_class": null,
+    "properties": {
+      "timestamp": {
+        "description": "Event timestamp",
+        "namespace": "food",
+        "name": "timestamp",
+        "range": "Date",
+        "optional": false
+      },
+      "user": {
+        "description": "User account",
+        "namespace": "food",
+        "name": "user",
+        "range": "UserAccount",
+        "optional": true
+      }
+    },
+    "enumerators": {}
+  }
+]

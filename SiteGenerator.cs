@@ -51,7 +51,9 @@ namespace SimpleOntoDoc
         {
             Log("Очистка и подготовка выходной директории...");
             if (Directory.Exists(_options.OutputPath))
-                Directory.Delete(_options.OutputPath, recursive: true);
+                Directory.GetFiles(_options.OutputPath, "*", SearchOption.AllDirectories)
+                        .ToList()
+                        .ForEach(File.Delete);
 
             Directory.CreateDirectory(_options.OutputPath);
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "classes"));

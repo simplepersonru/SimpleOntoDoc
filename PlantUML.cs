@@ -161,10 +161,10 @@ namespace SimpleOntoDoc
         private readonly bool _useWsl;
         private readonly string _wslDistro;
 
-        public PlantUmlDockerManager(int port = 55667, string wslDistro = "Ubuntu-24.04")
+        public PlantUmlDockerManager()
         {
-            _port = port;
-            _wslDistro = wslDistro;
+            _port = 55667;
+            _wslDistro = "Ubuntu-24.04";
             _useWsl = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
             RemoteUrl = $"http://localhost:{_port}";

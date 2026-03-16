@@ -52,12 +52,20 @@
 
             bool skipPlantUml = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_SKIP") == "true";
 
-            using var plantumlDocker = skipPlantUml ? null : new PlantUmlDockerManager();
+            string remoteUrl = string.Empty;
+            string? remoteUrlOpt = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_URL");
+            if (!string.IsNullOrEmpty(remoteUrlOpt))
+                remoteUrl = remoteUrlOpt;
+            else if (!skipPlantUml && remoteUrlOpt == null )
+            {
+                var plantumlDocker = new PlantUmlDockerManager();
+                remoteUrl = plantumlDocker.RemoteUrl;
+            }
 
             var options = new Options
             {
                 InputJsonPath = GetEnv("SIMPLEDOC_INPUT_PATH"),
-                PlantumlRemoteUrl = skipPlantUml ? null : plantumlDocker!.RemoteUrl,
+                PlantumlRemoteUrl = remoteUrl,
                 OutputPath = GetEnv("SIMPLEDOC_OUTPUT_PATH"),
                 DocTitle = GetEnv("SIMPLEDOC_TITLE"),
                 DocDescription = GetEnv("SIMPLEDOC_DESCRIPTION"),
