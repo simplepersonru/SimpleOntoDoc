@@ -233,27 +233,4 @@ SimpleOntoDoc/
 └── SimpleOntoDoc.csproj
 ```
 
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here is how you can help:
-
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/my-feature`
-3. **Commit** your changes: `git commit -m "Add my feature"`
-4. **Push** to your fork: `git push origin feature/my-feature`
-5. **Open a Pull Request**
-
-Please follow the existing C# code style (see `.editorconfig`).
-
----
-
-## 📄 License
-
-No license file is currently included in this repository.  
-**All rights reserved** — please contact the author before using, copying, or distributing this software.
-
----
-
 *Built with ❤️ using [.NET 9](https://dotnet.microsoft.com/), [RazorLight](https://github.com/toddams/RazorLight), [PlantUML](https://plantuml.com/) and [Bootstrap 5](https://getbootstrap.com/).*
