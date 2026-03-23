@@ -15,7 +15,7 @@ until curl -sf http://localhost:$PORT > /dev/null; do
 done
 
 cp $SIMPLEDOC_INPUT_PATH ./out/ontology.json
-docker pull gitea.simpleperson.ru/admin/simple-onto-doc:latest
+docker pull gitea.simpleperson.ru/pub/simple-onto-doc:latest
 
 SIMPLEDOC_INPUT_PATH=/out/ontology.json
 
