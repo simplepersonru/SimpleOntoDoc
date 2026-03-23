@@ -12,13 +12,6 @@
     <p class="lead">@Model.Class.Description</p>
 }
 
-@if (!string.IsNullOrEmpty(Model.Class.Description))
-{
-    <div class="alert alert-info">@Model.Class.Description</div>
-}
-
-
-
 <!-- Разметка -->
 @if (!string.IsNullOrEmpty(Model.Class.SvgDiagram))
 {
