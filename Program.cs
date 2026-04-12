@@ -79,7 +79,7 @@
             if (!options.SkipPlantUml)
             {
                 Log("Генерация SVG-диаграмм PlantUML...");
-                var umlrender = new PlantUML(options.PlantumlRemoteUrl!);
+                var umlrender = new PlantUML(options);
                 await umlrender.FillClassesAsync(classes);
             }
             else

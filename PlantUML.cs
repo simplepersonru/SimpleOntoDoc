@@ -5,10 +5,16 @@ using System.Text;
 
 namespace SimpleOntoDoc
 {
-    class PlantUmlBuilder
+    class PlantUmlBuilder(Program.Options _options)
     {
         StringBuilder _decl = new();
         StringBuilder _main = new();
+
+
+        private string AbsoluteUrl(string relativePath) =>
+          string.IsNullOrEmpty(_options.BasePath)
+              ? $"/{relativePath}"
+              : $"{_options.BasePath}/{relativePath}";
 
         static string PlantUmlId(Class cls)
         {
@@ -28,7 +34,7 @@ namespace SimpleOntoDoc
         }
         void Enum(Class cls)
         {
-            _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} [[/{cls.Href()}]] """);
+            _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} [[{AbsoluteUrl(cls.Href())}]] """);
 
             _main.AppendLine($"enum {PlantUmlId(cls)} {{");
             foreach (var descr in cls.Enumerators)
@@ -58,7 +64,7 @@ namespace SimpleOntoDoc
         }
         void Class(Class cls, bool useProperties = true)
         {
-            _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} [[/{cls.Href()}]] """);
+            _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} [[{AbsoluteUrl(cls.Href())}]] """);
 
             if (useProperties)
             {
@@ -102,7 +108,7 @@ namespace SimpleOntoDoc
     }
 
 
-    internal class PlantUML(string remoteUrl)
+    internal class PlantUML(Program.Options options)
     {
         private static void Log(string message)
         {
@@ -113,8 +119,8 @@ namespace SimpleOntoDoc
             if (cls.Type != ClassType.Class)
                 return;
             var factory = new RendererFactory();
-            var renderer = factory.CreateRenderer(new PlantUmlSettings { RemoteUrl = remoteUrl });
-            var bytes = await renderer.RenderAsync(new PlantUmlBuilder().Build(cls), OutputFormat.Svg);
+            var renderer = factory.CreateRenderer(new PlantUmlSettings { RemoteUrl = options.PlantumlRemoteUrl });
+            var bytes = await renderer.RenderAsync(new PlantUmlBuilder(options).Build(cls), OutputFormat.Svg);
 
             cls.SvgDiagram = Encoding.UTF8.GetString(bytes);
         }
@@ -283,6 +289,7 @@ namespace SimpleOntoDoc
             if (proc.ExitCode != 0)
                 throw new Exception("Не удалось запустить контейнер PlantUML: " + proc.StandardError.ReadToEnd());
         }
+
 
         public void Dispose()
         {
