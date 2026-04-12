@@ -1,0 +1,57 @@
+@using SimpleOntoDoc
+@model MarkdownClassViewModel
+@{
+    Layout = null;
+}
+
+# Описание
+
+@Model.Class.Description
+
+# Сводка
+
+| Наименование    | Количество |
+|-----------------|------------|
+| Базовый класс   | @Model.Class.Description |
+
+# Диаграмма
+
+```plantuml
+@Model.Class.DiagramContent
+``
+
+# Свойства
+
+| Идентификатор | Тип | Описание |
+|---------------|-----|----------|
+@foreach (var prop in Model.Properties)
+{
+@:| @prop.Name |  @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Description |
+}
+
+# Дочерние классы
+
+| Идентификатор | Описание |
+|---------------|----------|
+@foreach (var child in Model.ChildClasses)
+{
+@:| @child.MarkdownRef(near: true) | @child.Description |
+}
+
+# Все свойства (включая унаследованные)
+
+| Идентификатор | Тип | Описание |
+|---------------|-----|----------|
+@foreach (var prop in Model.AllClassProperties)
+{
+@:| @prop.MarkdownRef() |  @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Description |
+}
+
+
+# Ссылки
+| Свойство | Описание |
+|----------|----------|
+@foreach (var prop in Model.LinkProperties)
+{
+@:| @prop.MarkdownRef() | @prop.Description |
+}

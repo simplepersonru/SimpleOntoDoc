@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,23 @@ namespace SimpleOntoDoc
             ClassType.Primitive => "primitives",
             ClassType.Compound => "compounds",
             _ => "classes"
+        };
+
+        public static string MarkdownRef(this Class cls, bool near)
+        {
+            string link = near ? $"{cls.Name}.md" : $"./entities/{cls.Name}.md";
+
+            return $"[{cls.Id}]({link})";
+        }
+
+        public static string MarkdownColorSquare(this Class cls) => cls.Type switch
+        {
+            ClassType.Class => "🟦",
+            ClassType.Enum => "🟪",
+            ClassType.Primitive => "🟧",
+            ClassType.Datatype => "🟨",
+            ClassType.Compound => "🟥",
+            _ => "⬜"
         };
 
         public static string Href(this Class cls) => $"{cls.StereoPath()}/{cls.Name}.html";
@@ -48,6 +66,12 @@ namespace SimpleOntoDoc
 
     public static class PropertyExtensions
     {
+
+        public static string MarkdownRef(this Property prop)
+        {
+
+            return $"{prop.Domain.MarkdownRef(near: true)}.{prop.Name}";
+        }
         public static string Href(this Property prop) =>
             $"properties/{prop.Domain.Name}.{prop.Name}.html";
 
@@ -111,6 +135,29 @@ namespace SimpleOntoDoc
     public class PropertyListViewModel : LayoutViewModel
     {
         public List<Property> Properties { get; set; } = new();
+    }
+
+    public class MarkdownIndexViewModel
+    {
+        public string Title { get; set; } = "SimpleOntoDoc";
+        public string Description { get; set; } = string.Empty;
+        public int ClassCount { get; set; }
+        public int EnumCount { get; set; }
+        public int PrimitiveCount { get; set; }
+        public int DataTypeCount { get; set; }
+        public int CompoundCount { get; set; }
+        public List<Class> Classes { get; set; } = new();
+
+    }
+
+    public class MarkdownClassViewModel
+    {
+        public Class Class { get; set; } = new();
+        public List<Property> Properties { get; set; } = new();
+        public List<Class> ChildClasses { get; set; } = new();
+        public List<Property> LinkProperties { get; set; } = new();
+        public List<Property> AllClassProperties { get; set; } = new();
+
     }
 }
 

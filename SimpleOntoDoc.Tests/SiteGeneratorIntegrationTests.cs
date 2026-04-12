@@ -164,9 +164,9 @@ namespace SimpleOntoDoc.Tests
         [Fact]
         public void GenerateAsync_ClassPagesDoNotHaveSvgDiagramContent()
         {
-            // PlantUML отключён, SvgDiagram должен быть пустым
+            // PlantUML отключён, DiagramContent должен быть пустым
             foreach (Class cls in _classes.Values.Where(c => c.Type == ClassType.Class))
-                Assert.Empty(cls.SvgDiagram);
+                Assert.Empty(cls.DiagramContent);
         }
 
         [Fact]

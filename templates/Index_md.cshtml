@@ -1,0 +1,40 @@
+@using SimpleOntoDoc
+@model MarkdownIndexViewModel
+@{
+    Layout = null;
+}
+
+# Описание
+
+@Model.Description
+
+# Статистика
+
+| Наименование | Количество |
+|--------------|------------|
+| Классы       | @Model.ClassCount |
+| Перечисления | @Model.EnumCount |
+| Примитивы    | @Model.PrimitiveCount |
+| Типы данных  | @Model.DataTypeCount |
+
+# Классы
+
+## Легенда
+🟦 - класс 
+
+🟪 - перечисление
+
+🟧 - примитив
+
+🟨 - тип данных
+
+🟥 - составной тип
+
+
+| Идентификатор | Описание |
+|---------------|----------|
+@foreach (var cls in Model.Classes)
+{
+@:| @cls.MarkdownColorSquare() @cls.MarkdownRef(near: false) | @cls.Description |
+}
+

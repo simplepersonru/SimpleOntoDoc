@@ -102,6 +102,6 @@ namespace SimpleOntoDoc
 
         /// <summary>SVG-диаграмма класса (заполняется PlantUML, не из JSON).</summary>
         [JsonIgnore]
-        public string SvgDiagram { get; set; } = string.Empty;
+        public string DiagramContent { get; set; } = string.Empty;
     }
 }

@@ -24,6 +24,12 @@
             /// Устанавливается через ENV SIMPLEDOC_PLANTUML_SKIP=true.
             /// </summary>
             public bool SkipPlantUml { get; set; } = false;
+
+            /// <summary>
+            /// Рендеринг в формате Markdown (по умолчанию false). 
+            /// Если true, то описания классов и свойств будут рендериться как Markdown, а не как HTML. Устанавливается через ENV SIMPLEDOC_MARKDOWN_RENDER=true.
+            /// </summary>
+            public bool MarkdownRender { get; set; } = false;
         }
 
         static string GetEnv(string env)
@@ -52,11 +58,13 @@
 
             bool skipPlantUml = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_SKIP") == "true";
 
+            bool markdownRender = Environment.GetEnvironmentVariable("SIMPLEDOC_MARKDOWN_RENDER") == "true";
+
             string remoteUrl = string.Empty;
             string? remoteUrlOpt = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_URL");
             if (!string.IsNullOrEmpty(remoteUrlOpt))
                 remoteUrl = remoteUrlOpt;
-            else if (!skipPlantUml && remoteUrlOpt == null )
+            else if (!skipPlantUml && !markdownRender && remoteUrlOpt == null )
             {
                 var plantumlDocker = new PlantUmlDockerManager();
                 remoteUrl = plantumlDocker.RemoteUrl;
@@ -70,6 +78,7 @@
                 DocTitle = GetEnv("SIMPLEDOC_TITLE"),
                 DocDescription = GetEnv("SIMPLEDOC_DESCRIPTION"),
                 BasePath = NormalizeBasePath(GetEnvOptional("SIMPLEDOC_BASE_PATH")),
+                MarkdownRender = markdownRender,
                 SkipPlantUml = skipPlantUml,
             };
 
@@ -87,12 +96,25 @@
                 Log("Генерация SVG-диаграмм PlantUML пропущена (SIMPLEDOC_PLANTUML_SKIP=true).");
             }
 
-            Log("Генерация HTML-документации...");
-            var generator = new SiteGenerator(
-                data: classes,
-                options: options);
+            if (options.MarkdownRender)
+            {
+                Log("Рендеринг описаний в формате Markdown...");
+                var mdRenderer = new MarkdownGenerator(
+                    data: classes,
+                    options: options);
+                await mdRenderer.GenerateAsync();
+            }
+            else
+            {
+                Log("Генерация HTML-документации...");
+                var generator = new SiteGenerator(
+                    data: classes,
+                    options: options);
 
-            await generator.GenerateAsync();
+                await generator.GenerateAsync();
+            }
+
+
 
             Log("Генерация завершена успешно.");
         }

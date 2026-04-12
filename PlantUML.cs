@@ -120,9 +120,22 @@ namespace SimpleOntoDoc
                 return;
             var factory = new RendererFactory();
             var renderer = factory.CreateRenderer(new PlantUmlSettings { RemoteUrl = options.PlantumlRemoteUrl });
-            var bytes = await renderer.RenderAsync(new PlantUmlBuilder(options).Build(cls), OutputFormat.Svg);
 
-            cls.SvgDiagram = Encoding.UTF8.GetString(bytes);
+            string diagramSource = new PlantUmlBuilder(options).Build(cls);
+            if (options.MarkdownRender)
+            {
+                diagramSource = $"""
+                                @startuml
+                                {diagramSource}
+                                @enduml
+                                """;
+                cls.DiagramContent = diagramSource;
+            }
+            else
+            {
+                var bytes = await renderer.RenderAsync(diagramSource, OutputFormat.Svg);
+                cls.DiagramContent = Encoding.UTF8.GetString(bytes);
+            }
         }
 
         public async Task FillClassesAsync(Dictionary<string, Class> data)
