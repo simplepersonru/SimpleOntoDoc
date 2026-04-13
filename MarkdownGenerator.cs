@@ -35,6 +35,7 @@ namespace SimpleOntoDoc
             _engine = new RazorLightEngineBuilder()
                 .UseFileSystemProject(Path.Combine(_basePath, "templates"))
                 .UseMemoryCachingProvider()
+                .DisableEncoding()
                 .Build();
 
             // Разделяем данные по типам
@@ -54,11 +55,7 @@ namespace SimpleOntoDoc
 
         private void PrepareOutputDirectories()
         {
-            Log("Очистка и подготовка выходной директории...");
-            if (Directory.Exists(_options.OutputPath))
-                Directory.GetFiles(_options.OutputPath, "*", SearchOption.AllDirectories)
-                        .ToList()
-                        .ForEach(File.Delete);
+            Log("подготовка выходной директории...");
 
             Directory.CreateDirectory(_options.OutputPath);
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "entities"));
@@ -115,6 +112,7 @@ namespace SimpleOntoDoc
             {
                 Class = cls,
                 Properties = properties,
+                SubClassString = cls.SubClass == null ? "-" : cls.SubClass.MarkdownRef(near: true),
                 ChildClasses = childClasses,
                 AllClassProperties = allClassProperties,
                 LinkProperties = _properties.Where(p => p.Range.Id == cls.Id).ToList()

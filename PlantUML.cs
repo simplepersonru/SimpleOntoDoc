@@ -34,7 +34,9 @@ namespace SimpleOntoDoc
         }
         void Enum(Class cls)
         {
-            _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} [[{AbsoluteUrl(cls.Href())}]] """);
+            string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
+
+            _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} {link} """);
 
             _main.AppendLine($"enum {PlantUmlId(cls)} {{");
             foreach (var descr in cls.Enumerators)
@@ -64,7 +66,9 @@ namespace SimpleOntoDoc
         }
         void Class(Class cls, bool useProperties = true)
         {
-            _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} [[{AbsoluteUrl(cls.Href())}]] """);
+            string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
+
+            _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} {link} """);
 
             if (useProperties)
             {

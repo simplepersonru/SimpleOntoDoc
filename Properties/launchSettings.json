@@ -3,9 +3,9 @@
     "SimpleOntoDoc": {
       "commandName": "Project",
       "environmentVariables": {
-        "SIMPLEDOC_INPUT_PATH": "C:\\Users\\Admin\\source\\repos\\SimpleOntoDoc\\Example\\ontology.json",
-        "SIMPLEDOC_TITLE": "CIM Ontology",
-        "SIMPLEDOC_DESCRIPTION": "Онтология стандарта CIM по IEC 61970 с применением ГОСТ РФ (приказ 1340). С примесью от CGMES 3.0.0, а также некоторыми нашими кастомными расширениями",
+        "SIMPLEDOC_INPUT_PATH": "C:\\tmp\\ontoTest\\onto.json",
+        "SIMPLEDOC_TITLE": "Тренажер переключений",
+        "SIMPLEDOC_DESCRIPTION": "Тренажер переключений",
         "SIMPLEDOC_BASE_PATH": "cimdoc",
         "SIMPLEDOC_OUTPUT_PATH": "C:\\Users\\Admin\\source\\repos\\SimpleOntoDoc\\out",
         "SIMPLEDOC_MARKDOWN_RENDER": "true"

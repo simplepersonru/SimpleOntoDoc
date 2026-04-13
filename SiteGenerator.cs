@@ -49,11 +49,7 @@ namespace SimpleOntoDoc
 
         private void PrepareOutputDirectories()
         {
-            Log("Очистка и подготовка выходной директории...");
-            if (Directory.Exists(_options.OutputPath))
-                Directory.GetFiles(_options.OutputPath, "*", SearchOption.AllDirectories)
-                        .ToList()
-                        .ForEach(File.Delete);
+            Log("подготовка выходной директории...");
 
             Directory.CreateDirectory(_options.OutputPath);
             Directory.CreateDirectory(Path.Combine(_options.OutputPath, "classes"));

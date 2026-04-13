@@ -153,6 +153,7 @@ namespace SimpleOntoDoc
     public class MarkdownClassViewModel
     {
         public Class Class { get; set; } = new();
+        public string SubClassString { get; set; } = "-";
         public List<Property> Properties { get; set; } = new();
         public List<Class> ChildClasses { get; set; } = new();
         public List<Property> LinkProperties { get; set; } = new();
