@@ -53,12 +53,12 @@
 <text>
 # Свойства
 
-| Идентификатор | Тип | Количество | Описание |
-|----------------|------|-----------|-----------|
+| Идентификатор  | Тип  | Количество | Ограничения | Описание |
+|----------------|------|------------|------------|-----------|
 </text>
 @foreach(var prop in Model.Properties)
 {
-@:| @prop.Name |  @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Multiplicity | @prop.Description |
+@:| @prop.NameWithAnchor() | @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Multiplicity | @prop.MarkdownLimits() | @prop.Description |
 }
 }
 
@@ -84,12 +84,12 @@
 <text>
 # Все свойства (включая унаследованные)
 
-| Идентификатор | Тип | Количество | Описание |
-| ---------------| -----| ----------|  ----------|
+| Идентификатор | Тип | Количество| Ограничения | Описание |
+| ---------------| -----| --------|--------------|  ----------|
 </text>
 @foreach(var prop in Model.AllClassProperties)
 {
-@:| @prop.MarkdownRef() |  @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Multiplicity | @prop.Description |
+@:| @prop.MarkdownRef() |  @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Multiplicity | @prop.MarkdownLimits() | @prop.Description |
 }
 }
 
@@ -107,4 +107,4 @@
 }
 }
 
-
+Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  

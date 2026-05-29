@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Hjson;
 
 namespace SimpleOntoDoc
 {
@@ -37,7 +38,7 @@ namespace SimpleOntoDoc
 
         private void Parse(string path)
         {
-            var json = File.ReadAllText(path);
+            var json = HjsonValue.Load(path).ToString();
 
             var options = new JsonSerializerOptions
             {
@@ -55,6 +56,18 @@ namespace SimpleOntoDoc
             {
                 if (string.IsNullOrEmpty(cls.Name))
                     continue;
+
+                cls.Properties = cls.PropertiesList?.ToDictionary(p => p.Name) ?? new Dictionary<string, Property>();   
+                cls.Enumerators = cls.EnumeratorsList?.ToDictionary(e => e.Name) ?? new Dictionary<string, Enumerator>();
+
+                foreach (var rel in cls.Relations)
+                {
+                    if (string.IsNullOrEmpty(rel.LeftName) || string.IsNullOrEmpty(rel.RightName))
+                        throw new Exception($"Отношение в классе '{cls.Name}' имеет незаполненные LeftName или RightName. Оба поля обязательны для всех отношений.");
+                    rel.Left = GetOrCreate(rel.LeftName);
+                    rel.Right = GetOrCreate(rel.RightName);
+                }
+
                 _classes[cls.Name] = cls;
             }
 

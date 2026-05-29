@@ -75,6 +75,26 @@ namespace SimpleOntoDoc
         public static string Href(this Property prop) =>
             $"properties/{prop.Domain.Name}.{prop.Name}.html";
 
+        public static string NameWithAnchor(this Property prop)
+        {
+            return $"<a name=\"{prop.Name}\"/> {prop.Name}";
+        }
+
+        
+
+        public static string MarkdownLimits(this Property prop)
+        {
+            StringBuilder sb = new();
+            if (prop.Min.HasValue)
+                sb.Append($"min = {prop.Min.Value};<br/> ");
+            if (prop.Max.HasValue)
+                sb.Append($"max = {prop.Max.Value};<br/> ");
+            if (prop.Pattern != null)
+                sb.Append($"pattern = {prop.Pattern};<br/> ");
+
+            return sb.ToString();
+        }
+
         public static string NamespacedId(this Property prop) =>
             string.IsNullOrEmpty(prop.Namespace) ? prop.Name : $"{prop.Namespace}:{prop.Name}";
     }

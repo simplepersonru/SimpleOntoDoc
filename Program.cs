@@ -30,6 +30,11 @@
             /// Если true, то описания классов и свойств будут рендериться как Markdown, а не как HTML. Устанавливается через ENV SIMPLEDOC_MARKDOWN_RENDER=true.
             /// </summary>
             public bool MarkdownRender { get; set; } = false;
+            /// <summary>
+            /// Использовать ли неймспейсы внутри диаграмм (по умолчанию true). 
+            /// Если false, то в диаграммах будут пропускаться неймспейсы. Устанавливается через ENV SIMPLEDOC_USE_NAMESPACE_IN_DIAGRAMM=true.
+            /// </summary>
+            public bool UseNamespaceInDiagramm { get; set; } = true;
         }
 
         static string GetEnv(string env)

@@ -37,10 +37,11 @@
 @:🟨 - тип данных  
 }
 
-| Идентификатор | Описание |
-|---------------|----------|
+| Идентификатор | Наименование | Описание |
+|---------------|--------------|----------|
 @foreach (var cls in Model.Classes)
 {
-@:| @cls.MarkdownColorSquare() @cls.MarkdownRef(near: false) | @cls.Description |
+@:| @cls.MarkdownColorSquare() @cls.MarkdownRef(near: false) | @cls.Display | @cls.Description |
 }
 
+Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)      

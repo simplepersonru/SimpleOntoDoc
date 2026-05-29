@@ -90,7 +90,7 @@ namespace SimpleOntoDoc
             };
 
             string markdown = await _engine.CompileRenderAsync("Index_md.cshtml", model);
-            await WriteOutputAsync("index.md", markdown);
+            await WriteOutputAsync("Readme.md", markdown);
         }
 
         private async Task GenerateClassPageAsync(Class cls)

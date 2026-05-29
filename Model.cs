@@ -8,6 +8,9 @@ namespace SimpleOntoDoc
     /// </summary>
     public abstract class Base
     {
+        [JsonPropertyName("display")]
+        public string Display { get; set; } = string.Empty;
+
         [JsonPropertyName("description")]
         public string Description { get; set; } = string.Empty;
 
@@ -30,6 +33,9 @@ namespace SimpleOntoDoc
         [JsonPropertyName("range")]
         public string? RangeName { get; set; }
 
+        [JsonPropertyName("relation_line")]
+        public string? RelationLine { get; set; }
+
         [JsonPropertyName("optional")]
         public bool Optional { get; set; } = true;
 
@@ -38,6 +44,15 @@ namespace SimpleOntoDoc
 
         [JsonPropertyName("inverse_role_name")]
         public string? InverseRoleName { get; set; }
+
+        [JsonPropertyName("min")]
+        public double? Min { get; set; }
+
+        [JsonPropertyName("max")]
+        public double? Max { get; set; }
+
+        [JsonPropertyName("pattern")]
+        public string? Pattern { get; set; }
 
         /// <summary>Класс-владелец свойства (устанавливается после парсинга, не из JSON). Всегда заполнен.</summary>
         [JsonIgnore]
@@ -77,6 +92,23 @@ namespace SimpleOntoDoc
         Compound
     }
 
+    public class Relation
+    {
+        [JsonPropertyName("left")]
+        public string LeftName { get; set; } = string.Empty;
+
+        [JsonPropertyName("right")]
+        public string RightName { get; set; } = string.Empty;
+
+        [JsonPropertyName("relation_line")]
+        public string RelationLine { get; set; } = string.Empty;
+
+        [JsonIgnore]
+        public Class Left { get; set; } = new();
+        [JsonIgnore]
+        public Class Right { get; set; } = new();
+    }
+
     /// <summary>
     /// Представляет класс в онтологической схеме.
     /// Соответствует классу Class из model.py.
@@ -86,19 +118,29 @@ namespace SimpleOntoDoc
         [JsonPropertyName("type")]
         public ClassType Type { get; set; } = ClassType.Class;
 
+        [JsonPropertyName("relations")]
+        public List<Relation> Relations { get; set;} = new List<Relation>();
+
         /// <summary>Имя базового класса (строковая ссылка из JSON, разрешается в SubClass после парсинга).</summary>
         [JsonPropertyName("sub_class")]
         public string? SubClassName { get; set; }
 
         [JsonPropertyName("properties")]
-        public Dictionary<string, Property> Properties { get; set; } = new();
+        public List<Property> PropertiesList { get; set; } = new();
 
         [JsonPropertyName("enumerators")]
-        public Dictionary<string, Enumerator> Enumerators { get; set; } = new();
+        public List<Enumerator> EnumeratorsList { get; set; } = new();
 
         /// <summary>Базовый класс (разрешается из SubClassName после парсинга, не из JSON).</summary>
         [JsonIgnore]
         public Class? SubClass { get; set; }
+
+
+        [JsonIgnore]
+        public Dictionary<string, Property> Properties { get; set; } = new();
+
+        [JsonIgnore]
+        public Dictionary<string, Enumerator> Enumerators { get; set; } = new();
 
         /// <summary>SVG-диаграмма класса (заполняется PlantUML, не из JSON).</summary>
         [JsonIgnore]

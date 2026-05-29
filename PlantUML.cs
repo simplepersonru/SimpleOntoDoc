@@ -46,8 +46,13 @@ namespace SimpleOntoDoc
             _main.AppendLine("}");
 
         }
-        void ClassRelations(Class cls)
+        void ClassRelations(Class cls, bool allClassesFlag = false)
         {
+            foreach (var rel in cls.Relations)
+            {
+                _main.AppendLine($"{PlantUmlId(rel.Left)} {rel.RelationLine} {PlantUmlId(rel.Right)}");
+            }
+
             foreach (var propKeyValue in cls.Properties)
             {
                 var prop = propKeyValue.Value;
@@ -56,12 +61,22 @@ namespace SimpleOntoDoc
                 if (type != ClassType.Enum && type != ClassType.Class)
                     continue;
 
-                if (type == ClassType.Enum)
+                if (type == ClassType.Enum && !allClassesFlag)
                     Enum(prop.Range);
                 else if (type == ClassType.Class)
                     Class(prop.Range, useProperties: false);
 
-                _main.AppendLine($"{PlantUmlId(cls)}::{prop.Name} -- {PlantUmlId(prop.Range)}");
+                string leftPart = PlantUmlId(cls);
+                if (!allClassesFlag)
+                    leftPart += $"::{prop.Name}";
+
+                string relationSymbol = "--";
+                if (!string.IsNullOrEmpty(prop.RelationLine) )
+                {
+                    relationSymbol = $"{prop.RelationLine}\"{prop.Multiplicity}\"";
+                }
+
+                _main.AppendLine($"{leftPart} {relationSymbol} {PlantUmlId(prop.Range)}");
             }
         }
         void Class(Class cls, bool useProperties = true)
@@ -70,20 +85,30 @@ namespace SimpleOntoDoc
 
             _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} {link} """);
 
-            if (useProperties)
-            {
-                foreach (var prop in cls.Properties)
-                {
-                    string rangeModifier = prop.Value.Range.Type switch
-                    {
-                        ClassType.Class => "~",
-                        ClassType.Enum => "#",
-                        _ => "+",
-                    };
+            if (!useProperties)
+                return;
 
-                    _main.AppendLine($"{PlantUmlId(cls)} : {rangeModifier}{prop.Value.NamespacedId()} : {prop.Value.Range.Id}");
-                }
+            foreach (var prop in cls.Properties)
+            {
+                string rangeModifier = prop.Value.Range.Type switch
+                {
+                    ClassType.Class => "~",
+                    ClassType.Enum => "#",
+                    _ => "+",
+                };
+
+                string propNameInDiagram = _options.UseNamespaceInDiagramm ? prop.Value.NamespacedId() : prop.Value.Name;
+                _main.AppendLine($"{PlantUmlId(cls)} : {rangeModifier}{propNameInDiagram} : {prop.Value.Range.Id}");
             }
+        }
+
+        string Result()
+        {
+            var result = new StringBuilder();
+            result.Append(_decl.ToString());
+            result.Append(_main.ToString());
+
+            return result.ToString();
         }
 
         public string Build(Class cls)
@@ -99,15 +124,31 @@ namespace SimpleOntoDoc
 						}
 						""");
 
-            Class(cls);
+            Class(cls, useProperties: false);
             ClassRelations(cls);
             ParentClass(cls);
 
-            var result = new StringBuilder();
-            result.Append(_decl.ToString());
-            result.Append(_main.ToString());
+            return Result();
+        }
 
-            return result.ToString();
+        public string BuildAllClasses(Dictionary<string, Class> data)
+        {
+            _decl.AppendLine("skinparam groupInheritance 6");
+            _decl.AppendLine("set separator none");
+            foreach (var cls in data.Values)
+            {
+                if (cls.Type == ClassType.Enum)
+                    Enum(cls);
+                else if (cls.Type == ClassType.Class)
+                {
+                    Class(cls);
+                    ClassRelations(cls);
+                    ParentClass(cls);
+                }
+
+            }
+
+            return Result();
         }
     }
 
@@ -140,6 +181,11 @@ namespace SimpleOntoDoc
                 var bytes = await renderer.RenderAsync(diagramSource, OutputFormat.Svg);
                 cls.DiagramContent = Encoding.UTF8.GetString(bytes);
             }
+        }
+
+        public string RenderAllClasses(Dictionary<string, Class> data)
+        {
+            return new PlantUmlBuilder(options).BuildAllClasses(data);
         }
 
         public async Task FillClassesAsync(Dictionary<string, Class> data)
