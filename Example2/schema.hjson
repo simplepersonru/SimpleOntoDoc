@@ -3,7 +3,7 @@
     # Primitive
     name: String
     namespace: demo
-    display: String primitive
+    display: Строка
     description: Primitive text value
     type: Primitive
   },
@@ -12,7 +12,7 @@
     # Datatype
     name: Date
     namespace: demo
-    display: Date datatype
+    display: Дата
     description: Date value
     type: Datatype
   },
@@ -74,7 +74,7 @@
     # Base class
     name: Thing
     namespace: demo
-    display: Base thing class
+    display: Базовая штука
     description: Base domain entity
     type: Class
     properties:
@@ -101,7 +101,7 @@
   {
     name: Person
     namespace: demo
-    display: Person class
+    display: Чувак
     description: Person who owns devices
     type: Class
     sub_class: Thing
@@ -123,16 +123,15 @@
   {
     name: Device
     namespace: demo
-    display: Device class
+    display: **Устройство**
     description: Trackable device
     type: Class
     sub_class: Thing
     relations:
     [
       {
-        left: Device
-        right: Person
         relation_line: "..>"
+        right: Person
       }
     ]
     properties:

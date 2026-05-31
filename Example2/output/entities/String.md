@@ -1,6 +1,7 @@
 ﻿
 # Описание
 
+Строка  
 Primitive text value
 
 
@@ -10,11 +11,7 @@ Primitive text value
 |-----------------|------------|
 | Тип             | 🟧 Primitive |
 | namespace       | demo |
-
-
-
-
-
+| Ссылок       | 3 |
 
 
 
@@ -24,10 +21,46 @@ Primitive text value
 
 # Ссылки
 
-| Свойство | Описание |
-| ----------| ----------|
-| [GeoPoint](GeoPoint.md).lat | Latitude |
-| [GeoPoint](GeoPoint.md).lon | Longitude |
-| [Thing](Thing.md).id | External identifier |
+| Свойство  | Display  | Описание |
+| ----------| ----------|----------|
+| [GeoPoint.lat](GeoPoint.md#lat) |  | Latitude |
+| [GeoPoint.lon](GeoPoint.md#lon) |  | Longitude |
+| [Thing.id](Thing.md#id) |  | External identifier |
+
+---
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+- пропуск места, чтобы ссылки попадали куда надо
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
 
 Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  

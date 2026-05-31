@@ -94,8 +94,6 @@ namespace SimpleOntoDoc
 
     public class Relation
     {
-        [JsonPropertyName("left")]
-        public string LeftName { get; set; } = string.Empty;
 
         [JsonPropertyName("right")]
         public string RightName { get; set; } = string.Empty;
@@ -103,8 +101,6 @@ namespace SimpleOntoDoc
         [JsonPropertyName("relation_line")]
         public string RelationLine { get; set; } = string.Empty;
 
-        [JsonIgnore]
-        public Class Left { get; set; } = new();
         [JsonIgnore]
         public Class Right { get; set; } = new();
     }

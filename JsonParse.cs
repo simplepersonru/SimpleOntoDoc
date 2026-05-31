@@ -62,9 +62,8 @@ namespace SimpleOntoDoc
 
                 foreach (var rel in cls.Relations ?? new List<Relation>())
                 {
-                    if (string.IsNullOrEmpty(rel.LeftName) || string.IsNullOrEmpty(rel.RightName))
-                        throw new Exception($"Отношение в классе '{cls.Name}' имеет незаполненные LeftName или RightName. Оба поля обязательны для всех отношений.");
-                    rel.Left = GetOrCreate(rel.LeftName);
+                    if (string.IsNullOrEmpty(rel.RightName))
+                        throw new Exception($"Отношение в классе '{cls.Name}' имеет незаполненный RightName.");
                     rel.Right = GetOrCreate(rel.RightName);
                 }
 
@@ -76,8 +75,6 @@ namespace SimpleOntoDoc
             {
                 foreach (var rel in cls.Relations ?? new List<Relation>())
                 {
-                    rel.Left = cls;
-
                     if (string.IsNullOrEmpty(rel.RightName))
                         throw new Exception($"Отношение в классе '{cls.Name}' имеет незаполненное RightName.");
                     rel.Right = GetOrCreate(rel.RightName);

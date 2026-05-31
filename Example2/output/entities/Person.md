@@ -1,6 +1,7 @@
 ﻿
 # Описание
 
+Чувак  
 Person who owns devices
 
 
@@ -11,6 +12,10 @@ Person who owns devices
 | Тип             | 🟦 Class |
 | namespace       | demo |
 | Базовый класс | [Thing](Thing.md) |
+| Свойств | 1 |
+| Всех свойств | 3 |
+| Дочерних классов | 0 |
+| Ссылок       | 1 |
 
 
 
@@ -25,9 +30,10 @@ annotation "Легенда" {
   ~ссылка на класс
   +простое свойство
 }
-class "Person" as demo.Person  
-class "Device" as demo.Device  
-class "Thing" as demo.Thing  
+class "Person \n Чувак" as demo.Person  
+class "Device \n **Устройство**" as demo.Device  
+class "Thing \n Базовая штука" as demo.Thing  
+demo.Person : ~devices : Device
 demo.Person::devices o--"0..*" demo.Device
 demo.Thing <|-down- demo.Person
 demo.Thing : +id : String
@@ -37,32 +43,63 @@ demo.Thing : +createdAt : Date
 ```
 
 
-
-
-
 # Свойства
 
-| Идентификатор  | Тип  | Количество | Ограничения | Описание |
-|----------------|------|------------|------------|-----------|
-| <a name="devices"/> devices | 🟦 [Device](Device.md) | 0..* |  | Owned devices |
-
-
+| Идентификатор  | Тип  | Ограничения | Display  | Описание  |
+|----------------|------|------------ |-----------|-----------|
+| <a name="devices"/> [devices](Person.md#devices) | 🟦 [Device](Device.md) | _multiplicity_: 0..*<br/>  |  | Owned devices |
 
 
 
 # Все свойства (включая унаследованные)
 
-| Идентификатор | Тип | Количество| Ограничения | Описание |
-| ---------------| -----| --------|--------------|  ----------|
-| [Thing](Thing.md).id |  🟧 [String](String.md) | 1 | pattern = ^[A-Z0-9_-]{3,20}$;<br/>  | External identifier |
-| [Thing](Thing.md).createdAt |  🟨 [Date](Date.md) |  |  | Creation timestamp |
-| [Person](Person.md).devices |  🟦 [Device](Device.md) | 0..* |  | Owned devices |
+| Идентификатор | Тип   |  Ограничения  | Display   |  Описание |
+| ---------------| -----| --------------|  ----------| ----------|
+| [Thing.id](Thing.md#id) |  🟧 [String](String.md) | _multiplicity_: 1<br/> _pattern_: ^[A-Z0-9_-]{3,20}$<br/>  |  | External identifier |
+| [Thing.createdAt](Thing.md#createdAt) |  🟨 [Date](Date.md) |  |  | Creation timestamp |
+| [Person.devices](Person.md#devices) |  🟦 [Device](Device.md) | _multiplicity_: 0..*<br/>  |  | Owned devices |
 
 
 # Ссылки
 
-| Свойство | Описание |
-| ----------| ----------|
-| [Device](Device.md).owner | Device owner |
+| Свойство  | Display  | Описание |
+| ----------| ----------|----------|
+| [Device.owner](Device.md#owner) |  | Device owner |
+
+---
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+- пропуск места, чтобы ссылки попадали куда надо
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
 
 Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  

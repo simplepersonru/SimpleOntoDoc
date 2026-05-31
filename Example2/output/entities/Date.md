@@ -1,6 +1,7 @@
 ﻿
 # Описание
 
+Дата  
 Date value
 
 
@@ -10,11 +11,7 @@ Date value
 |-----------------|------------|
 | Тип             | 🟨 Datatype |
 | namespace       | demo |
-
-
-
-
-
+| Ссылок       | 1 |
 
 
 
@@ -24,8 +21,44 @@ Date value
 
 # Ссылки
 
-| Свойство | Описание |
-| ----------| ----------|
-| [Thing](Thing.md).createdAt | Creation timestamp |
+| Свойство  | Display  | Описание |
+| ----------| ----------|----------|
+| [Thing.createdAt](Thing.md#createdAt) |  | Creation timestamp |
+
+---
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+- пропуск места, чтобы ссылки попадали куда надо
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
 
 Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  

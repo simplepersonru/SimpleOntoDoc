@@ -1,6 +1,7 @@
 ﻿
 # Описание
 
+Базовая штука  
 Base domain entity
 
 
@@ -11,6 +12,10 @@ Base domain entity
 | Тип             | 🟦 Class |
 | namespace       | demo |
 | Базовый класс | - |
+| Свойств | 2 |
+| Всех свойств | 2 |
+| Дочерних классов | 2 |
+| Ссылок       | 0 |
 
 
 
@@ -25,32 +30,65 @@ annotation "Легенда" {
   ~ссылка на класс
   +простое свойство
 }
-class "Thing" as demo.Thing  
+class "Thing \n Базовая штука" as demo.Thing  
+demo.Thing : +id : String
+demo.Thing : +createdAt : Date
 
 @enduml
 ```
 
 
-
-
-
 # Свойства
 
-| Идентификатор  | Тип  | Количество | Ограничения | Описание |
-|----------------|------|------------|------------|-----------|
-| <a name="id"/> id | 🟧 [String](String.md) | 1 | pattern = ^[A-Z0-9_-]{3,20}$;<br/>  | External identifier |
-| <a name="createdAt"/> createdAt | 🟨 [Date](Date.md) |  |  | Creation timestamp |
-
+| Идентификатор  | Тип  | Ограничения | Display  | Описание  |
+|----------------|------|------------ |-----------|-----------|
+| <a name="id"/> [id](Thing.md#id) | 🟧 [String](String.md) | _multiplicity_: 1<br/> _pattern_: ^[A-Z0-9_-]{3,20}$<br/>  |  | External identifier |
+| <a name="createdAt"/> [createdAt](Thing.md#createdAt) | 🟨 [Date](Date.md) |  |  | Creation timestamp |
 
 
 # Дочерние классы
 
-| Идентификатор | Описание |
-| ---------------| ----------|
-| [Person](Person.md) | Person who owns devices |
-| [Device](Device.md) | Trackable device |
+| Идентификатор  | Display  | Описание  |
+| ---------------| ----------| ----------|
+| [Person](Person.md) | Чувак | Person who owns devices |
+| [Device](Device.md) | **Устройство** | Trackable device |
 
 
 
+---
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+- пропуск места, чтобы ссылки попадали куда надо
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
 
 Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  

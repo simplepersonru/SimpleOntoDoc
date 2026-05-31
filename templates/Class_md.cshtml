@@ -6,6 +6,7 @@
 
 # Описание
 
+@Model.Class.Display  
 @Model.Class.Description
 
 @if (Model.Class.Type == ClassType.Enum && Model.Class.Enumerators.Count > 0)
@@ -13,12 +14,12 @@
 <text>
 # Перечисление
 
-| Идентификатор | Описание |
-| ---------------| ----------|
+| Идентификатор | Display  | Описание |
+| ---------------| ------- |----------|
 </text>
 @foreach (var enumerator in Model.Class.Enumerators.Values)
 {
-@:| @enumerator.Name | @enumerator.Description |
+@:| @enumerator.NameWithAnchor() | @enumerator.Display | @enumerator.Description |
 }
 }
 
@@ -32,6 +33,21 @@
 {
 @:| Базовый класс | @Model.SubClassString |
 }
+@if (Model.Class.Type == ClassType.Class
+     || Model.Class.Type == ClassType.Compound) 
+{
+@:| Свойств | @Model.Class.Properties.Count |
+}
+@if (Model.Class.Type == ClassType.Class) 
+{
+@:| Всех свойств | @Model.AllClassProperties.Count |
+@:| Дочерних классов | @Model.ChildClasses.Count |
+}
+@if (Model.Class.Type == ClassType.Enum) 
+{
+@:| Элементов | @Model.Class.Enumerators.Count |
+}
+| Ссылок       | @Model.LinkProperties.Count |
 
 
 @if (Model.Class.Type == ClassType.Class)
@@ -45,51 +61,46 @@
 </text>
 }
 
-
-
-
 @if (Model.Properties.Count > 0)
 {
 <text>
 # Свойства
 
-| Идентификатор  | Тип  | Количество | Ограничения | Описание |
-|----------------|------|------------|------------|-----------|
+| Идентификатор  | Тип  | Ограничения | Display  | Описание  |
+|----------------|------|------------ |-----------|-----------|
 </text>
 @foreach(var prop in Model.Properties)
 {
-@:| @prop.NameWithAnchor() | @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Multiplicity | @prop.MarkdownLimits() | @prop.Description |
+@:| @prop.NameWithAnchor() | @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.MarkdownLimits() | @prop.Display | @prop.Description |
 }
 }
-
 
 @if (Model.ChildClasses.Count > 0)
 {
 <text>
 # Дочерние классы
 
-| Идентификатор | Описание |
-| ---------------| ----------|
+| Идентификатор  | Display  | Описание  |
+| ---------------| ----------| ----------|
 </text>    
 @foreach(var child in Model.ChildClasses)
 {
-@:| @child.MarkdownRef(near: true) | @child.Description |
+@:| @child.MarkdownRef(near: true) | @child.Display | @child.Description |
 }
     
 }
-
 
 @if (Model.AllClassProperties.Count > Model.Class.Properties.Count)
 {
 <text>
 # Все свойства (включая унаследованные)
 
-| Идентификатор | Тип | Количество| Ограничения | Описание |
-| ---------------| -----| --------|--------------|  ----------|
+| Идентификатор | Тип   |  Ограничения  | Display   |  Описание |
+| ---------------| -----| --------------|  ----------| ----------|
 </text>
 @foreach(var prop in Model.AllClassProperties)
 {
-@:| @prop.MarkdownRef() |  @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.Multiplicity | @prop.MarkdownLimits() | @prop.Description |
+@:| @prop.MarkdownRef() |  @prop.Range.MarkdownColorSquare() @prop.Range.MarkdownRef(near: true) | @prop.MarkdownLimits() | @prop.Display | @prop.Description |
 }
 }
 
@@ -98,13 +109,49 @@
 <text>
 # Ссылки
 
-| Свойство | Описание |
-| ----------| ----------|
+| Свойство  | Display  | Описание |
+| ----------| ----------|----------|
 </text>
 @foreach(var prop in Model.LinkProperties)
 {
-@:| @prop.MarkdownRef() | @prop.Description |
+@:| @prop.MarkdownRef() | @prop.Display | @prop.Description |
 }
 }
+
+---
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+- пропуск места, чтобы ссылки попадали куда надо
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
+-  
 
 Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  

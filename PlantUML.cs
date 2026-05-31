@@ -40,8 +40,9 @@ namespace SimpleOntoDoc
                 return;
 
             string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
+            string viewString = string.IsNullOrEmpty(cls.Display) ? cls.Id : $"{cls.Id} \\n {cls.Display}";
 
-            _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} {link} """);
+            _decl.AppendLine($"""enum "{viewString}" as {PlantUmlId(cls)} {link} """);
 
             _main.AppendLine($"enum {PlantUmlId(cls)} {{");
             foreach (var descr in cls.Enumerators)
@@ -93,8 +94,9 @@ namespace SimpleOntoDoc
                 return;
 
             string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
+            string viewString = string.IsNullOrEmpty(cls.Display) ? cls.Id : $"{cls.Id} \\n {cls.Display}";
 
-            _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} {link} """);
+            _decl.AppendLine($"""class "{viewString}" as {PlantUmlId(cls)} {link} """);
 
             if (!useProperties)
                 return;
@@ -135,7 +137,7 @@ namespace SimpleOntoDoc
 						}
 						""");
 
-            Class(cls, useProperties: false);
+            Class(cls, useProperties: true);
             ClassRelations(cls);
             ParentClass(cls);
 

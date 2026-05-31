@@ -23,11 +23,14 @@ namespace SimpleOntoDoc
             _ => "classes"
         };
 
+        public static string Link(this Class cls, bool near)
+        {
+            return near ? $"{cls.Name}.md" : $"./entities/{cls.Name}.md";
+        }
+
         public static string MarkdownRef(this Class cls, bool near)
         {
-            string link = near ? $"{cls.Name}.md" : $"./entities/{cls.Name}.md";
-
-            return $"[{cls.Id}]({link})";
+            return $"[{cls.Id}]({cls.Link(near)})";
         }
 
         public static string MarkdownColorSquare(this Class cls) => cls.Type switch
@@ -67,36 +70,58 @@ namespace SimpleOntoDoc
     public static class PropertyExtensions
     {
 
-        public static string MarkdownRef(this Property prop)
+        public static string MarkdownRef(this Property prop, bool useClassPart = true)
         {
+            string link = prop.Domain.Link(near: true);
+            string text = useClassPart ? prop.Id : prop.Name;
 
-            return $"{prop.Domain.MarkdownRef(near: true)}.{prop.Name}";
+            return $"[{text}]({link}#{prop.Name})";
         }
         public static string Href(this Property prop) =>
             $"properties/{prop.Domain.Name}.{prop.Name}.html";
 
         public static string NameWithAnchor(this Property prop)
         {
-            return $"<a name=\"{prop.Name}\"/> {prop.Name}";
+            return $"<a name=\"{prop.Name}\"/> {prop.MarkdownRef(false)}";
         }
-
         
 
         public static string MarkdownLimits(this Property prop)
         {
             StringBuilder sb = new();
-            if (prop.Min.HasValue)
-                sb.Append($"min = {prop.Min.Value};<br/> ");
-            if (prop.Max.HasValue)
-                sb.Append($"max = {prop.Max.Value};<br/> ");
+            if (prop.Multiplicity != null)
+                sb.Append($"_multiplicity_: {prop.Multiplicity}<br/> ");
+
+            if (prop.Min.HasValue && !prop.Max.HasValue)
+                sb.Append($"_≥_ {prop.Min.Value}<br/> ");
+            if (!prop.Min.HasValue && prop.Max.HasValue)
+                sb.Append($"_≤_ {prop.Max.Value}<br/> ");
+            if (prop.Min.HasValue && prop.Max.HasValue)
+                sb.Append($"_≥_ {prop.Min.Value}, _≤_ {prop.Max.Value}<br/> ");
+                
             if (prop.Pattern != null)
-                sb.Append($"pattern = {prop.Pattern};<br/> ");
+                sb.Append($"_pattern_: {prop.Pattern}<br/> ");
 
             return sb.ToString();
         }
 
         public static string NamespacedId(this Property prop) =>
             string.IsNullOrEmpty(prop.Namespace) ? prop.Name : $"{prop.Namespace}:{prop.Name}";
+    }
+
+    public static class EnumeratorExtensions
+    {
+        public static string NameWithAnchor(this Enumerator prop)
+        {
+            return $"<a name=\"{prop.Name}\"/> {prop.MarkdownRef(false)}";
+        }
+        public static string MarkdownRef(this Enumerator prop, bool useClassPart = false)
+        {
+            string link = prop.Domain.Link(near: true);
+            string text = useClassPart ? prop.Id : prop.Name;
+
+            return $"[{text}]({link}#{prop.Name})";
+        }
     }
 
     // ─── View-модели для навигации ────────────────────────────────────────────────
