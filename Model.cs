@@ -9,13 +9,13 @@ namespace SimpleOntoDoc
     public abstract class Base
     {
         [JsonPropertyName("display")]
-        public string Display { get; set; } = string.Empty;
+        public string? Display { get; set; } = string.Empty;
 
         [JsonPropertyName("description")]
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
 
         [JsonPropertyName("namespace")]
-        public string Namespace { get; set; } = string.Empty;
+        public string? Namespace { get; set; } = string.Empty;
 
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
