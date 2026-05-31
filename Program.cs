@@ -32,7 +32,7 @@
             public bool MarkdownRender { get; set; } = false;
             /// <summary>
             /// Использовать ли неймспейсы внутри диаграмм (по умолчанию true). 
-            /// Если false, то в диаграммах будут пропускаться неймспейсы. Устанавливается через ENV SIMPLEDOC_USE_NAMESPACE_IN_DIAGRAMM=true.
+            /// Если false, то в диаграммах будут пропускаться неймспейсы. Устанавливается через ENV SIMPLEDOC_USE_NAMESPACE_IN_DIAGRAMM=false.
             /// </summary>
             public bool UseNamespaceInDiagramm { get; set; } = true;
         }
@@ -64,6 +64,7 @@
             bool skipPlantUml = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_SKIP") == "true";
 
             bool markdownRender = Environment.GetEnvironmentVariable("SIMPLEDOC_MARKDOWN_RENDER") == "true";
+            bool useNamespaceInDiagramm = Environment.GetEnvironmentVariable("SIMPLEDOC_USE_NAMESPACE_IN_DIAGRAMM") != "false";
 
             string remoteUrl = string.Empty;
             string? remoteUrlOpt = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_URL");
@@ -85,6 +86,7 @@
                 BasePath = NormalizeBasePath(GetEnvOptional("SIMPLEDOC_BASE_PATH")),
                 MarkdownRender = markdownRender,
                 SkipPlantUml = skipPlantUml,
+                UseNamespaceInDiagramm = useNamespaceInDiagramm,
             };
 
             Log("Чтение и парсинг JSON схемы...");

@@ -45,7 +45,7 @@ namespace SimpleOntoDoc
 
             // Собираем все свойства
             _properties = data.Values
-                .Where(x => x.Type == ClassType.Class)
+                .Where(x => x.Type == ClassType.Class || x.Type == ClassType.Compound)
                 .SelectMany(x => x.Properties.Values)
                 .ToList();
 
@@ -87,6 +87,7 @@ namespace SimpleOntoDoc
                 PrimitiveCount = _data.Values.Count(x => x.Type == ClassType.Primitive),
                 DataTypeCount = _data.Values.Count(x => x.Type == ClassType.Datatype),
                 CompoundCount = _data.Values.Count(x => x.Type == ClassType.Compound),
+                AllClassesDiagramContent = new PlantUML(_options).RenderAllClasses(_data),
             };
 
             string markdown = await _engine.CompileRenderAsync("Index_md.cshtml", model);

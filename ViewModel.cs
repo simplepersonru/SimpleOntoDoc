@@ -167,6 +167,7 @@ namespace SimpleOntoDoc
         public int DataTypeCount { get; set; }
         public int CompoundCount { get; set; }
         public List<Class> Classes { get; set; } = new();
+        public string AllClassesDiagramContent { get; set; } = string.Empty;
 
     }
 
@@ -181,4 +182,3 @@ namespace SimpleOntoDoc
 
     }
 }
-

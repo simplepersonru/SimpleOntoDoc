@@ -74,6 +74,15 @@ namespace SimpleOntoDoc
             // Второй проход: разрешаем строковые ссылки в объекты
             foreach (var cls in _classes.Values.ToList())
             {
+                foreach (var rel in cls.Relations ?? new List<Relation>())
+                {
+                    rel.Left = cls;
+
+                    if (string.IsNullOrEmpty(rel.RightName))
+                        throw new Exception($"Отношение в классе '{cls.Name}' имеет незаполненное RightName.");
+                    rel.Right = GetOrCreate(rel.RightName);
+                }
+
                 // Разрешаем базовый класс
                 if (!string.IsNullOrEmpty(cls.SubClassName))
                     cls.SubClass = GetOrCreate(cls.SubClassName);

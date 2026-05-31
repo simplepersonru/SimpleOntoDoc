@@ -29,7 +29,7 @@ class "Device" as demo.Device
 enum "StatusKind" as demo.StatusKind  
 class "Person" as demo.Person  
 class "Thing" as demo.Thing  
-.Device ..> demo.Person
+demo.Device ..> demo.Person
 enum demo.StatusKind {
 #Draft
 #Active
@@ -37,8 +37,8 @@ enum demo.StatusKind {
 demo.Device::status -- demo.StatusKind
 demo.Device::owner o--"0..1" demo.Person
 demo.Thing <|-down- demo.Device
-demo.Thing : +demo:id : String
-demo.Thing : +demo:createdAt : Date
+demo.Thing : +id : String
+demo.Thing : +createdAt : Date
 
 @enduml
 ```

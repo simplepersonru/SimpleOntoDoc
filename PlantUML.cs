@@ -9,6 +9,8 @@ namespace SimpleOntoDoc
     {
         StringBuilder _decl = new();
         StringBuilder _main = new();
+        HashSet<string> _declaredClasses = new();
+        HashSet<string> _declaredEnums = new();
 
 
         private string AbsoluteUrl(string relativePath) =>
@@ -34,6 +36,9 @@ namespace SimpleOntoDoc
         }
         void Enum(Class cls)
         {
+            if (!_declaredEnums.Add(PlantUmlId(cls)))
+                return;
+
             string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
 
             _decl.AppendLine($"""enum "{cls.Id}" as {PlantUmlId(cls)} {link} """);
@@ -50,7 +55,7 @@ namespace SimpleOntoDoc
         {
             foreach (var rel in cls.Relations ?? [])
             {
-                _main.AppendLine($"{PlantUmlId(rel.Left)} {rel.RelationLine} {PlantUmlId(rel.Right)}");
+                _main.AppendLine($"{PlantUmlId(cls)} {rel.RelationLine} {PlantUmlId(rel.Right)}");
             }
 
             foreach (var propKeyValue in cls.Properties)
@@ -61,9 +66,12 @@ namespace SimpleOntoDoc
                 if (type != ClassType.Enum && type != ClassType.Class)
                     continue;
 
+                if (allClassesFlag && type != ClassType.Class)
+                    continue;
+
                 if (type == ClassType.Enum && !allClassesFlag)
                     Enum(prop.Range);
-                else if (type == ClassType.Class)
+                else if (type == ClassType.Class && !allClassesFlag)
                     Class(prop.Range, useProperties: false);
 
                 string leftPart = PlantUmlId(cls);
@@ -81,6 +89,9 @@ namespace SimpleOntoDoc
         }
         void Class(Class cls, bool useProperties = true)
         {
+            if (!_declaredClasses.Add(PlantUmlId(cls)))
+                return;
+
             string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
 
             _decl.AppendLine($"""class "{cls.Id}" as {PlantUmlId(cls)} {link} """);
@@ -137,12 +148,10 @@ namespace SimpleOntoDoc
             _decl.AppendLine("set separator none");
             foreach (var cls in data.Values)
             {
-                if (cls.Type == ClassType.Enum)
-                    Enum(cls);
-                else if (cls.Type == ClassType.Class)
+                if (cls.Type == ClassType.Class)
                 {
-                    Class(cls);
-                    ClassRelations(cls);
+                    Class(cls, useProperties: false);
+                    ClassRelations(cls, allClassesFlag: true);
                     ParentClass(cls);
                 }
 
@@ -184,7 +193,16 @@ namespace SimpleOntoDoc
 
         public string RenderAllClasses(Dictionary<string, Class> data)
         {
-            return new PlantUmlBuilder(options).BuildAllClasses(data);
+            string diagramSource = new PlantUmlBuilder(options).BuildAllClasses(data);
+
+            if (!options.MarkdownRender)
+                return diagramSource;
+
+            return $"""
+                    @startuml
+                    {diagramSource}
+                    @enduml
+                    """;
         }
 
         public async Task FillClassesAsync(Dictionary<string, Class> data)

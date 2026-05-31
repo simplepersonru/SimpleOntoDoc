@@ -11,6 +11,26 @@ Minimal diverse HJSON example for Markdown generation
 | Перечисления | 1 |
 | Примитивы    | 1 |
 | Типы данных  | 1 |
+| Составные типы | 1 |
+
+
+# Полная диаграмма классов
+
+```plantuml
+@startuml
+skinparam groupInheritance 6
+set separator none
+class "Thing" as demo.Thing  
+class "Person" as demo.Person  
+class "Device" as demo.Device  
+demo.Person o--"0..*" demo.Device
+demo.Thing <|-down- demo.Person
+demo.Device ..> demo.Person
+demo.Device o--"0..1" demo.Person
+demo.Thing <|-down- demo.Device
+
+@enduml
+```
 
 # Классы
 
@@ -19,6 +39,7 @@ Minimal diverse HJSON example for Markdown generation
 🟪 - перечисление  
 🟧 - примитив  
 🟨 - тип данных  
+🟥 - составной тип  
 
 | Идентификатор | Наименование | Описание |
 |---------------|--------------|----------|

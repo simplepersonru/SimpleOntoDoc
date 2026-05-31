@@ -30,8 +30,8 @@ class "Device" as demo.Device
 class "Thing" as demo.Thing  
 demo.Person::devices o--"0..*" demo.Device
 demo.Thing <|-down- demo.Person
-demo.Thing : +demo:id : String
-demo.Thing : +demo:createdAt : Date
+demo.Thing : +id : String
+demo.Thing : +createdAt : Date
 
 @enduml
 ```

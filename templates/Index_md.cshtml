@@ -16,6 +16,18 @@
 | Перечисления | @Model.EnumCount |
 | Примитивы    | @Model.PrimitiveCount |
 | Типы данных  | @Model.DataTypeCount |
+| Составные типы | @Model.CompoundCount |
+
+@if (!string.IsNullOrEmpty(Model.AllClassesDiagramContent))
+{
+<text>
+# Полная диаграмма классов
+
+```plantuml
+@Model.AllClassesDiagramContent
+```
+</text>
+}
 
 # Классы
 
@@ -35,6 +47,10 @@
 @if (Model.DataTypeCount > 0)
 {
 @:🟨 - тип данных  
+}
+@if (Model.CompoundCount > 0)
+{
+@:🟥 - составной тип  
 }
 
 | Идентификатор | Наименование | Описание |

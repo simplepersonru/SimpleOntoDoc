@@ -6,4 +6,5 @@ SIMPLEDOC_TITLE="Example2 Markdown Ontology" \
 SIMPLEDOC_DESCRIPTION="Minimal diverse HJSON example for Markdown generation" \
 SIMPLEDOC_OUTPUT_PATH="$SCRIPT_DIR/output" \
 SIMPLEDOC_MARKDOWN_RENDER=true \
+SIMPLEDOC_USE_NAMESPACE_IN_DIAGRAMM=false \
 dotnet run --no-launch-profile --project SimpleOntoDoc.csproj
