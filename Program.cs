@@ -59,7 +59,7 @@
 
         static async Task Main(string[] args)
         {
-            Log("Запуск генерации документации...");
+            Log("Запуск генерации документации..."); 
 
             bool skipPlantUml = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_SKIP") == "true";
 

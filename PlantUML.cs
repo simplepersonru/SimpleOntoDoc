@@ -27,7 +27,9 @@ namespace SimpleOntoDoc
         void ParentClass(Class cls, bool first = true)
         {
             if (!_declaredParentClasses.Add(PlantUmlId(cls)))
+            {
                 return;
+            }
 
             if (!first)
                 Class(cls);
@@ -44,7 +46,7 @@ namespace SimpleOntoDoc
                 return;
 
             string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
-            string viewString = string.IsNullOrEmpty(cls.Display) ? cls.Id : $"{cls.Id} \\n {cls.Display}";
+            string viewString = string.IsNullOrEmpty(cls.Display) ? cls.Id : $"{cls.Id}\\n{cls.Display}";
 
             _decl.AppendLine($"""enum "{viewString}" as {PlantUmlId(cls)} {link} """);
 
@@ -98,7 +100,7 @@ namespace SimpleOntoDoc
                 return;
 
             string link = _options.MarkdownRender ? string.Empty : $"[[{AbsoluteUrl(cls.Href())}]]";
-            string viewString = string.IsNullOrEmpty(cls.Display) ? cls.Id : $"{cls.Id} \\n {cls.Display}";
+            string viewString = string.IsNullOrEmpty(cls.Display) ? cls.Id : $"{cls.Id}\\n{cls.Display}";
 
             _decl.AppendLine($"""class "{viewString}" as {PlantUmlId(cls)} {link} """);
 
