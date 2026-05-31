@@ -119,17 +119,17 @@ namespace SimpleOntoDoc
         public ClassType Type { get; set; } = ClassType.Class;
 
         [JsonPropertyName("relations")]
-        public List<Relation> Relations { get; set;} = new List<Relation>();
+        public List<Relation>? Relations { get; set; } = new();
 
         /// <summary>Имя базового класса (строковая ссылка из JSON, разрешается в SubClass после парсинга).</summary>
         [JsonPropertyName("sub_class")]
         public string? SubClassName { get; set; }
 
         [JsonPropertyName("properties")]
-        public List<Property> PropertiesList { get; set; } = new();
+        public List<Property>? PropertiesList { get; set; } = new();
 
         [JsonPropertyName("enumerators")]
-        public List<Enumerator> EnumeratorsList { get; set; } = new();
+        public List<Enumerator>? EnumeratorsList { get; set; } = new();
 
         /// <summary>Базовый класс (разрешается из SubClassName после парсинга, не из JSON).</summary>
         [JsonIgnore]
@@ -146,4 +146,5 @@ namespace SimpleOntoDoc
         [JsonIgnore]
         public string DiagramContent { get; set; } = string.Empty;
     }
+
 }

@@ -163,8 +163,6 @@ namespace SimpleOntoDoc
         {
             if (cls.Type != ClassType.Class)
                 return;
-            var factory = new RendererFactory();
-            var renderer = factory.CreateRenderer(new PlantUmlSettings { RemoteUrl = options.PlantumlRemoteUrl });
 
             string diagramSource = new PlantUmlBuilder(options).Build(cls);
             if (options.MarkdownRender)
@@ -175,12 +173,13 @@ namespace SimpleOntoDoc
                                 @enduml
                                 """;
                 cls.DiagramContent = diagramSource;
+                return;
             }
-            else
-            {
-                var bytes = await renderer.RenderAsync(diagramSource, OutputFormat.Svg);
-                cls.DiagramContent = Encoding.UTF8.GetString(bytes);
-            }
+
+            var factory = new RendererFactory();
+            var renderer = factory.CreateRenderer(new PlantUmlSettings { RemoteUrl = options.PlantumlRemoteUrl });
+            var bytes = await renderer.RenderAsync(diagramSource, OutputFormat.Svg);
+            cls.DiagramContent = Encoding.UTF8.GetString(bytes);
         }
 
         public string RenderAllClasses(Dictionary<string, Class> data)

@@ -5,8 +5,8 @@
     "name": "String",
     "type": "Primitive",
     "sub_class": null,
-    "properties": {},
-    "enumerators": {}
+    "properties": [],
+    "enumerators": []
   },
   {
     "description": "Целое число",
@@ -14,8 +14,8 @@
     "name": "Integer",
     "type": "Primitive",
     "sub_class": null,
-    "properties": {},
-    "enumerators": {}
+    "properties": [],
+    "enumerators": []
   },
   {
     "description": "Логическое значение",
@@ -23,8 +23,8 @@
     "name": "Boolean",
     "type": "Primitive",
     "sub_class": null,
-    "properties": {},
-    "enumerators": {}
+    "properties": [],
+    "enumerators": []
   },
   {
     "description": "Дата",
@@ -32,8 +32,8 @@
     "name": "Date",
     "type": "Datatype",
     "sub_class": null,
-    "properties": {},
-    "enumerators": {}
+    "properties": [],
+    "enumerators": []
   },
   {
     "description": "Географическая координата",
@@ -41,23 +41,23 @@
     "name": "GeoPosition",
     "type": "Compound",
     "sub_class": null,
-    "properties": {
-      "latitude": {
+    "properties": [
+      {
         "description": "Широта",
         "namespace": "animal",
         "name": "latitude",
         "range": "String",
         "optional": false
       },
-      "longitude": {
+      {
         "description": "Долгота",
         "namespace": "animal",
         "name": "longitude",
         "range": "String",
         "optional": false
       }
-    },
-    "enumerators": {}
+    ],
+    "enumerators": []
   },
   {
     "description": "Классификация рациона питания",
@@ -65,24 +65,24 @@
     "name": "DietKind",
     "type": "Enum",
     "sub_class": null,
-    "properties": {},
-    "enumerators": {
-      "herbivore": {
+    "properties": [],
+    "enumerators": [
+      {
         "description": "Растительноядное",
         "namespace": "animal",
         "name": "herbivore"
       },
-      "carnivore": {
+      {
         "description": "Плотоядное",
         "namespace": "animal",
         "name": "carnivore"
       },
-      "omnivore": {
+      {
         "description": "Всеядное",
         "namespace": "animal",
         "name": "omnivore"
       }
-    }
+    ]
   },
   {
     "description": "Базовый класс всех живых существ",
@@ -90,23 +90,23 @@
     "name": "LivingBeing",
     "type": "Class",
     "sub_class": null,
-    "properties": {
-      "name": {
+    "properties": [
+      {
         "description": "Имя существа",
         "namespace": "animal",
         "name": "name",
         "range": "String",
         "optional": false
       },
-      "isAlive": {
+      {
         "description": "Живо ли существо",
         "namespace": "animal",
         "name": "isAlive",
         "range": "Boolean",
         "optional": true
       }
-    },
-    "enumerators": {}
+    ],
+    "enumerators": []
   },
   {
     "description": "Базовый класс животных",
@@ -114,8 +114,8 @@
     "name": "Animal",
     "type": "Class",
     "sub_class": "LivingBeing",
-    "properties": {
-      "age": {
+    "properties": [
+      {
         "description": "Возраст в годах",
         "namespace": "animal",
         "name": "age",
@@ -123,15 +123,15 @@
         "optional": true,
         "multiplicity": "0..1"
       },
-      "diet": {
+      {
         "description": "Тип рациона",
         "namespace": "animal",
         "name": "diet",
         "range": "DietKind",
         "optional": false
       }
-    },
-    "enumerators": {}
+    ],
+    "enumerators": []
   },
   {
     "description": "Млекопитающее",
@@ -139,8 +139,8 @@
     "name": "Mammal",
     "type": "Class",
     "sub_class": "Animal",
-    "properties": {
-      "furColor": {
+    "properties": [
+      {
         "description": "Цвет шерсти",
         "namespace": "animal",
         "name": "furColor",
@@ -148,8 +148,8 @@
         "optional": true,
         "multiplicity": "0..*"
       }
-    },
-    "enumerators": {}
+    ],
+    "enumerators": []
   },
   {
     "description": "Собака — одомашненное млекопитающее",
@@ -157,15 +157,15 @@
     "name": "Dog",
     "type": "Class",
     "sub_class": "Mammal",
-    "properties": {
-      "breed": {
+    "properties": [
+      {
         "description": "Порода",
         "namespace": "animal",
         "name": "breed",
         "range": "String",
         "optional": true
       },
-      "owner": {
+      {
         "description": "Владелец собаки",
         "namespace": "animal",
         "name": "owner",
@@ -173,8 +173,8 @@
         "optional": true,
         "inverse_role_name": "pets"
       }
-    },
-    "enumerators": {}
+    ],
+    "enumerators": []
   },
   {
     "description": "Человек, который может владеть питомцами",
@@ -182,15 +182,15 @@
     "name": "Person",
     "type": "Class",
     "sub_class": "LivingBeing",
-    "properties": {
-      "birthDate": {
+    "properties": [
+      {
         "description": "Дата рождения",
         "namespace": "animal",
         "name": "birthDate",
         "range": "Date",
         "optional": true
       },
-      "pets": {
+      {
         "description": "Питомцы человека",
         "namespace": "animal",
         "name": "pets",
@@ -199,14 +199,14 @@
         "multiplicity": "0..*",
         "inverse_role_name": "owner"
       },
-      "habitat": {
+      {
         "description": "Место обитания",
         "namespace": "animal",
         "name": "habitat",
         "range": "GeoPosition",
         "optional": true
       }
-    },
-    "enumerators": {}
+    ],
+    "enumerators": []
   }
 ]

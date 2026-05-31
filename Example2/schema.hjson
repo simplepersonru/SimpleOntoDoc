@@ -1,0 +1,168 @@
+[
+  {
+    # Primitive
+    name: String
+    namespace: demo
+    display: String primitive
+    description: Primitive text value
+    type: Primitive
+  },
+
+  {
+    # Datatype
+    name: Date
+    namespace: demo
+    display: Date datatype
+    description: Date value
+    type: Datatype
+  },
+
+  {
+    # Enum
+    name: StatusKind
+    namespace: demo
+    display: Device status enum
+    description: Device lifecycle states
+    type: Enum
+    enumerators:
+    [
+      {
+        name: Draft
+        namespace: demo
+        description: Draft state
+      }
+      {
+        name: Active
+        namespace: demo
+        description: Active state
+      }
+    ]
+  },
+
+  {
+    # Compound
+    name: GeoPoint
+    namespace: demo
+    display: Geo point compound
+    description: Compound coordinates value
+    type: Compound
+    properties:
+    [
+      {
+        name: lat
+        namespace: demo
+        description: Latitude
+        range: String
+        optional: false
+        min: -90
+        max: 90
+        pattern: "^-?[0-9]+(\\.[0-9]+)?$"
+      }
+      {
+        name: lon
+        namespace: demo
+        description: Longitude
+        range: String
+        optional: false
+        min: -180
+        max: 180
+      }
+    ]
+  },
+
+  {
+    # Base class
+    name: Thing
+    namespace: demo
+    display: Base thing class
+    description: Base domain entity
+    type: Class
+    properties:
+    [
+      {
+        name: id
+        namespace: demo
+        description: External identifier
+        range: String
+        optional: false
+        multiplicity: "1"
+        pattern: "^[A-Z0-9_-]{3,20}$"
+      }
+      {
+        name: createdAt
+        namespace: demo
+        description: Creation timestamp
+        range: Date
+        optional: true
+      }
+    ]
+  },
+
+  {
+    name: Person
+    namespace: demo
+    display: Person class
+    description: Person who owns devices
+    type: Class
+    sub_class: Thing
+    properties:
+    [
+      {
+        name: devices
+        namespace: demo
+        description: Owned devices
+        range: Device
+        optional: true
+        multiplicity: "0..*"
+        inverse_role_name: owner
+        relation_line: "o--"
+      }
+    ]
+  },
+
+  {
+    name: Device
+    namespace: demo
+    display: Device class
+    description: Trackable device
+    type: Class
+    sub_class: Thing
+    relations:
+    [
+      {
+        left: Device
+        right: Person
+        relation_line: "..>"
+      }
+    ]
+    properties:
+    [
+      {
+        name: status
+        namespace: demo
+        description: Current status
+        range: StatusKind
+        optional: false
+        multiplicity: "1"
+      }
+      {
+        name: owner
+        namespace: demo
+        description: Device owner
+        range: Person
+        optional: true
+        multiplicity: "0..1"
+        inverse_role_name: devices
+        relation_line: "o--"
+      }
+      {
+        name: location
+        namespace: demo
+        description: Current location
+        range: GeoPoint
+        optional: true
+        multiplicity: "0..1"
+      }
+    ]
+  }
+]

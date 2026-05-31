@@ -228,5 +228,40 @@ namespace SimpleOntoDoc.Tests
             Property ageProp = classes["Animal"].Properties["age"];
             Assert.Equal("Animal.age", ageProp.Id);
         }
+
+        [Fact]
+        public void Parse_AllowsMissingCollectionFields()
+        {
+            string tempFile = Path.Combine(Path.GetTempPath(), $"simpleontodoc_missing_lists_{Guid.NewGuid():N}.json");
+            try
+            {
+                File.WriteAllText(tempFile,
+                    "[\n" +
+                    "  { \"name\": \"String\", \"namespace\": \"demo\", \"type\": \"Primitive\" },\n" +
+                    "  { \"name\": \"Device\", \"namespace\": \"demo\", \"type\": \"Class\", \"properties\": { \"code\": { \"namespace\": \"demo\", \"name\": \"code\", \"range\": \"String\", \"optional\": false } } }\n" +
+                    "]");
+
+                var options = new Program.Options
+                {
+                    InputJsonPath = tempFile,
+                    OutputPath = Path.GetTempPath(),
+                    DocTitle = "Test",
+                    DocDescription = "Test",
+                    SkipPlantUml = true,
+                };
+
+                var classes = new JsonParse(options).Classes;
+
+                Assert.True(classes.ContainsKey("String"));
+                Assert.True(classes.ContainsKey("Device"));
+                Assert.True(classes["Device"].Properties.ContainsKey("code"));
+                Assert.Empty(classes["Device"].Relations);
+            }
+            finally
+            {
+                if (File.Exists(tempFile))
+                    File.Delete(tempFile);
+            }
+        }
     }
 }

@@ -57,10 +57,10 @@ namespace SimpleOntoDoc
                 if (string.IsNullOrEmpty(cls.Name))
                     continue;
 
-                cls.Properties = cls.PropertiesList?.ToDictionary(p => p.Name) ?? new Dictionary<string, Property>();   
+                cls.Properties = cls.PropertiesList?.ToDictionary(p => p.Name) ?? new Dictionary<string, Property>();
                 cls.Enumerators = cls.EnumeratorsList?.ToDictionary(e => e.Name) ?? new Dictionary<string, Enumerator>();
 
-                foreach (var rel in cls.Relations)
+                foreach (var rel in cls.Relations ?? new List<Relation>())
                 {
                     if (string.IsNullOrEmpty(rel.LeftName) || string.IsNullOrEmpty(rel.RightName))
                         throw new Exception($"Отношение в классе '{cls.Name}' имеет незаполненные LeftName или RightName. Оба поля обязательны для всех отношений.");
@@ -117,5 +117,6 @@ namespace SimpleOntoDoc
         {
             Console.WriteLine($"{DateTime.Now:HH:mm:ss} [{nameof(JsonParse)}] {message}");
         }
+
     }
 }

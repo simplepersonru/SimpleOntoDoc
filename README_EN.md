@@ -1,59 +1,72 @@
 # SimpleOntoDoc
 
-> **Beautiful HTML documentation generator for ontology schemas**
+> **Ontology documentation generator (HTML and Markdown)**
 
-SimpleOntoDoc takes an ontology schema in its own JSON format and produces a fully searchable, interactive static HTML documentation website — complete with UML class diagrams, cross-linked entities, and a responsive Bootstrap 5 UI.
+SimpleOntoDoc consumes an ontology schema in its internal format (JSON/HJSON) and generates static documentation:
+- **HTML website** with navigation and search;
+- **Markdown package** (`Readme.md` + entity pages).
 
 ---
 
-## 🔀 Input Format
+## 🔀 Input format
 
-SimpleOntoDoc expects **a single JSON file** whose structure is defined in [`model.py`](./model.py) as Python dataclasses. The file is a JSON array of `Class` objects:
+SimpleOntoDoc expects a single schema file in JSON or HJSON format. The structure is described in [`model.py`](./model.py).
+
+Root object: array of `Class` objects.
+
+Current format highlights:
+- `properties` is a **list** of `Property` objects;
+- `enumerators` is a **list** of `Enumerator` objects;
+- `relations` is a list of explicit class relations (`left`, `right`, `relation_line`);
+- references (`sub_class`, `range`, `left`, `right`) are string class names and are resolved by the parser.
+
+Minimal example:
 
 ```json
 [
   {
-    "description": "Base class...",
-    "namespace": "cim",
-    "name": "IdentifiedObject",
-    "type": "Class",
+    "name": "String",
+    "namespace": "demo",
+    "type": "Primitive",
     "sub_class": null,
-    "properties": {
-      "mRID": {
-        "description": "UUID of the object.",
-        "namespace": "cim",
-        "name": "mRID",
-        "range": "String",
-        "optional": true
-      }
-    }
+    "relations": [],
+    "properties": [],
+    "enumerators": []
   },
   {
-    "description": "Grounding type.",
-    "namespace": "rf",
-    "name": "ShieldGroundingKind",
+    "name": "StatusKind",
+    "namespace": "demo",
     "type": "Enum",
     "sub_class": null,
-    "enumerators": {
-      "none": { "description": "No grounding.", "namespace": "rf", "name": "none" }
-    }
+    "relations": [],
+    "properties": [],
+    "enumerators": [
+      { "name": "Active", "namespace": "demo", "description": "Active" }
+    ]
+  },
+  {
+    "name": "Device",
+    "namespace": "demo",
+    "type": "Class",
+    "sub_class": null,
+    "relations": [],
+    "properties": [
+      {
+        "name": "status",
+        "namespace": "demo",
+        "range": "StatusKind",
+        "optional": false,
+        "multiplicity": "1"
+      }
+    ],
+    "enumerators": []
   }
 ]
 ```
 
 Supported `type` values: `Class`, `Enum`, `Datatype`, `Primitive`, `Compound`.
 
-Cross-references (`sub_class`, `range`) are stored as class name strings rather than nested objects (to avoid recursion). `JsonParse.cs` resolves them automatically via a `GetOrCreate` mechanism.
-
-### How to obtain the input file?
-
-Ontology schemas exist in many formats (RDF/XML, OWL, XMI, EA UML, …). The repository contains [`model.py`](./model.py) describing the internal SimpleOntoDoc format. To convert from a specific source format you need a converter script (Python or any other language). SimpleOntoDoc is intentionally decoupled from any particular ontology source.
-
----
-
-## ✨ Why SimpleOntoDoc?
-
-Ontologies are rich knowledge models, but reading their source files is painful. SimpleOntoDoc bridges that gap by generating a polished documentation site, similar to what JavaDoc or Sphinx provides for code — but tailored for ontology schemas.
+A ready-to-run minimal diverse sample is available at [`Example2/schema.hjson`](./Example2/schema.hjson).
 
 ---
 
@@ -61,176 +74,141 @@ Ontologies are rich knowledge models, but reading their source files is painful.
 
 | Feature | Description |
 |---|---|
-| 📄 **HTML site generation** | Produces a complete static HTML website from a single JSON file |
-| 🔍 **Full-text search** | Client-side JSON search index for instant lookup of any class or property |
-| 📐 **UML diagrams** | PlantUML-powered SVG class diagrams embedded per page |
-| 🏷️ **Type support** | Automatically categorises entities as Class, Enum, Datatype, Primitive, Compound |
-| 🔗 **Cross-linking** | Every property domain/range reference links to the corresponding entity page |
-| 📱 **Responsive design** | Bootstrap 5 layout works on desktop, tablet and mobile |
-| 🐳 **Docker-first deployment** | `publish.bash` builds an nginx Docker image ready to serve |
-| 🪟 **Windows + WSL support** | Automatically uses WSL when running Docker commands on Windows |
-| 🧹 **Clean generation** | Output directory is wiped before each run — no stale leftover files |
+| 📄 **HTML generation** | Full static site with pages, navigation and search |
+| 📝 **Markdown generation** | Generates `Readme.md` + `entities/*.md` |
+| 🧾 **JSON/HJSON input** | Supports both `.json` and `.hjson` schema files |
+| 📐 **UML/PlantUML** | Class diagrams in HTML or PlantUML blocks in Markdown mode |
+| 🔗 **Links and relations** | Resolves `sub_class`/`range`, supports `relations` and `relation_line` |
+| 🔍 **Search index** | Client-side search via `assets/search-index.json` |
 
 ---
 
-## 📸 Output Structure
+## 📸 Output structure
+
+### HTML mode (`SIMPLEDOC_MARKDOWN_RENDER=false`)
 
 ```
 output/
-├── index.html                         # Home page with statistics
-├── classes/_index.html                # All classes
-├── enums/_index.html                  # All enumerations
-├── datatypes/_index.html              # All data types
-├── primitives/_index.html             # All primitives
-├── compounds/_index.html              # All compound types
-├── properties/_index.html             # All properties
-├── classes/<ClassName>.html           # One page per class
-├── properties/<Domain>.<Prop>.html    # One page per property
+├── index.html
+├── entities.html
+├── classes/_index.html
+├── enums/_index.html
+├── datatypes/_index.html
+├── primitives/_index.html
+├── compounds/_index.html
+├── properties/_index.html
+├── classes/<ClassName>.html
+├── properties/<Domain>.<Prop>.html
 └── assets/
     ├── css/site.css
     ├── js/search.js
-    └── search-index.json              # Search index
+    └── search-index.json
+```
+
+### Markdown mode (`SIMPLEDOC_MARKDOWN_RENDER=true`)
+
+```
+output/
+├── Readme.md
+└── entities/
+    └── <ClassName>.md
 ```
 
 ---
 
-## 🛠️ Getting Started
+## 🛠️ Getting started
 
 ### Prerequisites
 
 | Tool | Version | Notes |
 |---|---|---|
-| [.NET SDK](https://dotnet.microsoft.com/download) | **9.0+** | Required to build and run |
-| [Docker](https://www.docker.com/get-started) | Any recent version | Required for PlantUML diagram rendering |
-| WSL 2 *(Windows only)* | — | Used to run Docker commands on Windows |
+| [.NET SDK](https://dotnet.microsoft.com/download) | **10.0+** | Build and run |
+| [Docker](https://www.docker.com/get-started) | optional | Needed for full PlantUML rendering in HTML mode |
+| WSL 2 *(Windows)* | optional | Used for Docker commands on Windows |
 
-### Build from source
+### Build
 
 ```bash
-git clone https://github.com/simplepersonru/SimpleOntoDoc.git
-cd SimpleOntoDoc
-
 dotnet build SimpleOntoDoc.csproj
 ```
 
-### Publish a self-contained binary
+### Publish
 
 ```bash
 dotnet publish SimpleOntoDoc.csproj -c Release
 ```
 
-The binary and all required assets are placed in `bin/Release/net9.0/publish/`.
+Publish output path: `bin/Release/net10.0/publish/`.
 
 ---
 
-## ⚙️ Configuration
-
-SimpleOntoDoc is configured entirely through **environment variables**.
+## ⚙️ Configuration (ENV)
 
 | Variable | Required | Description |
 |---|---|---|
-| `SIMPLEDOC_INPUT_PATH` | ✅ | Path to the input JSON ontology file |
-| `SIMPLEDOC_TITLE` | ✅ | Documentation site title |
-| `SIMPLEDOC_DESCRIPTION` | ✅ | Short description shown on the home page |
-| `SIMPLEDOC_PLANTUML_URL` | ✅ | URL of a running PlantUML server (e.g. `http://localhost:55667`) |
-| `SIMPLEDOC_OUTPUT_PATH` | ✅ | Directory where the generated site will be written |
+| `SIMPLEDOC_INPUT_PATH` | ✅ | Input `.json` or `.hjson` path |
+| `SIMPLEDOC_OUTPUT_PATH` | ✅ | Output directory |
+| `SIMPLEDOC_TITLE` | ✅ | Documentation title |
+| `SIMPLEDOC_DESCRIPTION` | ✅ | Home page description |
+| `SIMPLEDOC_BASE_PATH` | ❌ | Site base path (for example `/docs`) |
+| `SIMPLEDOC_MARKDOWN_RENDER` | ❌ | `true` => Markdown mode |
+| `SIMPLEDOC_PLANTUML_SKIP` | ❌ | `true` => skip PlantUML step |
+| `SIMPLEDOC_PLANTUML_URL` | ❌ | PlantUML server URL (if omitted, app tries to auto-start Docker PlantUML in HTML mode) |
 
 ---
 
 ## 🏃 Usage
 
-### Option 1 — Run with `publish.bash` (recommended for production)
+### HTML mode
 
 ```bash
-SIMPLEDOC_INPUT_PATH=/path/to/ontology.json \
-SIMPLEDOC_TITLE="My Documentation" \
-SIMPLEDOC_DESCRIPTION="Auto-generated ontology documentation" \
-/usr/bin/bash publish.bash
-```
-
-### Option 2 — Run the binary directly
-
-Start a PlantUML server first (Docker required):
-
-```bash
-docker run -d --name plantuml -p 55667:8080 plantuml/plantuml-server
-```
-
-Then run the generator:
-
-```bash
-SIMPLEDOC_INPUT_PATH=/path/to/ontology.json \
-SIMPLEDOC_TITLE="My Ontology" \
-SIMPLEDOC_DESCRIPTION="My ontology description" \
-SIMPLEDOC_PLANTUML_URL=http://localhost:55667 \
+SIMPLEDOC_INPUT_PATH=./Example/ontology.json \
 SIMPLEDOC_OUTPUT_PATH=./output \
-dotnet run --project SimpleOntoDoc.csproj
+SIMPLEDOC_TITLE="My Ontology" \
+SIMPLEDOC_DESCRIPTION="Generated ontology docs" \
+SIMPLEDOC_PLANTUML_URL=http://localhost:55667 \
+dotnet run --no-launch-profile --project SimpleOntoDoc.csproj
 ```
 
-Open `./output/index.html` in your browser to view the result.
-
-### Option 3 — Run via Docker
+### Markdown mode
 
 ```bash
-docker run --rm \
-  -v ./output:/out \
-  --net=host \
-  -e SIMPLEDOC_INPUT_PATH=/out/ontology.json \
-  -e SIMPLEDOC_TITLE="My Ontology" \
-  -e SIMPLEDOC_DESCRIPTION="My ontology description" \
-  -e SIMPLEDOC_PLANTUML_URL=http://localhost:55667 \
-  -e SIMPLEDOC_OUTPUT_PATH=/out \
-  gitea.simpleperson.ru/admin/simple-onto-doc:latest
+SIMPLEDOC_INPUT_PATH=./Example2/schema.hjson \
+SIMPLEDOC_OUTPUT_PATH=./Example2/output \
+SIMPLEDOC_TITLE="Example2 Markdown Ontology" \
+SIMPLEDOC_DESCRIPTION="Minimal diverse HJSON example" \
+SIMPLEDOC_MARKDOWN_RENDER=true \
+SIMPLEDOC_PLANTUML_SKIP=true \
+dotnet run --no-launch-profile --project SimpleOntoDoc.csproj
 ```
+
+For `Example2`, you can also run [`Example2/example_markdown.bash`](./Example2/example_markdown.bash).
 
 ---
 
-## 📖 How It Works
-
-```
-JSON file (model.py format)
-      │
-      ▼
-  JsonParse             ← Parses JSON array of classes, resolves string
-      │                    references (sub_class, range) via GetOrCreate
-      ▼
-  PlantUML              ← Renders per-class SVG diagrams via a
-      │                    PlantUML server running in Docker
-      ▼
-  SiteGenerator         ← Uses RazorLight (.cshtml) templates to
-      │                    produce HTML pages and search-index.json
-      ▼
-  output/               ← Static website ready to serve with any
-                           HTTP server or nginx Docker image
-```
-
----
-
-## 🏗️ Project Structure
+## 🧱 Project structure
 
 ```
 SimpleOntoDoc/
-├── Program.cs          # Entry point and configuration (reads ENV vars)
-├── Model.cs            # Domain model: Class, Property, Enumerator, ClassType
-│                         (fields with [JsonPropertyName] mirror model.py)
-├── JsonParse.cs        # JSON parser for the model.py format
-├── SiteGenerator.cs    # HTML generation engine (RazorLight)
-├── PlantUML.cs         # PlantUML diagram renderer + Docker manager
-├── ViewModel.cs        # View models + ClassExtensions/PropertyExtensions helpers
-├── model.py            # Python dataclass description of the input format
-├── templates/          # Razor (.cshtml) templates
-│   ├── _Layout.cshtml
+├── Program.cs
+├── Model.cs
+├── JsonParse.cs
+├── SiteGenerator.cs
+├── MarkdownGenerator.cs
+├── PlantUML.cs
+├── ViewModel.cs
+├── model.py
+├── templates/
 │   ├── Index.cshtml
 │   ├── Class.cshtml
 │   ├── ClassList.cshtml
 │   ├── Property.cshtml
-│   └── PropertyList.cshtml
-├── assets/             # Static web assets
-│   ├── css/site.css
-│   └── js/search.js
-├── Dockerfile          # nginx image wrapping generated output
-├── publish.bash        # End-to-end build + deploy script
-└── SimpleOntoDoc.csproj
+│   ├── PropertyList.cshtml
+│   ├── Index_md.cshtml
+│   └── Class_md.cshtml
+├── Example/
+├── Example2/
+└── SimpleOntoDoc.Tests/
 ```
 
-*Built with ❤️ using [.NET 9](https://dotnet.microsoft.com/), [RazorLight](https://github.com/toddams/RazorLight), [PlantUML](https://plantuml.com/) and [Bootstrap 5](https://getbootstrap.com/).*
+*Built with ❤️ using [.NET 10](https://dotnet.microsoft.com/), [RazorLight](https://github.com/toddams/RazorLight) and [PlantUML](https://plantuml.com/).*
