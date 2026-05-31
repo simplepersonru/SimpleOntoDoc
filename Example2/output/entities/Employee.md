@@ -1,8 +1,8 @@
 ﻿
 # Описание
 
-**Устройство**  
-Trackable device
+Работник  
+Работяга, который может владеть устройствами
 
 
 # Сводка
@@ -11,11 +11,11 @@ Trackable device
 |-----------------|------------|
 | Тип             | 🟦 Class |
 | namespace       | demo |
-| Базовый класс | [Thing](Thing.md) |
-| Свойств | 3 |
-| Всех свойств | 5 |
+| Базовый класс | [Person](Person.md) |
+| Свойств | 1 |
+| Всех свойств | 4 |
 | Дочерних классов | 0 |
-| Ссылок       | 1 |
+| Ссылок       | 0 |
 
 
 
@@ -30,21 +30,13 @@ annotation "Легенда" {
   ~ссылка на класс
   +простое свойство
 }
-class "Device \n **Устройство**" as demo.Device  
-enum "StatusKind \n Device status enum" as demo.StatusKind  
+class "Employee \n Работник" as demo.Employee  
 class "Person \n Чувак" as demo.Person  
 class "Thing \n Базовая штука" as demo.Thing  
-demo.Device : #status : StatusKind
-demo.Device : ~owner : Person
-demo.Device : +location : GeoPoint
-demo.Device .. demo.Person
-enum demo.StatusKind {
-#Draft
-#Active
-}
-demo.Device::status -- demo.StatusKind
-demo.Device::owner o--"0..1" demo.Person
-demo.Thing <|-down- demo.Device
+demo.Employee : +company : String
+demo.Person <|-down- demo.Employee
+demo.Person : ~devices : Device
+demo.Thing <|-down- demo.Person
 demo.Thing : +id : String
 demo.Thing : +createdAt : Date
 
@@ -56,9 +48,7 @@ demo.Thing : +createdAt : Date
 
 | Идентификатор  | Тип  | Ограничения | Display  | Описание  |
 |----------------|------|------------ |-----------|-----------|
-| <a name="status"/> [status](Device.md#status) | 🟪 [StatusKind](StatusKind.md) | _multiplicity_: 1<br/>  |  | Current status |
-| <a name="owner"/> [owner](Device.md#owner) | 🟦 [Person](Person.md) | _multiplicity_: 0..1<br/>  |  | Device owner |
-| <a name="location"/> [location](Device.md#location) | 🟥 [GeoPoint](GeoPoint.md) | _multiplicity_: 0..1<br/>  |  | Current location |
+| <a name="company"/> [company](Employee.md#company) | 🟧 [String](String.md) |  |  | Компания, в которой работает сотрудник |
 
 
 
@@ -68,16 +58,9 @@ demo.Thing : +createdAt : Date
 | ---------------| -----| --------------|  ----------| ----------|
 | [Thing.id](Thing.md#id) |  🟧 [String](String.md) | _multiplicity_: 1<br/> _pattern_: ^[A-Z0-9_-]{3,20}$<br/>  |  | External identifier |
 | [Thing.createdAt](Thing.md#createdAt) |  🟨 [Date](Date.md) |  |  | Creation timestamp |
-| [Device.status](Device.md#status) |  🟪 [StatusKind](StatusKind.md) | _multiplicity_: 1<br/>  |  | Current status |
-| [Device.owner](Device.md#owner) |  🟦 [Person](Person.md) | _multiplicity_: 0..1<br/>  |  | Device owner |
-| [Device.location](Device.md#location) |  🟥 [GeoPoint](GeoPoint.md) | _multiplicity_: 0..1<br/>  |  | Current location |
+| [Person.devices](Person.md#devices) |  🟦 [Device](Device.md) | _multiplicity_: 0..*<br/>  |  | Owned devices |
+| [Employee.company](Employee.md#company) |  🟧 [String](String.md) |  |  | Компания, в которой работает сотрудник |
 
-
-# Ссылки
-
-| Свойство  | Display  | Описание |
-| ----------| ----------|----------|
-| [Person.devices](Person.md#devices) |  | Owned devices |
 
 ---
 -  

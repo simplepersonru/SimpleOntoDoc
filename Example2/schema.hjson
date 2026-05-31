@@ -121,6 +121,54 @@
   },
 
   {
+    name: Employee
+    namespace: demo
+    display: Работник
+    description: Работяга, который может владеть устройствами
+    type: Class
+    sub_class: Person
+    properties: [
+      {
+        name: company
+        namespace: demo
+        description: Компания, в которой работает сотрудник
+        range: String
+      }
+
+    ]
+  },
+
+  {
+    name: Animal
+    namespace: demo
+    display: Животное
+    description: Животное!
+    type: Class
+    sub_class: Thing
+    properties: []
+  },
+
+    {
+    name: Dog
+    namespace: demo
+    display: Собака
+    description: Собака!
+    type: Class
+    sub_class: Animal
+    properties: []
+  },
+
+    {
+    name: Cat
+    namespace: demo
+    display: Кот
+    description: Кот!
+    type: Class
+    sub_class: Animal
+    properties: []
+  },
+
+  {
     name: Device
     namespace: demo
     display: **Устройство**
@@ -129,8 +177,9 @@
     sub_class: Thing
     relations:
     [
+      # Подразумевается что left - это текущая сущность
       {
-        relation_line: "..>"
+        relation_line: ".."
         right: Person
       }
     ]
@@ -152,6 +201,9 @@
         optional: true
         multiplicity: "0..1"
         inverse_role_name: devices
+        # Для свойств можно указывать тип связи, который будет отображаться в диаграммах. 
+        # Левый конец будет к текущей сущности, а правый к range свойства.
+        # Если не указать, то будет использован тип связи по умолчанию для свойств - "--"
         relation_line: "o--"
       }
       {
@@ -159,7 +211,8 @@
         namespace: demo
         description: Current location
         range: GeoPoint
-        optional: true
+        # вместо optional можно использовать multiplicity, который более явно указывает на количество допустимых значений.
+        # Для обычных свойств 0..1 это аналог optional: true, а 1 или 1..1 это аналог optional: false.
         multiplicity: "0..1"
       }
     ]

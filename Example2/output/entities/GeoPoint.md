@@ -21,8 +21,8 @@ Compound coordinates value
 
 | Идентификатор  | Тип  | Ограничения | Display  | Описание  |
 |----------------|------|------------ |-----------|-----------|
-| <a name="lat"/> [lat](GeoPoint.md#lat) | 🟧 [String](String.md) | _≥_ -90<br/> _≤_ 90<br/> _pattern_: ^-?[0-9]+(\.[0-9]+)?$<br/>  |  | Latitude |
-| <a name="lon"/> [lon](GeoPoint.md#lon) | 🟧 [String](String.md) | _≥_ -180<br/> _≤_ 180<br/>  |  | Longitude |
+| <a name="lat"/> [lat](GeoPoint.md#lat) | 🟧 [String](String.md) | _≥_ -90, _≤_ 90<br/> _pattern_: ^-?[0-9]+(\.[0-9]+)?$<br/>  |  | Latitude |
+| <a name="lon"/> [lon](GeoPoint.md#lon) | 🟧 [String](String.md) | _≥_ -180, _≤_ 180<br/>  |  | Longitude |
 
 
 

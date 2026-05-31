@@ -10,6 +10,7 @@ namespace SimpleOntoDoc
         StringBuilder _decl = new();
         StringBuilder _main = new();
         HashSet<string> _declaredClasses = new();
+        HashSet<string> _declaredParentClasses = new();
         HashSet<string> _declaredEnums = new();
 
 
@@ -25,6 +26,9 @@ namespace SimpleOntoDoc
 
         void ParentClass(Class cls, bool first = true)
         {
+            if (!_declaredParentClasses.Add(PlantUmlId(cls)))
+                return;
+
             if (!first)
                 Class(cls);
 

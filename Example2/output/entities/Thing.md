@@ -14,7 +14,7 @@ Base domain entity
 | Базовый класс | - |
 | Свойств | 2 |
 | Всех свойств | 2 |
-| Дочерних классов | 2 |
+| Дочерних классов | 3 |
 | Ссылок       | 0 |
 
 
@@ -51,6 +51,7 @@ demo.Thing : +createdAt : Date
 | Идентификатор  | Display  | Описание  |
 | ---------------| ----------| ----------|
 | [Person](Person.md) | Чувак | Person who owns devices |
+| [Animal](Animal.md) | Животное | Животное! |
 | [Device](Device.md) | **Устройство** | Trackable device |
 
 

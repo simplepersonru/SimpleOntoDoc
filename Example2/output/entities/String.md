@@ -11,7 +11,7 @@ Primitive text value
 |-----------------|------------|
 | Тип             | 🟧 Primitive |
 | namespace       | demo |
-| Ссылок       | 3 |
+| Ссылок       | 4 |
 
 
 
@@ -26,6 +26,7 @@ Primitive text value
 | [GeoPoint.lat](GeoPoint.md#lat) |  | Latitude |
 | [GeoPoint.lon](GeoPoint.md#lon) |  | Longitude |
 | [Thing.id](Thing.md#id) |  | External identifier |
+| [Employee.company](Employee.md#company) |  | Компания, в которой работает сотрудник |
 
 ---
 -  
