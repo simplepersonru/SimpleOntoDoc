@@ -48,7 +48,7 @@ namespace SimpleOntoDoc
         }
         void ClassRelations(Class cls, bool allClassesFlag = false)
         {
-            foreach (var rel in cls.Relations)
+            foreach (var rel in cls.Relations ?? [])
             {
                 _main.AppendLine($"{PlantUmlId(rel.Left)} {rel.RelationLine} {PlantUmlId(rel.Right)}");
             }

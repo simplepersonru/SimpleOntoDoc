@@ -238,7 +238,7 @@ namespace SimpleOntoDoc.Tests
                 File.WriteAllText(tempFile,
                     "[\n" +
                     "  { \"name\": \"String\", \"namespace\": \"demo\", \"type\": \"Primitive\" },\n" +
-                    "  { \"name\": \"Device\", \"namespace\": \"demo\", \"type\": \"Class\", \"properties\": { \"code\": { \"namespace\": \"demo\", \"name\": \"code\", \"range\": \"String\", \"optional\": false } } }\n" +
+                    "  { \"name\": \"Device\", \"namespace\": \"demo\", \"type\": \"Class\", \"properties\": [ { \"namespace\": \"demo\", \"name\": \"code\", \"range\": \"String\", \"optional\": false } ] }\n" +
                     "]");
 
                 var options = new Program.Options
@@ -255,7 +255,7 @@ namespace SimpleOntoDoc.Tests
                 Assert.True(classes.ContainsKey("String"));
                 Assert.True(classes.ContainsKey("Device"));
                 Assert.True(classes["Device"].Properties.ContainsKey("code"));
-                Assert.Empty(classes["Device"].Relations);
+                Assert.Empty(classes["Device"].Relations ?? new List<Relation>());
             }
             finally
             {
