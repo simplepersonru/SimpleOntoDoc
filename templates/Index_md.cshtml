@@ -20,13 +20,24 @@
 
 @if (!string.IsNullOrEmpty(Model.AllClassesDiagramContent))
 {
-<text>
-# Полная диаграмма классов
+@:# Полная диаграмма классов
 
+@if (Model.DiagramWay == DiagramWay.Vanilla)
+{
+<text>
 ```plantuml
 @Model.AllClassesDiagramContent
 ```
 </text>
+}
+else
+{
+@:[plant-uml:./index.puml]
+
+@* ::1750px:665px *@
+}
+
+
 }
 
 # Классы

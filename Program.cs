@@ -35,6 +35,11 @@
             /// Если false, то в диаграммах будут пропускаться неймспейсы. Устанавливается через ENV SIMPLEDOC_USE_NAMESPACE_IN_DIAGRAMM=false.
             /// </summary>
             public bool UseNamespaceInDiagramm { get; set; } = true;
+
+            /// <summary>
+            /// Способ обработки диаграмм в MD файлах
+            /// </summary>
+            public DiagramWay DiagramWay { get; set; } = DiagramWay.Grammax;
         }
 
         static string GetEnv(string env)
@@ -65,6 +70,7 @@
 
             bool markdownRender = Environment.GetEnvironmentVariable("SIMPLEDOC_MARKDOWN_RENDER") == "true";
             bool useNamespaceInDiagramm = Environment.GetEnvironmentVariable("SIMPLEDOC_USE_NAMESPACE_IN_DIAGRAMM") != "false";
+            DiagramWay diagramWay = Environment.GetEnvironmentVariable("SIMPLEDOC_DIAGRAM_WAY") == "Vanilla" ? DiagramWay.Vanilla : DiagramWay.Grammax;
 
             string remoteUrl = string.Empty;
             string? remoteUrlOpt = Environment.GetEnvironmentVariable("SIMPLEDOC_PLANTUML_URL");
@@ -87,6 +93,7 @@
                 MarkdownRender = markdownRender,
                 SkipPlantUml = skipPlantUml,
                 UseNamespaceInDiagramm = useNamespaceInDiagramm,
+                DiagramWay = diagramWay
             };
 
             Log("Чтение и парсинг JSON схемы...");

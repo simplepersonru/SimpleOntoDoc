@@ -82,7 +82,7 @@ namespace SimpleOntoDoc
 
         public static string NameWithAnchor(this Property prop)
         {
-            return $"<a name=\"{prop.Name}\"/> {prop.MarkdownRef(false)}";
+            return $"<a name=\"{prop.Name}\"></a> {prop.MarkdownRef(false)}";
         }
         
 
@@ -113,7 +113,7 @@ namespace SimpleOntoDoc
     {
         public static string NameWithAnchor(this Enumerator prop)
         {
-            return $"<a name=\"{prop.Name}\"/> {prop.MarkdownRef(false)}";
+            return $"<a name=\"{prop.Name}\"></a> {prop.MarkdownRef(false)}";
         }
         public static string MarkdownRef(this Enumerator prop, bool useClassPart = false)
         {
@@ -182,8 +182,15 @@ namespace SimpleOntoDoc
         public List<Property> Properties { get; set; } = new();
     }
 
+    public enum DiagramWay
+    {
+        Vanilla, ///< инлайн диаграмма внутри MD файла 
+        Grammax ///< Вынесенная в отдельный puml файл
+    }
+
     public class MarkdownIndexViewModel
     {
+        public DiagramWay DiagramWay {get; set;}  
         public string Title { get; set; } = "SimpleOntoDoc";
         public string Description { get; set; } = string.Empty;
         public int ClassCount { get; set; }
@@ -198,6 +205,7 @@ namespace SimpleOntoDoc
 
     public class MarkdownClassViewModel
     {
+        public DiagramWay DiagramWay {get; set;}  
         public Class Class { get; set; } = new();
         public string SubClassString { get; set; } = "-";
         public List<Property> Properties { get; set; } = new();

@@ -52,19 +52,25 @@
 
 @if (Model.Class.Type == ClassType.Class)
 {
+@:# Диаграмма
+@if (Model.DiagramWay == DiagramWay.Vanilla)
+{
 <text>
-# Диаграмма
-
 ```plantuml
 @Model.Class.DiagramContent
 ```
 </text>
 }
+else
+{
+@:[plant-uml:./diagrams/@(Model.Class.Id).puml]
+}
+}
 
 @if (Model.Properties.Count > 0)
 {
 <text>
-# Свойства
+ # Свойства
 
 | Идентификатор  | Тип  | Ограничения | Display  | Описание  |
 |----------------|------|------------ |-----------|-----------|
@@ -119,6 +125,7 @@
 }
 
 ---
+Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  
 -  
 -  
 -  
@@ -153,5 +160,3 @@
 -  
 -  
 -  
-
-Сделано с помощью [SimpleOntoDoc](https://github.com/simplepersonru/SimpleOntoDoc)  

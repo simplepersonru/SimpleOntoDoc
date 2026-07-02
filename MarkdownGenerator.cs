@@ -88,10 +88,15 @@ namespace SimpleOntoDoc
                 DataTypeCount = _data.Values.Count(x => x.Type == ClassType.Datatype),
                 CompoundCount = _data.Values.Count(x => x.Type == ClassType.Compound),
                 AllClassesDiagramContent = new PlantUML(_options).RenderAllClasses(_data),
+                DiagramWay = _options.DiagramWay
             };
 
             string markdown = await _engine.CompileRenderAsync("Index_md.cshtml", model);
             await WriteOutputAsync("Readme.md", markdown);
+            if (_options.DiagramWay == DiagramWay.Grammax)
+            {
+                await WriteOutputAsync("index.puml", model.AllClassesDiagramContent);
+            }
         }
 
         private async Task GenerateClassPageAsync(Class cls)
@@ -116,11 +121,16 @@ namespace SimpleOntoDoc
                 SubClassString = cls.SubClass == null ? "-" : cls.SubClass.MarkdownRef(near: true),
                 ChildClasses = childClasses,
                 AllClassProperties = allClassProperties,
-                LinkProperties = _properties.Where(p => p.Range.Id == cls.Id).ToList()
+                LinkProperties = _properties.Where(p => p.Range.Id == cls.Id).ToList(),
+                DiagramWay = _options.DiagramWay
             };
 
             string html = await _engine.CompileRenderAsync("Class_md.cshtml", model);
             await WriteOutputAsync($"entities/{cls.Id}.md", html);
+            if (_options.DiagramWay == DiagramWay.Grammax)
+            {
+                await WriteOutputAsync($"entities/diagrams/{cls.Id}.puml", cls.DiagramContent);
+            }
         }
 
         private async Task WriteOutputAsync(string relativePath, string content)
