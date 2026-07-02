@@ -25,12 +25,12 @@ namespace SimpleOntoDoc
 
         public static string Link(this Class cls, bool near)
         {
-            return near ? $"{cls.Name}.md" : $"./entities/{cls.Name}.md";
+            return near ? $"./{cls.Name}.md" : $"./entities/{cls.Name}.md";
         }
 
         public static string MarkdownRef(this Class cls, bool near)
         {
-            return $"[{cls.Id}]({cls.Link(near)})";
+            return $"[{cls.Id}](<{cls.Link(near)}>)";
         }
 
         public static string MarkdownColorSquare(this Class cls) => cls.Type switch
@@ -75,14 +75,14 @@ namespace SimpleOntoDoc
             string link = prop.Domain.Link(near: true);
             string text = useClassPart ? prop.Id : prop.Name;
 
-            return $"[{text}]({link}#{prop.Name})";
+            return $"[{text}](<{link}#{prop.Name}>)";
         }
         public static string Href(this Property prop) =>
             $"properties/{prop.Domain.Name}.{prop.Name}.html";
 
         public static string NameWithAnchor(this Property prop)
         {
-            return $"<div id=\"{prop.Name}\"></div> {prop.MarkdownRef(false)}";
+            return $"<a id=\"{prop.Name}\"></a> {prop.MarkdownRef(false)}";
         }
         
 
@@ -113,7 +113,7 @@ namespace SimpleOntoDoc
     {
         public static string NameWithAnchor(this Enumerator prop)
         {
-            return $"<div id=\"{prop.Name}\"></div> {prop.MarkdownRef(false)}";
+            return $"<a id=\"{prop.Name}\"></a> {prop.MarkdownRef(false)}";
         }
         public static string MarkdownRef(this Enumerator prop, bool useClassPart = false)
         {
