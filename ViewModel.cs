@@ -82,7 +82,7 @@ namespace SimpleOntoDoc
 
         public static string NameWithAnchor(this Property prop)
         {
-            return $"<a name=\"{prop.Name}\"></a> {prop.MarkdownRef(false)}";
+            return $"<div id=\"{prop.Name}\"></div> {prop.MarkdownRef(false)}";
         }
         
 
@@ -113,7 +113,7 @@ namespace SimpleOntoDoc
     {
         public static string NameWithAnchor(this Enumerator prop)
         {
-            return $"<a name=\"{prop.Name}\"></a> {prop.MarkdownRef(false)}";
+            return $"<div id=\"{prop.Name}\"></div> {prop.MarkdownRef(false)}";
         }
         public static string MarkdownRef(this Enumerator prop, bool useClassPart = false)
         {
