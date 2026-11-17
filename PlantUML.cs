@@ -1,4 +1,4 @@
-﻿using PlantUml.Net;
+using PlantUml.Net;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -22,6 +22,27 @@ namespace SimpleOntoDoc
         static string PlantUmlId(Class cls)
         {
             return $"{cls.Namespace}.{cls.Name}";
+        }
+
+        static string RelationLineWithRightArrow(string? relationLine)
+        {
+            var line = (relationLine ?? string.Empty).Trim();
+            if (string.IsNullOrEmpty(line))
+                return "-->";
+
+            if (line.EndsWith(">", StringComparison.Ordinal))
+                return line;
+
+            if (line.EndsWith("--", StringComparison.Ordinal))
+                return $"{line[..^2]}-->";
+
+            if (line.EndsWith('-', StringComparison.Ordinal))
+                return $"{line[..^1]}>";
+
+            if (line.EndsWith('.', StringComparison.Ordinal))
+                return $"{line[..^1]}>";
+
+            return $"{line}>";
         }
 
         void ParentClass(Class cls, bool first = true)
@@ -62,6 +83,13 @@ namespace SimpleOntoDoc
         {
             foreach (var rel in cls.Relations ?? [])
             {
+                bool isSelfRelation = PlantUmlId(rel.Right) == PlantUmlId(cls);
+                if (isSelfRelation)
+                {
+                    _main.AppendLine($"{PlantUmlId(cls)} {RelationLineWithRightArrow(rel.RelationLine)} {PlantUmlId(cls)}");
+                    continue;
+                }
+
                 _main.AppendLine($"{PlantUmlId(cls)} {rel.RelationLine} {PlantUmlId(rel.Right)}");
             }
 
@@ -82,11 +110,26 @@ namespace SimpleOntoDoc
                     Class(prop.Range, useProperties: false);
 
                 string leftPart = PlantUmlId(cls);
-                if (!allClassesFlag)
+                bool isSelfPropertyRelation = PlantUmlId(prop.Range) == PlantUmlId(cls);
+                if (!allClassesFlag && !isSelfPropertyRelation)
                     leftPart += $"::{prop.Name}";
 
                 string relationSymbol = "--";
-                if (!string.IsNullOrEmpty(prop.RelationLine) )
+                if (!string.IsNullOrEmpty(prop.RelationLine))
+                {
+                    relationSymbol = RelationLineWithRightArrow(prop.RelationLine);
+                }
+
+                if (isSelfPropertyRelation)
+                {
+                    string multiplicitySuffix = string.IsNullOrEmpty(prop.Multiplicity)
+                        ? string.Empty
+                        : $"\"{prop.Multiplicity}\"";
+                    _main.AppendLine($"{leftPart} {relationSymbol}{multiplicitySuffix} {PlantUmlId(cls)}");
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(prop.RelationLine))
                 {
                     relationSymbol = $"{prop.RelationLine}\"{prop.Multiplicity}\"";
                 }
